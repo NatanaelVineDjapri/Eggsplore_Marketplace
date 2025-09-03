@@ -1,3 +1,5 @@
+import 'package:eggsplore/app_routes.dart';
+import 'package:eggsplore/widget/bottomAuth.dart';
 import 'package:eggsplore/bar/buttom_banner.dart';
 import 'package:eggsplore/constants/text_string.dart';
 import 'package:flutter/material.dart';
@@ -10,12 +12,11 @@ class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.only(
             top: Appsized.none,
-            // left: Appsized.lg,
-            // right: Appsized.lg,
             bottom: Appsized.lg
           ),
           child: Column(
@@ -24,6 +25,7 @@ class WelcomeScreen extends StatelessWidget {
               Image(
                 image: AssetImage(AppImages.introLogo),
                 width: double.infinity,
+                height: MediaQuery.of(context).size.height / 2,
                 fit: BoxFit.fitWidth,
               ),
     
@@ -64,62 +66,26 @@ class WelcomeScreen extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(height: Appsized.xl),
+            const SizedBox(height: Appsized.xl),
 
               //login button
-              SizedBox(
-                width: 300,
-                height: 50,
-                child: TextButton(
-                  onPressed:(){
-                    //login action, nanti diisi disini
-                  },
-                  style: TextButton.styleFrom(
-                    backgroundColor: Colors.orange,
-                    // foregroundColor: Colors.black,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                    side: const BorderSide(
-                      color: Colors.black,
-                      width: 1.2)
-                  ) 
-                
-                , child: const Text(
-                    AppStrings.login,
-                    style: TextStyle(
-                      fontSize: Appsized.fontLg,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                )),
-              ),
+            BottomAuth(
+              text: AppStrings.login,
+              onPressed: (){
+                Navigator.pushNamed(context, AppRoutes.login);
+              },
+            ),
 
-              SizedBox(height: Appsized.lg,),
+            SizedBox(height: Appsized.lg,),
               //register button
-              SizedBox(
-                width: 300,
-                height: 50,
-                child: TextButton(
-                  onPressed:(){
-                    //Register action, nanti diisi disini
-                  },
-                  style: TextButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    // foregroundColor: Colors.black,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                    side: const BorderSide(
-                      color: Colors.black,
-                      width: 1.2)
-                  ) 
-                
-                , child: const Text(
-                    AppStrings.register,
-                    style: TextStyle(
-                      fontSize: Appsized.fontLg,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
-                )),
-              ),
+            BottomAuth(
+              text: AppStrings.register,
+              backgroundColor: Colors.white,
+              textColor: Colors.black,
+              onPressed: (){
+                Navigator.pushNamed(context, AppRoutes.register);
+              },
+             ),
             ],
           ),
         ),

@@ -14,26 +14,8 @@ class BottomBanner extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Text(
-            AppStrings.buttombanner1,
-            style: bottomBannerTextStyle,
-          ),
-          Text(
-            AppStrings.buttombanner2,
-            style: bottomBannerTextStyle,
-          ),
-          Text(
-            AppStrings.buttombanner3,
-            style: bottomBannerTextStyle,
-          ),
-          Text(
-            AppStrings.buttombanner4,
-            style: bottomBannerTextStyle,
-          ),
-          Text(
-            AppStrings.buttombanner5,
-            style: bottomBannerTextStyle,
-          )
+          for (var text in AppStrings.bottomBannerText)
+            Text(text, style: bottomBannerTextStyle),
         ],
       ),
     );

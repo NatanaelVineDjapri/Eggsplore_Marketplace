@@ -7,6 +7,8 @@ class Appsized{
   static const double md = 16.0;
   static const double lg = 24.0;
   static const double xl = 32.0;
+  static const double xxl = 46.0;
+  static const double xxxl = 60.0;
   static const double defaultspace = 24.0;
 
   //Font sizes
@@ -14,6 +16,7 @@ class Appsized{
   static const double fontMd = 16.0;
   static const double fontLg = 18.0;
   static const double fontxl= 24.0;
+  static const double fontxxl= 30.0;
 
   //Icon sizes
   static const double iconXs = 12.0;

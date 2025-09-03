@@ -11,18 +11,27 @@ class AppStrings{
   static const String introSub = "Lorem Ipsum dolor sit amet, consectur adipsicing elit, sed do eiusmod tempor";
   static const String login = "Login";
   static const String register = "Register";
+
+  static const String account =" Account";
+  static const String loginSub="Welcome back to the app!";
+  static const String registerSub="Set your account!";
   static const String firstName = "First Name";
   static const String lastName = "Last Name";
-  static const String email = "Email";
+  static const String email = "Email Addres";
   static const String password = "Password";
   static const String forgetPassword = "Forgot Password?";
+  static const String notRegister = "Not registered yet?";
+  static const String createAccount = " Create Account";
   static const String signIn = "Sign In";
 
   //buttombanner
-  static const buttombanner1 = "Hatch.";
-  static const buttombanner2 = "Browse.";
-  static const buttombanner3 = "Discover.";
-  static const buttombanner4 = "Purchase.";
-  static const buttombanner5 = "Smile.";
+  static const List<String> bottomBannerText = [
+    "Hatch.",
+    "Browse.",
+    "Discover.",
+    "Purchase.",
+    "Smile.",
+  ];
+
   
 }

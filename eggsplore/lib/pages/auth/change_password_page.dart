@@ -1,3 +1,4 @@
+import 'package:eggsplore/app_routes.dart';
 import 'package:eggsplore/base/auth_base.dart';
 import 'package:eggsplore/constants/sizes.dart';
 import 'package:eggsplore/constants/text_string.dart';
@@ -40,12 +41,13 @@ class ChangePassword extends StatelessWidget {
           prefixIcon: Icon(Icons.email),
           width: MediaQuery.of(context).size.width * 0.8,
         ),
-        const SizedBox(height: 70),
+        const SizedBox(height: 65),
         
       ],
       buttonText: "Continue",
       onButtonPressed: () {
-        // TODO: action register
+        Navigator.pushNamed(context, AppRoutes.newpassword);
+
       },
     );
   }

@@ -25,7 +25,7 @@ class LoginPage extends StatelessWidget {
           width: MediaQuery.of(context).size.width * 0.8,
         ),
         const SizedBox(height: Appsized.xl),
-        const passwordForm(),
+        const passwordForm(title: AppStrings.password,),
         const SizedBox(height: Appsized.xs),
         Align(
           alignment: Alignment.centerRight,

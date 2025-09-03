@@ -3,7 +3,12 @@ import 'package:eggsplore/widget/customForm.dart';
 import 'package:flutter/material.dart';
 
 class passwordForm extends StatefulWidget {
-  const passwordForm({super.key});
+  final String title;
+
+  const passwordForm({
+    super.key,
+    required this.title,
+  });
 
   @override
   State<passwordForm> createState() => passwordFormState();
@@ -15,7 +20,7 @@ class passwordFormState extends State<passwordForm> {
   @override
   Widget build(BuildContext context) {
     return CustomForm(
-          label: AppStrings.password,
+          label: widget.title,
           obscureText: obscureText,
           prefixIcon: const Icon(Icons.lock),
           suffixIcon: IconButton(

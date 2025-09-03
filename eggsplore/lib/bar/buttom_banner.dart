@@ -15,7 +15,7 @@ class BottomBanner extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           for (var text in AppStrings.bottomBannerText)
-            Text(text, style: bottomBannerTextStyle),
+            Text(text, style: AppTextStyle.bottomBannerTextStyle),
         ],
       ),
     );

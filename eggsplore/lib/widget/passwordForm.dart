@@ -6,10 +6,10 @@ class passwordForm extends StatefulWidget {
   const passwordForm({super.key});
 
   @override
-  State<passwordForm> createState() => _passwordFormState();
+  State<passwordForm> createState() => passwordFormState();
 }
 
-class _passwordFormState extends State<passwordForm> {
+class passwordFormState extends State<passwordForm> {
   bool obscureText = true;
 
   @override

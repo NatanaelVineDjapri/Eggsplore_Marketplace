@@ -1,6 +1,8 @@
+import 'package:eggsplore/app_routes.dart';
 import 'package:eggsplore/base/auth_base.dart';
 import 'package:eggsplore/constants/sizes.dart';
 import 'package:eggsplore/constants/text_string.dart';
+import 'package:eggsplore/pages/auth/change_password_page.dart';
 import 'package:eggsplore/widget/customForm.dart';
 import 'package:eggsplore/widget/passwordForm.dart';
 import 'package:flutter/material.dart';
@@ -12,9 +14,11 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return AuthPage(
       title: "Login",
+      accentTitle: "Account",
       subtitle: "Welcome back to the app",
       fields: [
         // Email field
+        
         CustomForm(
           label: AppStrings.email,
           prefixIcon: Icon(Icons.email),
@@ -25,11 +29,16 @@ class LoginPage extends StatelessWidget {
         const SizedBox(height: Appsized.xs),
         Align(
           alignment: Alignment.centerRight,
-          child: Text(
-            AppStrings.forgetPassword,
-            style: TextStyle(
-              color: Colors.indigo,
-              fontWeight: FontWeight.bold
+          child: GestureDetector(
+              onTap:(){
+                Navigator.pushNamed(context, AppRoutes.changepassword);
+              },
+              child: Text(
+                AppStrings.forgetPassword,
+                style: TextStyle(
+                color: Colors.indigo,
+                fontWeight: FontWeight.bold
+                ),
               ),
           ),
         ),
@@ -37,7 +46,7 @@ class LoginPage extends StatelessWidget {
       ],
       buttonText: "Login",
       onButtonPressed: () {
-        // TODO: action login
+        Navigator.pushNamed(context, AppRoutes.register);
       },
       footerText: 'test',
     );

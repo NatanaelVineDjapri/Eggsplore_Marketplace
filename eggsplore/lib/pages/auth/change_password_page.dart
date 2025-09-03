@@ -5,15 +5,15 @@ import 'package:eggsplore/widget/customForm.dart';
 import 'package:eggsplore/widget/passwordForm.dart';
 import 'package:flutter/material.dart';
 
-class RegisterPage extends StatelessWidget {
-  const RegisterPage({super.key});
+class ChangePassword extends StatelessWidget {
+  const ChangePassword({super.key});
 
   @override
   Widget build(BuildContext context) {
     return AuthPage(
-      title: "Register",
-      accentTitle: "Account",
-      subtitle: "Set your account",
+      title: "Forgot Your ",
+      accentTitle: AppStrings.password,
+      subtitle: "Time to update your password!",
       fields:  [
         Row(
           children: [
@@ -40,11 +40,10 @@ class RegisterPage extends StatelessWidget {
           prefixIcon: Icon(Icons.email),
           width: MediaQuery.of(context).size.width * 0.8,
         ),
-        const SizedBox(height: Appsized.xl),
-        const passwordForm()
+        const SizedBox(height: 70),
         
       ],
-      buttonText: "Register",
+      buttonText: "Continue",
       onButtonPressed: () {
         // TODO: action register
       },

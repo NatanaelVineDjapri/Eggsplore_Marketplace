@@ -1,12 +1,16 @@
+import 'package:eggsplore/app_routes.dart';
 import 'package:eggsplore/constants/sizes.dart';
 import 'package:eggsplore/constants/text_string.dart';
+import 'package:eggsplore/constants/text_style.dart';
 import 'package:eggsplore/widget/bottomAuth.dart';
 import 'package:eggsplore/widget/richText.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 
 class AuthPage extends StatelessWidget {
   final String title;
+  final String? accentTitle;
   final String subtitle;
   final List<Widget> fields;
   final String buttonText;
@@ -16,6 +20,7 @@ class AuthPage extends StatelessWidget {
   const AuthPage({
     super.key,
     required this.title,
+    this.accentTitle,
     required this.subtitle,
     required this.fields,
     required this.buttonText,
@@ -25,6 +30,7 @@ class AuthPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String finalAccentTitle = accentTitle ?? AppStrings.account;
     return Scaffold(
       body: Stack(
         children: [
@@ -37,8 +43,7 @@ class AuthPage extends StatelessWidget {
               fit: BoxFit.cover,
             ),
           ),
-
-          // Container utama
+          // Main container
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
@@ -56,27 +61,30 @@ class AuthPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Top: title + subtitle
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        richTextTitle(
-                          mainTitle: title,
-                          accentTitle: AppStrings.account,
-                          fontSize: Appsized.fontxxl,
-                        ),
-                        const SizedBox(height: Appsized.xs),
-                        Text(
-                          subtitle,
-                          style: TextStyle(fontSize: Appsized.fontSm),
-                        ),
-                        const SizedBox(height: Appsized.xxxl),
-                      ],
-                    ),
+                    // Title + optional accent
+                    if (finalAccentTitle != 'Account')
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(title, style: AppTextStyle.mainTitle),
+                          Text(finalAccentTitle, style: AppTextStyle.accentTitle),
+                        ],
+                      )
+                    else
+                      richTextTitle(
+                        mainTitle: title,
+                        accentTitle: AppStrings.account,
+                        fontSize: Appsized.fontxxl,),
+                    
+                    const SizedBox(height: Appsized.xs),
+                    Text(subtitle, style: AppTextStyle.subtitle),
+                    const SizedBox(height: Appsized.xxxl),
 
-                   ...fields,
+                    // Form fields
+                    ...fields,
                     const SizedBox(height: 50),
-                    // Bottom: tombol + footer
+
+                    // Bottom button + footer
                     Column(
                       children: [
                         BottomAuth(
@@ -86,15 +94,24 @@ class AuthPage extends StatelessWidget {
                         if (footerText != null) ...[
                           const SizedBox(height: Appsized.xs),
                           Center(
-                            child: richTextTitle(
-                              mainTitle: AppStrings.notRegister,
-                              accentTitle: AppStrings.createAccount,
-                              fontSize: Appsized.fontSm,
-                              mainColor: Colors.grey,
-                              accentColor: Colors.indigo,
+                            child: RichText(
+                              text: TextSpan(
+                                text: AppStrings.notRegister,
+                                style: AppTextStyle.footer,
+                                children: [
+                                  TextSpan(
+                                    text: ' ${AppStrings.createAccount}',
+                                    style: AppTextStyle.footerAccent,
+                                    recognizer: TapGestureRecognizer()
+                                    ..onTap =() {
+                                       Navigator.pushNamed(context, AppRoutes.register);
+                                    }
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ],
+                        ]
                       ],
                     ),
                   ],

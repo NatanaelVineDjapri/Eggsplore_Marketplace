@@ -1,5 +1,6 @@
 import 'package:eggsplore/app_routes.dart';
 import 'package:eggsplore/base/auth_base.dart';
+import 'package:eggsplore/constants/images.dart';
 import 'package:eggsplore/constants/sizes.dart';
 import 'package:eggsplore/constants/text_string.dart';
 import 'package:eggsplore/pages/auth/change_password_page.dart';
@@ -9,13 +10,16 @@ import 'package:flutter/material.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
+  
 
   @override
   Widget build(BuildContext context) {
+    final spacing = Appsized(context);
     return AuthPage(
       title: "Login",
       accentTitle: "Account",
       subtitle: "Welcome back to the app",
+      imagePaths: AppImages.thirdLogo,
       fields: [
         // Email field
         
@@ -24,9 +28,9 @@ class LoginPage extends StatelessWidget {
           prefixIcon: Icon(Icons.email),
           width: MediaQuery.of(context).size.width * 0.8,
         ),
-        const SizedBox(height: Appsized.xl),
+        SizedBox(height: spacing.xl),
         const passwordForm(title: AppStrings.password,),
-        const SizedBox(height: Appsized.xs),
+        SizedBox(height: spacing.xs),
         Align(
           alignment: Alignment.centerRight,
           child: GestureDetector(

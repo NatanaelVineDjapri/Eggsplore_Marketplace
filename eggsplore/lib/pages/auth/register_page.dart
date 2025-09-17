@@ -1,4 +1,5 @@
 import 'package:eggsplore/base/auth_base.dart';
+import 'package:eggsplore/constants/images.dart';
 import 'package:eggsplore/constants/sizes.dart';
 import 'package:eggsplore/constants/text_string.dart';
 import 'package:eggsplore/widget/customForm.dart';
@@ -10,39 +11,39 @@ class RegisterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final spacing = Appsized(context);
+
     return AuthPage(
       title: "Register",
       accentTitle: "Account",
       subtitle: "Set your account",
-      fields:  [
+      imagePaths: AppImages.fourthLogo,
+      fields: [
         Row(
           children: [
             Expanded(
-              flex: 1,
               child: CustomForm(
                 label: AppStrings.firstName,
-                prefixIcon: Icon(Icons.person),
+                prefixIcon: const Icon(Icons.person),
               ),
             ),
             const SizedBox(width: 12),
             Expanded(
-              flex: 1,
               child: CustomForm(
                 label: AppStrings.lastName,
-                prefixIcon: Icon(Icons.person),
+                prefixIcon: const Icon(Icons.person),
               ),
             ),
           ],
         ),
-        const SizedBox(height: Appsized.xl),
+        SizedBox(height: spacing.xl),
         CustomForm(
           label: AppStrings.email,
-          prefixIcon: Icon(Icons.email),
+          prefixIcon: const Icon(Icons.email),
           width: MediaQuery.of(context).size.width * 0.8,
         ),
-        const SizedBox(height: Appsized.xl),
-        const passwordForm(title: AppStrings.password,)
-        
+        SizedBox(height: spacing.xl),
+        const passwordForm(title: AppStrings.password),
       ],
       buttonText: "Register",
       onButtonPressed: () {

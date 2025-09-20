@@ -54,20 +54,28 @@ class _AddProductPageState extends State<AddProductPage> {
 
   InputDecoration _inputDecoration(String label, {String? prefix}) {
     return InputDecoration(
-      labelText: label,
-      labelStyle: const TextStyle(color: Colors.black54), // label normal
-      floatingLabelStyle: TextStyle(
-        color: Colors.black87,
-        backgroundColor: Colors.white.withOpacity(0.7), // bg label saat naik
+      label: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+        decoration: BoxDecoration(
+          color: Colors.white, // solid bg
+          borderRadius: BorderRadius.circular(6), // rounded bg label
+        ),
+        child: Text(
+          label,
+          style: const TextStyle(
+            color: Colors.black87,
+            fontSize: 14,
+          ),
+        ),
       ),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
       ),
       filled: true,
-      fillColor: Colors.white.withOpacity(0.7), // bg field semi transparan
+      fillColor: Colors.white, // field solid bg
       prefixText: prefix,
-      prefixStyle: const TextStyle(color: Colors.black54), // prefix kalem
-      hintStyle: const TextStyle(color: Colors.black54),  // hint kalem
+      prefixStyle: const TextStyle(color: Colors.black54),
+      hintStyle: const TextStyle(color: Colors.black54),
     );
   }
 

@@ -4,8 +4,10 @@ import 'package:eggsplore/pages/auth/login_page.dart';
 import 'package:eggsplore/pages/auth/register_page.dart';
 import 'package:eggsplore/pages/auth/welcome_page.dart';
 import 'package:eggsplore/pages/home_page.dart';
-import 'package:eggsplore/pages/my_shop_page.dart';
-import 'package:eggsplore/pages/add_product_page.dart';
+import 'package:eggsplore/pages/myShop/my_shop_page.dart';
+import 'package:eggsplore/pages/myShop/add_product_page.dart';
+import 'package:eggsplore/pages/myShop/shop_orders_page.dart';
+import 'package:eggsplore/pages/myShop/completed_orders_page.dart';
 import 'package:flutter/material.dart';
 
 class AppRoutes {
@@ -17,6 +19,8 @@ class AppRoutes {
   static const String homepage = '/homepage';
   static const String myshop = '/myshop';
   static const String addProduct = '/add-product';
+  static const String shopOrders = '/shop-orders';
+  static const String completedOrders = '/completed-orders';
 
   static Map<String, WidgetBuilder> routes = {
     welcome: (context) => const WelcomeScreen(),
@@ -27,5 +31,7 @@ class AppRoutes {
     homepage: (context) => const HomePage(),
     myshop: (context) => const MyShopPage(),
     addProduct: (context) => const AddProductPage(),
+    shopOrders: (context) => const ShopOrdersPage(),
+    completedOrders: (context) => const CompletedOrdersPage(),
   };
 }

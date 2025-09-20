@@ -47,12 +47,12 @@ class ShopActionsCard extends StatelessWidget {
           _buildAction(
             icon: Icons.shopping_bag,
             label: "Shop Orders",
-            onTap: () => Navigator.pushNamed(context, AppRoutes.myshop),
+            onTap: () => Navigator.pushNamed(context, AppRoutes.shopOrders),
           ),
           _buildAction(
             icon: Icons.check_circle,
             label: "Completed Orders",
-            onTap: () => Navigator.pushNamed(context, AppRoutes.myshop),
+            onTap: () => Navigator.pushNamed(context, AppRoutes.completedOrders),
           ),
           _buildAction(
             icon: Icons.add,

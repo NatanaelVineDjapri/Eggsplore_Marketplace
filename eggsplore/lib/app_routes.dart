@@ -4,8 +4,8 @@ import 'package:eggsplore/pages/auth/login_page.dart';
 import 'package:eggsplore/pages/auth/register_page.dart';
 import 'package:eggsplore/pages/auth/welcome_page.dart';
 import 'package:eggsplore/pages/home_page.dart';
+import 'package:eggsplore/pages/my_shop_page.dart';
 import 'package:flutter/material.dart';
-
 
 class AppRoutes {
   static const String welcome = '/';
@@ -14,6 +14,8 @@ class AppRoutes {
   static const String changepassword = '/change-password';
   static const String newpassword = '/new-password';
   static const String homepage = '/homepage';
+  static const String myshop = '/myshop';
+  static const String addProduct = '/add-product';
 
   static Map<String, WidgetBuilder> routes = {
     welcome: (context) => const WelcomeScreen(),
@@ -22,5 +24,6 @@ class AppRoutes {
     changepassword: (context) => const ChangePassword(),
     newpassword: (context) => const NewPasswordPage(),
     homepage: (context) => const HomePage(),
+    myshop: (context) => const MyShopPage(),
   };
 }

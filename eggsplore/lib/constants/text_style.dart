@@ -13,6 +13,12 @@ static const TextStyle mainTitle = TextStyle(
     color: Colors.black,
   );
 
+static const TextStyle mainTitle2 = TextStyle(
+    fontSize: Appsized.fontxxl,
+    fontWeight: FontWeight.bold,
+    color: Colors.black54,
+  );
+
 static const TextStyle accentTitle = TextStyle(
     fontSize: Appsized.fontxxl,
     fontWeight: FontWeight.bold,

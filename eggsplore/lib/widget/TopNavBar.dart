@@ -4,16 +4,12 @@ class TopNavBar extends StatelessWidget {
   final VoidCallback onChatTap;
   final ValueChanged<String>? onSearch;
 
-  const TopNavBar({
-    super.key,
-    required this.onChatTap,
-    this.onSearch,
-  });
+  const TopNavBar({super.key, required this.onChatTap, this.onSearch});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: const EdgeInsets.only(top: 1, left: 16, right: 16, bottom: 12),
       color: Colors.white,
       child: Row(
         children: [
@@ -34,9 +30,7 @@ class TopNavBar extends StatelessWidget {
               ),
             ),
           ),
-
           const SizedBox(width: 12),
-
           GestureDetector(
             onTap: onChatTap,
             child: Container(
@@ -45,7 +39,10 @@ class TopNavBar extends StatelessWidget {
                 color: Colors.grey.shade200,
                 shape: BoxShape.circle,
               ),
-              child: const Icon(Icons.chat_bubble_outline, color: Colors.black87),
+              child: const Icon(
+                Icons.chat_bubble_outline,
+                color: Colors.black87,
+              ),
             ),
           ),
         ],

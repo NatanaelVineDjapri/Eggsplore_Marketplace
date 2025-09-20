@@ -6,7 +6,6 @@ import 'package:eggsplore/pages/auth/welcome_page.dart';
 import 'package:eggsplore/pages/home_page.dart';
 import 'package:flutter/material.dart';
 
-
 class AppRoutes {
   static const String welcome = '/';
   static const String login = '/login';

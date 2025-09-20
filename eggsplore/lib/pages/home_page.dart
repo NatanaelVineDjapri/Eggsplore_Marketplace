@@ -1,20 +1,31 @@
+// lib/pages/home_page.dart
 import 'package:flutter/material.dart';
-import 'package:eggsplore/widget/TopNavBar.dart'; // pastikan nama file sesuai (huruf kecil semua)
+import 'package:eggsplore/widget/TopNavBar.dart';
+import 'package:eggsplore/widget/Eggsplore_Pay_Card.dart';
+import 'package:eggsplore/widget/banner_card.dart';
+import 'package:eggsplore/pages/eggsplore_pay_page.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  double balance = 0; // saldo mulai dari 0
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false, // ⬅️ panah back ilang
+        automaticallyImplyLeading: false,
         title: const Text(''),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(70),
           child: Container(
-            color: Colors.grey[200], // ⬅️ background abu
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8), // ⬅️ jaga jarak
+            color: Colors.grey[200],
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             child: TopNavBar(
               onChatTap: () {
                 print("Chat tapped!");
@@ -26,7 +37,30 @@ class HomePage extends StatelessWidget {
           ),
         ),
       ),
-      body: Container(),
+      body: ListView(
+        children: [
+          const BannerCard(imagePath: "assets/images/banner.jpg"),
+          EggsplorePayCard(
+            balance: balance,
+            onTap: () async {
+              // buka halaman top up, kirim balance saat ini
+              final newBalance = await Navigator.push<double>(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => EggsplorePayPage(balance: balance),
+                ),
+              );
+
+              // kalau balik dengan updated balance => pakai
+              if (newBalance != null) {
+                setState(() {
+                  balance = newBalance;
+                });
+              }
+            },
+          ),
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         items: const [
           BottomNavigationBarItem(
@@ -41,7 +75,7 @@ class HomePage extends StatelessWidget {
               AssetImage("assets/images/profile.png"),
               size: 30,
             ),
-            label: "profile",
+            label: "Profile",
           ),
         ],
       ),

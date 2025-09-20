@@ -9,6 +9,7 @@ class CustomForm extends StatelessWidget {
   final double height;
   final Icon? prefixIcon;
   final Widget? suffixIcon;
+  final TextEditingController? controller;
 
 
   const CustomForm({
@@ -19,6 +20,7 @@ class CustomForm extends StatelessWidget {
     this.height = 55,
     this.prefixIcon,
     this.suffixIcon,
+    this.controller,
   });
 
   @override
@@ -39,6 +41,7 @@ class CustomForm extends StatelessWidget {
           width: finalWidth,
           height: height,
           child: TextFormField(
+            controller: controller,
             obscureText: obscureText,
             decoration: InputDecoration(
               // labelText: label,

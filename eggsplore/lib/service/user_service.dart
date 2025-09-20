@@ -20,12 +20,17 @@ class UserService {
   // Register user
   static Future<bool> register(String firstname,String lastname, String email, String password) async {
     var url = Uri.parse('$baseUrl/register');
+
+    
     var response = await http.post(url, body: {
       'firstname': firstname,
       'lastname': lastname,
       'email': email,
       'password': password,
     });
+
+    print(response.statusCode);
+    print(response.body);
 
     return response.statusCode == 200;
   }
@@ -37,6 +42,9 @@ class UserService {
       'email': email,
       'password': password,
     });
+
+    print(response.statusCode);
+    print(response.body);
 
     if (response.statusCode == 200) {
       var json = jsonDecode(response.body); //ambil object usernya doang,klo misal diluar ad msg dll

@@ -6,6 +6,7 @@ class ShopInfoCard extends StatelessWidget {
   final String buyers;
   final String rating;
   final String imagePath;
+  final VoidCallback onModify; // callback ke page modify
 
   const ShopInfoCard({
     super.key,
@@ -14,13 +15,14 @@ class ShopInfoCard extends StatelessWidget {
     required this.buyers,
     required this.rating,
     required this.imagePath,
+    required this.onModify,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 8), // kasih jarak kanan kiri
-      padding: const EdgeInsets.all(16), // biar isi ga dempet
+      margin: const EdgeInsets.symmetric(horizontal: 8),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
@@ -52,7 +54,12 @@ class ShopInfoCard extends StatelessWidget {
                 Text("Rating: $rating"),
               ],
             ),
-          )
+          ),
+          IconButton(
+            icon: const Icon(Icons.edit, color: Colors.orange),
+            onPressed: onModify,
+            tooltip: "Modify Shop Info",
+          ),
         ],
       ),
     );

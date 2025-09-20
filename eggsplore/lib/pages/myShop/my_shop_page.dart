@@ -4,6 +4,7 @@ import 'package:eggsplore/widget/shop_info_card.dart';
 import 'package:eggsplore/widget/shop_actions_card.dart';
 import 'package:eggsplore/constants/text_style.dart';
 import 'package:eggsplore/constants/text_string.dart';
+import 'package:eggsplore/pages/myShop/modify_shop_info.dart';
 
 class MyShopPage extends StatefulWidget {
   const MyShopPage({super.key});
@@ -35,6 +36,14 @@ class _MyShopPageState extends State<MyShopPage> {
               buyers: buyers,
               rating: rating,
               imagePath: imagePath,
+              onModify: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ModifyShopInfoPage(),
+                  ),
+                );
+              },
             ),
             const SizedBox(height: 20),
             const ShopActionsCard(),

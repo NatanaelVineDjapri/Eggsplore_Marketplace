@@ -5,6 +5,7 @@ import 'package:eggsplore/pages/auth/register_page.dart';
 import 'package:eggsplore/pages/auth/welcome_page.dart';
 import 'package:eggsplore/pages/home_page.dart';
 import 'package:eggsplore/pages/my_shop_page.dart';
+import 'package:eggsplore/pages/add_product_page.dart';
 import 'package:flutter/material.dart';
 
 class AppRoutes {
@@ -25,5 +26,6 @@ class AppRoutes {
     newpassword: (context) => const NewPasswordPage(),
     homepage: (context) => const HomePage(),
     myshop: (context) => const MyShopPage(),
+    addProduct: (context) => const AddProductPage(),
   };
 }

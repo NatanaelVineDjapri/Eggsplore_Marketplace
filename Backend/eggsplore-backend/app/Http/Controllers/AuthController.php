@@ -67,10 +67,39 @@ class AuthController extends Controller
         ]);
     }
 
-    public function changePassword(Request $request){
-        $validator= Validator::make($request->all(),[
+    public function verifyUser(Request $request) {
+        $validator = Validator::make($request->all(), [
             'firstname' => 'required|string|max:255',
             'lastname' => 'required|string|max:255',
+            'email' => 'required|email',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors()->first()], 422);
+        }
+
+        $fullname = $request->firstname . ' ' . $request->lastname;
+
+        $user = User::where('name', $fullname)
+                    ->where('email', $request->email)
+                    ->first();
+
+        if (!$user) {
+            return response()->json(['message' => 'User tidak ditemukan'], 404);
+        }
+
+        return response()->json([
+            'message' => 'User ditemukan',
+            'data' => [
+                'fullname' => $fullname,
+                'email' => $request->email,
+            ]
+        ], 200);
+    }
+
+    public function changePassword(Request $request){
+        $validator= Validator::make($request->all(),[
+            'fullname' => 'required|string|max:255',
             'email' => 'required|email',
             'newpassword' => 'required',
             'confirmpassword' => 'required|same:newpassword',
@@ -83,9 +112,10 @@ class AuthController extends Controller
             return response()->json(['message' => $validator->errors()->first()], 422);
         }
    
-        $user = User::where('name',($request->firstname . ' ' . $request->lastname))
+        $user = User::where('name', $request->fullname)
                 ->where('email', $request->email)
                 ->first();
+                
          if (!$user) {
             return response()->json(['message' => 'User tidak ditemukan'], 404);
         }

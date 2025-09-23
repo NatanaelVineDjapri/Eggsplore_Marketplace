@@ -108,10 +108,12 @@ class ProductController extends Controller
 
     public function rateProduct(Request $request, $id){
         $request->validate([
-            'rating' => 'required|integer|min:1|max:5'
+            'rating' => 'required|integer|min:1|max:5',
+            'ulasan' => 'nullable|string|max:255',
         ]);
 
         $product = Product::find($id);
+        
         if(!$product){
             return response()->json(['message'=>'Produk tidak ditemukan'], 404);
         }

@@ -35,12 +35,9 @@ class AuthController extends Controller
             'role' => 'user',
         ]);
 
-        $token = Str::random(60);
-
         return response()->json([
             'message' => 'Register Berhasil',
             'user' => $user,
-            'token' => $token
         ], 201);
     }
 
@@ -62,7 +59,7 @@ class AuthController extends Controller
             return response()->json(['message' => 'Email atau password salah'], 401);
         }
 
-        $token = Str::random(60);
+        $token = $user->createToken('Token for user ' . $user->email)->plainTextToken;
 
         return response()->json([
             'message' => 'Login berhasil',

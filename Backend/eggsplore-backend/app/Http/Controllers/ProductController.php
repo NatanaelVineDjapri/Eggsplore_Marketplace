@@ -13,7 +13,8 @@ class ProductController extends Controller
     }
 
     public function showProduct($id){
-        $product = Product::with(['user','likes','comments','payments'])->find($id);
+        // $product = Product::with(['user','likes','comments','payments'])->find($id);
+        $product = Product::with(['user'])->find($id);
 
         if(!$product){
             return response()->json(['message' => 'Produk tidak ditemukan'], 404);
@@ -35,10 +36,8 @@ class ProductController extends Controller
         $data['user_id'] = auth()->id();
 
         if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $filename = time().'_'.$file->getClientOriginalName();
-            $file->move(public_path('images/products'), $filename);
-            $data['image'] = 'images/products/'.$filename;
+            $path = $request->file('image')->store('products', 'public');            
+            $data['image'] = 'storage/' . $path;
         }
 
         $product = Product::create($data);
@@ -71,10 +70,8 @@ class ProductController extends Controller
         $data = $request->only(['name','description','price','stock']);
 
         if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $filename = time().'_'.$file->getClientOriginalName();
-            $file->move(public_path('images/products'), $filename);
-            $data['image'] = 'images/products/'.$filename;
+            $path = $request->file('image')->store('products', 'public');            
+            $data['image'] = 'storage/' . $path;
         }
 
         $product->update($data);

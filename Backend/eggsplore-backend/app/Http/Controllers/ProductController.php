@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Product;
 
 class ProductController extends Controller
 {
@@ -13,7 +14,7 @@ class ProductController extends Controller
 
     public function showProduct($id){
         $product = Product::with(['user','likes','comments','payments'])->find($id);
-        
+
         if(!$product){
             return response()->json(['message' => 'Produk tidak ditemukan'], 404);
         }
@@ -23,14 +24,24 @@ class ProductController extends Controller
 
     public function addProduct(Request $request){
         $request->validate([
-            'name' => $request->name,
-            'description' => $request->description,
-            'price' => $request->price,
-            'stock' => $request->stock,
-            'user_id' => auth()->id(),
+            'name' => 'required|string',
+            'description' => 'nullable|string',
+            'price' => 'required|numeric',
+            'stock' => 'required|integer',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
-        $product = Product::create($request->all());
+        $data = $request->all();
+        $data['user_id'] = auth()->id();
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $filename = time().'_'.$file->getClientOriginalName();
+            $file->move(public_path('images/products'), $filename);
+            $data['image'] = 'images/products/'.$filename;
+        }
+
+        $product = Product::create($data);
 
         return response()->json([
             'message' => 'Product berhasil ditambahkan',
@@ -48,14 +59,25 @@ class ProductController extends Controller
         if($product->user_id != auth()->id()){
             return response()->json(['message' => 'Tidak punya akses'], 403);
         }
+
         $request->validate([
             'name' => 'sometimes|required|string',
             'description' => 'sometimes|nullable|string',
             'price' => 'sometimes|required|numeric',
-            'stock' => 'sometimes|required|integer'
+            'stock' => 'sometimes|required|integer',
+            'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
-        $product->update($request->only(['name', 'description', 'price','stock']));
+        $data = $request->only(['name','description','price','stock']);
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $filename = time().'_'.$file->getClientOriginalName();
+            $file->move(public_path('images/products'), $filename);
+            $data['image'] = 'images/products/'.$filename;
+        }
+
+        $product->update($data);
 
         return response()->json([
             'message' => 'Produk berhasil diupdate',
@@ -76,11 +98,34 @@ class ProductController extends Controller
 
         $product->delete();
 
-        return response()->json(['message' => "Produk berhasil di delete"]);
+        return response()->json(['message' => "Produk berhasil dihapus"]);
     }
 
     public function trendingProduct(){
-        $product = Product::trending();
-        return response()->json($product);
+        $products = Product::trending();
+        return response()->json($products);
     }
+
+    public function rateProduct(Request $request, $id){
+        $request->validate([
+            'rating' => 'required|integer|min:1|max:5'
+        ]);
+
+        $product = Product::find($id);
+        if(!$product){
+            return response()->json(['message'=>'Produk tidak ditemukan'], 404);
+        }
+
+        $rating = $product->ratings()->updateOrCreate(
+            ['user_id'=>auth()->id()],
+            ['rating'=>$request->rating]
+        );
+
+        return response()->json([
+            'message'=>'Rating berhasil diberikan',
+            'rating'=>$rating,
+            'average_rating'=>$product->averageRating()
+        ]);
+    }
+
 }

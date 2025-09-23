@@ -14,7 +14,8 @@ class Product extends Model
         'description',
         'price',
         'stock',
-        'user_id'
+        'user_id',
+        'image',
     ];
 
     public function user(){
@@ -39,5 +40,13 @@ class Product extends Model
 
     public static function trending(){
         return self::with('user')->withCount('payments')->orderBy('payment_counts','desc')->get();
+    }
+
+    public function ratings(){
+        return $this->hasMany(Rating::class);
+    }
+
+    public function averageRating(){
+        return $this->ratings()->avg('rating');
     }
 }

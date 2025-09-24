@@ -35,6 +35,10 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    public function likedProducts() {
+        return $this->belongsToMany(Product::class, 'likes'); 
+    }
+
     /**
      * Get the attributes that should be cast.
      *

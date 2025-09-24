@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ShopController;
+use App\Http\Controllers\LikeController;
 
 Route::post('register', [AuthController::class, 'register']);
 Route::get('users', [AuthController::class, 'allUsers']);
@@ -28,4 +29,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('/shops/{id}', [ShopController::class, 'showShop']);
     Route::post('/shops', [ShopController::class, 'makeShop']);
     Route::put('/shops/{id}', [ShopController::class, 'updateShop']);
+    
+    Route::post('/products/{id}/like', [LikeController::class, 'toggleLike']);
+
 });

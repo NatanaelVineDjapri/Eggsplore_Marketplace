@@ -13,15 +13,20 @@ class ProductController extends Controller
     }
 
     public function showProduct($id){
-        // $product = Product::with(['user','likes','comments','payments'])->find($id);
-        $product = Product::with(['user'])->find($id);
+        $product = Product::with(['shop','ratings.user', 'likedByUsers'])->find($id);
 
         if(!$product){
             return response()->json(['message' => 'Produk tidak ditemukan'], 404);
         }
 
-        return response()->json($product);
+        $averageRating = $product->ratings->avg('rating');
+
+        return response()->json([
+            'product' => $product,
+            'average_rating' => $averageRating
+        ]);
     }
+
 
     public function addProduct(Request $request){
         $request->validate([

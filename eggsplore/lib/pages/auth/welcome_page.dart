@@ -11,13 +11,14 @@ class WelcomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final spacing = Appsized(context);
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.only(
-            top: Appsized.none,
-            bottom: Appsized.lg
+            top: 0,
+            bottom: spacing.lg
           ),
           child: Column(
             children: [
@@ -29,7 +30,7 @@ class WelcomeScreen extends StatelessWidget {
                 fit: BoxFit.fitWidth,
               ),
     
-              const SizedBox(height: Appsized.xl),
+              SizedBox(height: spacing.xl),
               RichText(
                 textAlign: TextAlign.center,
                 text:TextSpan(
@@ -52,7 +53,7 @@ class WelcomeScreen extends StatelessWidget {
                 )
               ),
 
-              const SizedBox(height: Appsized.md),
+              SizedBox(height: spacing.md),
               //sub
               SizedBox(
                 width: 300,
@@ -66,7 +67,7 @@ class WelcomeScreen extends StatelessWidget {
                 ),
               ),
 
-            const SizedBox(height: Appsized.xl),
+            SizedBox(height: spacing.xl),
 
               //login button
             BottomAuth(
@@ -76,7 +77,7 @@ class WelcomeScreen extends StatelessWidget {
               },
             ),
 
-            SizedBox(height: Appsized.lg,),
+            SizedBox(height: spacing.lg,),
               //register button
             BottomAuth(
               text: AppStrings.register,

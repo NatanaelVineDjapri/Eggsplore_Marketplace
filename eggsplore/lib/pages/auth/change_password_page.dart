@@ -1,5 +1,6 @@
 import 'package:eggsplore/app_routes.dart';
 import 'package:eggsplore/base/auth_base.dart';
+import 'package:eggsplore/constants/images.dart';
 import 'package:eggsplore/constants/sizes.dart';
 import 'package:eggsplore/constants/text_string.dart';
 import 'package:eggsplore/widget/customForm.dart';
@@ -11,10 +12,12 @@ class ChangePassword extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final spacing = Appsized(context);
     return AuthPage(
       title: "Forgot Your ",
       accentTitle: AppStrings.password,
       subtitle: "Time to update your password!",
+      imagePaths: AppImages.fourthLogo,
       fields:  [
         Row(
           children: [
@@ -35,7 +38,7 @@ class ChangePassword extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: Appsized.xl),
+        SizedBox(height: spacing.xl),
         CustomForm(
           label: AppStrings.email,
           prefixIcon: Icon(Icons.email),

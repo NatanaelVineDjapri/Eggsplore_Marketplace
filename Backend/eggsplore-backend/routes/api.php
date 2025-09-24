@@ -32,4 +32,9 @@ Route::middleware('auth:sanctum')->group(function() {
     
     Route::post('/products/{id}/like', [LikeController::class, 'toggleLike']);
 
+    Route::get('/cart', [CartController::class, 'showCart']);
+    Route::post('/cart', [CartController::class, 'addCart']);
+    Route::put('/cart/{itemId}', [CartController::class, 'updateCart']);
+    Route::delete('/cart/{itemId}', [CartController::class, 'removeCart']);
+
 });

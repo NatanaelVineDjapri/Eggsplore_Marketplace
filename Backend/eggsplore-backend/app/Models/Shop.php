@@ -9,15 +9,19 @@ class Shop extends Model
 {
     use HasFactory;
 
-    public function up(): void {
-        Schema::create('shops', function (Blueprint $table) {
-        $table->id();
-        $table->foreignId('user_id')->constrained()->onDelete('cascade'); // pemilik toko
-        $table->string('name');
-        $table->string('description')->nullable();
-        $table->string('address')->nullable();
-        $table->string('image')->nullable(); 
-        $table->timestamps();
-    });
+    protected $fillable = [
+        'user_id',
+        'name',
+        'description',
+        'address',
+        'image',
+    ];
+
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
+
+    public function products() {
+        return $this->hasMany(Product::class);
     }
 }

@@ -26,17 +26,23 @@ class Product extends Model
         return $this->hasMany(Like::class);
     }
 
-    public function cart(){
-        return $this->hasMany(Cart::class);
+    public function likedByUsers() {
+        return $this->belongsToMany(User::class, 'likes'); // pivot table likes
     }
 
-    public function comment(){
-        return $this->hasMany(Comment::class);
+
+    // public function cart(){
+    //     return $this->hasMany(Cart::class);
+    // }
+
+    public function shop() {
+        return $this->belongsTo(Shop::class);
     }
 
-    public function payments(){
-        return $this->hasMany(Payment::class);
-    }
+
+    // public function payments(){
+    //     return $this->hasMany(Payment::class);
+    // }
 
     public static function trending(){
         return self::with('user')->withCount('payments')->orderBy('payment_counts','desc')->get();
@@ -46,7 +52,4 @@ class Product extends Model
         return $this->hasMany(Rating::class);
     }
 
-    public function averageRating(){
-        return $this->ratings()->avg('rating');
-    }
 }

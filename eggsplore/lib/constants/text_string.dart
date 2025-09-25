@@ -26,6 +26,17 @@ class AppStrings{
   static const String createAccount = " Create Account";
   static const String signIn = "Sign In";
 
+  // My Shop Page
+  static const String myShop = "My Shop";
+  static const String shopName = "Nama Toko";
+  static const String followers = "Followers";
+  static const String buyers = "Buyers";
+  static const String rating = "Rating";
+  static const String shopOrders = "Shop Orders";
+  static const String completedOrders = "Completed Orders";
+  static const String addProduct = "Add Product";
+  static const String myProducts = "My Products";
+
   //buttombanner
   static const List<String> bottomBannerText = [
     "Hatch.",
@@ -34,6 +45,4 @@ class AppStrings{
     "Purchase.",
     "Smile.",
   ];
-
-  
 }

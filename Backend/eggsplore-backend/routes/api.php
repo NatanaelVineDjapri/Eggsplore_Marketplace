@@ -3,6 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SearchController;
+use App\Http\Controllers\MessageController;
+
 
 Route::post('register', [AuthController::class, 'register']);
 Route::get('user', [AuthController::class, 'allUsers']);
@@ -20,4 +23,11 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('/products/trending', [ProductController::class,'trendingProduct']);
 
     Route::post('/products/{id}/rate', [ProductController::class,'rateProduct']);
+
+    Route::get('/search', [SearchController::class, 'search']);
+
+    Route::get('/messages/inbox', [MessageController::class, 'inbox']);
+    Route::get('/messages/{user}', [MessageController::class, 'index']);
+    Route::post('/messages/{user}', [MessageController::class, 'store']);
+    Route::delete('/messages/{user}/{message}', [MessageController::class, 'destroy']);
 });

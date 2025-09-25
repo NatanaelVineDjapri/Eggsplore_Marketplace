@@ -13,7 +13,7 @@ class ProductController extends Controller
     }
 
     public function showProduct($id){
-        $product = Product::with(['user','likes','comments','payments'])->find($id);
+        $product = Product::with(['user','likes','comments','payments','ratings'])->find($id);
 
         if(!$product){
             return response()->json(['message' => 'Produk tidak ditemukan'], 404);

@@ -1,9 +1,9 @@
-// lib/pages/home_page.dart
 import 'package:flutter/material.dart';
 import 'package:eggsplore/widget/TopNavBar.dart';
-import 'package:eggsplore/widget/Eggsplore_Pay_Card.dart';
-import 'package:eggsplore/widget/banner_card.dart';
+import 'package:eggsplore/widget/eggsplore_pay/Eggsplore_Pay_Card.dart';
+import 'package:eggsplore/widget/eggsplore_pay/banner_card.dart';
 import 'package:eggsplore/pages/eggsplore_pay_page.dart';
+import 'package:eggsplore/pages/chat_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -13,7 +13,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  double balance = 0; // saldo mulai dari 0
+  double balance = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,10 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             child: TopNavBar(
               onChatTap: () {
-                print("Chat tapped!");
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ChatPage()),
+                );
               },
               onSearch: (value) {
                 print("Search: $value");
@@ -43,7 +46,6 @@ class _HomePageState extends State<HomePage> {
           EggsplorePayCard(
             balance: balance,
             onTap: () async {
-              // buka halaman top up, kirim balance saat ini
               final newBalance = await Navigator.push<double>(
                 context,
                 MaterialPageRoute(
@@ -51,7 +53,6 @@ class _HomePageState extends State<HomePage> {
                 ),
               );
 
-              // kalau balik dengan updated balance => pakai
               if (newBalance != null) {
                 setState(() {
                   balance = newBalance;

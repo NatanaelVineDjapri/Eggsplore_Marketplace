@@ -1,7 +1,7 @@
 // lib/pages/eggsplore_pay_page.dart
 import 'package:flutter/material.dart';
 import 'package:eggsplore/widget/eggsplore_header.dart';
-import 'package:eggsplore/widget/balance_display.dart';
+import 'package:eggsplore/widget/eggsplore_pay/balance_display.dart';
 import 'package:eggsplore/widget/topup_item.dart';
 
 class EggsplorePayPage extends StatefulWidget {

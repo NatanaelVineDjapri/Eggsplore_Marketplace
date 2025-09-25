@@ -54,11 +54,7 @@ class AuthPage extends StatelessWidget {
                   height: double.infinity,
                   cacheWidth: 1080,
                 ),
-                Stack(
-                  children: [
-                     Eggsy(imagePath: imagePaths),
-                  ],
-                ),
+                Stack(children: [Eggsy(imagePath: imagePaths)]),
               ],
             ),
           ),
@@ -115,11 +111,11 @@ class AuthPage extends StatelessWidget {
 
                         Column(
                           children: [
-                            if(!isKeyboardVisible)
-                            BottomAuth(
-                              text: buttonText,
-                              onPressed: onButtonPressed,
-                            ),
+                            if (!isKeyboardVisible)
+                              BottomAuth(
+                                text: buttonText,
+                                onPressed: onButtonPressed,
+                              ),
                             if (footerText != null) ...[
                               SizedBox(height: spacing.xs),
                               Center(
@@ -149,14 +145,13 @@ class AuthPage extends StatelessWidget {
                       ],
                     ),
                   ),
-
                 ],
               ),
             ),
           ),
           if (!isKeyboardVisible) ...[
-             Handimage(isLeft: true), 
-             Handimage(isLeft: false), 
+            Handimage(isLeft: true),
+            Handimage(isLeft: false),
           ],
         ],
       ),

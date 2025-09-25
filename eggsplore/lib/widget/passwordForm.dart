@@ -1,13 +1,14 @@
-import 'package:eggsplore/constants/text_string.dart';
 import 'package:eggsplore/widget/customForm.dart';
 import 'package:flutter/material.dart';
 
 class passwordForm extends StatefulWidget {
   final String title;
+  final TextEditingController? controller;
 
   const passwordForm({
     super.key,
     required this.title,
+    this.controller,
   });
 
   @override
@@ -21,6 +22,7 @@ class passwordFormState extends State<passwordForm> {
   Widget build(BuildContext context) {
     return CustomForm(
           label: widget.title,
+          controller: widget.controller,
           obscureText: obscureText,
           prefixIcon: const Icon(Icons.lock),
           suffixIcon: IconButton(

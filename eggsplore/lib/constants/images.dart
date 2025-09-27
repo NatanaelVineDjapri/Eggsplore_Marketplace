@@ -10,4 +10,5 @@ class AppImages {
   static const String logo ='assets/logo/logo.png';
   static const String profileHeader = 'assets/images/profileHeader.png';
   static const String homeHeader = 'assets/images/homeHeader.png';
+  static const String shopPattern = 'assets/images/patterns.png';
 }

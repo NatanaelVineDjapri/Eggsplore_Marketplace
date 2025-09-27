@@ -13,7 +13,7 @@ class _CompletedOrdersPageState extends State<CompletedOrdersPage> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      backgroundColor: Colors.orange,
+      backgroundColor: const Color(0xFFffae11),
       appBar: backBar(title: "Completed Orders"),
       body: Center(
         child: Text(

@@ -8,45 +8,59 @@ class TopNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(top: 1, left: 16, right: 16, bottom: 12),
-      color: Colors.white,
-      child: Row(
-        children: [
-          Expanded(
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              decoration: BoxDecoration(
-                color: Colors.grey.shade200,
-                borderRadius: BorderRadius.circular(25),
-              ),
-              child: TextField(
-                onChanged: onSearch,
-                decoration: const InputDecoration(
-                  hintText: "Search Product",
-                  border: InputBorder.none,
-                  icon: Icon(Icons.search, color: Colors.grey),
+    return Row(
+      children: [
+        // Search bar
+        Expanded(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            decoration: BoxDecoration(
+              color: Colors.white, // search box warna putih
+              borderRadius: BorderRadius.circular(25),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 4,
+                  offset: const Offset(0, 2),
                 ),
+              ],
+            ),
+            child: TextField(
+              onChanged: onSearch,
+              decoration: const InputDecoration(
+                hintText: "Search Product",
+                border: InputBorder.none,
+                icon: Icon(Icons.search, color: Colors.grey),
+                contentPadding: EdgeInsets.symmetric(vertical: 12),
               ),
             ),
           ),
-          const SizedBox(width: 12),
-          GestureDetector(
-            onTap: onChatTap,
-            child: Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: Colors.grey.shade200,
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(
-                Icons.chat_bubble_outline,
-                color: Colors.black87,
-              ),
+        ),
+        const SizedBox(width: 12),
+
+        // Chat button
+        GestureDetector(
+          onTap: onChatTap,
+          child: Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 4,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: const Icon(
+              Icons.chat_bubble_outline,
+              color: Colors.black87,
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

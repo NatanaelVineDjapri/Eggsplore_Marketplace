@@ -8,6 +8,7 @@ import 'package:eggsplore/pages/myShop/my_shop_page.dart';
 import 'package:eggsplore/pages/myShop/add_product_page.dart';
 import 'package:eggsplore/pages/myShop/shop_orders_page.dart';
 import 'package:eggsplore/pages/myShop/completed_orders_page.dart';
+import 'package:eggsplore/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 
 class AppRoutes {
@@ -21,6 +22,7 @@ class AppRoutes {
   static const String addProduct = '/add-product';
   static const String shopOrders = '/shop-orders';
   static const String completedOrders = '/completed-orders';
+  static const String profile = '/profile';
 
   static Map<String, WidgetBuilder> routes = {
     welcome: (context) => const WelcomeScreen(),
@@ -33,5 +35,6 @@ class AppRoutes {
     addProduct: (context) => const AddProductPage(),
     shopOrders: (context) => const ShopOrdersPage(),
     completedOrders: (context) => const CompletedOrdersPage(),
+    profile: (context) => const ProfilePage(),
   };
 }

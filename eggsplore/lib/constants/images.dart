@@ -9,4 +9,5 @@ class AppImages {
   static const String introLogo ='assets/logo/eggsyLogin.png';
   static const String logo ='assets/logo/logo.png';
   static const String profileHeader = 'assets/images/profileHeader.png';
+  static const String homeHeader = 'assets/images/homeHeader.png';
 }

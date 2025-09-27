@@ -82,7 +82,7 @@ class _AddProductPageState extends State<AddProductPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.orange,
+      backgroundColor: const Color(0xFFffae11),
       appBar: const backBar(title: "Add Product"),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),

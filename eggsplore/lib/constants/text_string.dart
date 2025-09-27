@@ -26,6 +26,9 @@ class AppStrings{
   static const String createAccount = " Create Account";
   static const String signIn = "Sign In";
 
+  // Profile
+  static const String myWishlist = "My Wishlist";
+  
   // My Shop Page
   static const String myShop = "My Shop";
   static const String shopName = "Nama Toko";

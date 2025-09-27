@@ -4,6 +4,7 @@ import 'package:eggsplore/widget/eggsplore_pay/Eggsplore_Pay_Card.dart';
 import 'package:eggsplore/widget/eggsplore_pay/banner_card.dart';
 import 'package:eggsplore/pages/eggsplore_pay_page.dart';
 import 'package:eggsplore/pages/chat_page.dart';
+import 'package:eggsplore/bar/bottom_nav.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -62,24 +63,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(
-            icon: ImageIcon(
-              AssetImage("assets/images/home.png"),
-              size: 30,
-            ),
-            label: "Home",
-          ),
-          BottomNavigationBarItem(
-            icon: ImageIcon(
-              AssetImage("assets/images/profile.png"),
-              size: 30,
-            ),
-            label: "Profile",
-          ),
-        ],
-      ),
-    );
-  }
+      bottomNavigationBar: const CustomBottomNavBar(currentIndex: 0),
+    );
+  }
 }

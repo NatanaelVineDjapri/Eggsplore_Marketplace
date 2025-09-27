@@ -23,7 +23,7 @@ class _MyShopPageState extends State<MyShopPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.orange,
+      backgroundColor: const Color(0xFFffae11),
       appBar: const backBar(title: "My Shop"),
       body: Padding(
         padding: const EdgeInsets.all(16),

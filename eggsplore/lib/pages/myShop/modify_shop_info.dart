@@ -70,7 +70,7 @@ class _ModifyShopInfoPageState extends State<ModifyShopInfoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.orange,
+      backgroundColor: const Color(0xFFffae11),
       appBar: const backBar(title: "Modify Shop Info"),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),

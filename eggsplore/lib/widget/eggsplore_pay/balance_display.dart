@@ -1,4 +1,3 @@
-// lib/widget/balance_display.dart
 import 'package:flutter/material.dart';
 import 'package:eggsplore/widget/formatter.dart';
 
@@ -11,7 +10,7 @@ class BalanceDisplay extends StatelessWidget {
     super.key,
     required this.balance,
     this.imagePath = 'assets/images/money.png',
-    this.imageSize = 70, // bikin gambar lebih gede (sesuai Figma)
+    this.imageSize = 70, 
   });
 
   @override

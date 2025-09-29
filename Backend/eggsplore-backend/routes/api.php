@@ -5,15 +5,18 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\MessageController;
-
+use App\Http\Controllers\ShopController;
+use App\Http\Controllers\LikeController;
 
 Route::post('register', [AuthController::class, 'register']);
-Route::get('user', [AuthController::class, 'allUsers']);
+Route::get('users', [AuthController::class, 'allUsers']);
 Route::post('login', [AuthController::class, 'login']);
 Route::post('verify-user', [AuthController::class, 'verifyUser']);
 Route::put('change-password', [AuthController::class, 'changePassword']);
 
 Route::middleware('auth:sanctum')->group(function() {
+    Route::post('/logout', [AuthController::class, 'logout']);
+    
     Route::get('/products', [ProductController::class,'index']);
     Route::get('/products/{id}', [ProductController::class,'showProduct']);
     Route::post('/products', [ProductController::class,'addProduct']);
@@ -30,4 +33,15 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('/messages/{user}', [MessageController::class, 'index']);
     Route::post('/messages/{user}', [MessageController::class, 'store']);
     Route::delete('/messages/{user}/{message}', [MessageController::class, 'destroy']);
+    Route::get('/shops', [ShopController::class, 'index']);
+    Route::get('/shops/{id}', [ShopController::class, 'showShop']);
+    Route::post('/shops', [ShopController::class, 'makeShop']);
+    Route::put('/shops/{id}', [ShopController::class, 'updateShop']);
+    
+    Route::post('/products/{id}/like', [LikeController::class, 'toggleLike']);
+
+    Route::get('/cart', [CartController::class, 'showCart']);
+    Route::post('/cart', [CartController::class, 'addCart']);
+    Route::put('/cart/{itemId}', [CartController::class, 'updateCart']);
+    Route::delete('/cart/{itemId}', [CartController::class, 'removeCart']);
 });

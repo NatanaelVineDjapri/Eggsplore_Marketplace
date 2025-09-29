@@ -43,7 +43,7 @@ class CustomBottomNavBar extends StatelessWidget {
           label: "Home",
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.shopping_cart, size: 28),
+          icon: Icon(Icons.shopping_cart_outlined, size: 28),
           label: "Cart",
         ),
         BottomNavigationBarItem(

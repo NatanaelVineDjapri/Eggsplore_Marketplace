@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:eggsplore/pages/reviews.dart';
+import 'package:eggsplore/pages/onprocess.dart';
 
 class ProfileActionsCard extends StatefulWidget {
   const ProfileActionsCard({super.key});
@@ -20,15 +22,45 @@ class _ProfileActionsCardState extends State<ProfileActionsCard> {
             color: Colors.black.withOpacity(0.1),
             blurRadius: 6,
             offset: const Offset(0, 3),
-          )
+          ),
         ],
       ),
       child: Row(
-        children: const [
-          Expanded(child: _ActionItem(icon: Icons.receipt_long, label: "Transaction")),
-          Expanded(child: _ActionItem(icon: Icons.timelapse, label: "On Process")),
-          Expanded(child: _ActionItem(icon: Icons.send, label: "Sent")),
-          Expanded(child: _ActionItem(icon: Icons.reviews, label: "Reviews")),
+        children: [
+          Expanded(
+            child: _ActionItem(
+              icon: Icons.receipt_long,
+              label: "Transaction",
+              onTap: () {},
+            ),
+          ),
+          Expanded(
+            child: _ActionItem(
+              icon: Icons.timelapse,
+              label: "On Process",
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const ProcessedPage()),
+                );
+              },
+            ),
+          ),
+          Expanded(
+            child: _ActionItem(icon: Icons.send, label: "Sent", onTap: () {}),
+          ),
+          Expanded(
+            child: _ActionItem(
+              icon: Icons.reviews,
+              label: "Reviews",
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const ReviewsPage()),
+                );
+              },
+            ),
+          ),
         ],
       ),
     );
@@ -38,18 +70,22 @@ class _ProfileActionsCardState extends State<ProfileActionsCard> {
 class _ActionItem extends StatelessWidget {
   final IconData icon;
   final String label;
+  final VoidCallback? onTap;
 
-  const _ActionItem({required this.icon, required this.label});
+  const _ActionItem({required this.icon, required this.label, this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, size: 28, color: Colors.orange),
-        const SizedBox(height: 6),
-        Text(label, style: const TextStyle(fontSize: 12)),
-      ],
+    return InkWell(
+      onTap: onTap,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 28, color: Colors.orange),
+          const SizedBox(height: 6),
+          Text(label, style: const TextStyle(fontSize: 12)),
+        ],
+      ),
     );
   }
 }

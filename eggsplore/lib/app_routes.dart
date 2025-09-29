@@ -9,6 +9,7 @@ import 'package:eggsplore/pages/myShop/add_product_page.dart';
 import 'package:eggsplore/pages/myShop/shop_orders_page.dart';
 import 'package:eggsplore/pages/myShop/completed_orders_page.dart';
 import 'package:eggsplore/pages/profile_page.dart';
+import 'package:eggsplore/pages/reviews.dart';
 import 'package:flutter/material.dart';
 
 class AppRoutes {

@@ -6,6 +6,7 @@ import 'package:eggsplore/widget/profile/profile_shop_card.dart';
 import 'package:eggsplore/widget/profile/profile_actions_card.dart';
 import 'package:eggsplore/constants/text_string.dart';
 import 'package:eggsplore/constants/text_style.dart';
+import 'package:eggsplore/pages/reviews.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});

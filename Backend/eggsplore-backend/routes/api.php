@@ -22,9 +22,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::post('/products', [ProductController::class,'addProduct']);
     Route::put('/products/{id}', [ProductController::class,'updateProduct']);
     Route::delete('/products/{id}', [ProductController::class,'deleteProduct']);
-
     Route::get('/products/trending', [ProductController::class,'trendingProduct']);
-
     Route::post('/products/{id}/rate', [ProductController::class,'rateProduct']);
 
     Route::get('/search', [SearchController::class, 'search']);

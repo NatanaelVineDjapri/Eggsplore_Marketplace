@@ -132,5 +132,4 @@ class ProductController extends Controller
             'average_rating'=>$product->averageRating()
         ]);
     }
-
 }

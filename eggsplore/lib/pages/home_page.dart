@@ -6,6 +6,8 @@ import 'package:eggsplore/pages/eggsplore_pay_page.dart';
 import 'package:eggsplore/pages/chat_page.dart';
 import 'package:eggsplore/bar/bottom_nav.dart';
 import 'package:eggsplore/constants/images.dart'; // 🔹 biar bisa pake AppImages
+import 'package:eggsplore/pages/search_page.dart';
+import 'package:eggsplore/widget/trending_product_card.dart'; // 🔹 import widget produk
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -51,7 +53,12 @@ class _HomePageState extends State<HomePage> {
                       );
                     },
                     onSearch: (value) {
-                      print("Search: $value");
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SearchPage(query: value),
+                        ),
+                      );
                     },
                   ),
                 ),
@@ -79,6 +86,41 @@ class _HomePageState extends State<HomePage> {
                             });
                           }
                         },
+                      ),
+
+                      // 🔹 Tambah section produk di bawah top up
+                      Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: GridView.count(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 12,
+                          mainAxisSpacing: 12,
+                          childAspectRatio: 0.75,
+                          children: const [
+                            TrendingProductCard(
+                              name: "Telur 1kg",
+                              price: "Rp. 1.000.000",
+                        
+                            ),
+                            TrendingProductCard(
+                              name: "Ayam Potong 1 Ekor",
+                              price: "Rp. 1.000.000",
+                            
+                            ),
+                            TrendingProductCard(
+                              name: "Cabai 500gr",
+                              price: "Rp. 1.000.000",
+                            
+                            ),
+                            TrendingProductCard(
+                              name: "ZGMF-X10A Freedom Gundam",
+                              price: "Rp. 1.000.000",
+                              
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),

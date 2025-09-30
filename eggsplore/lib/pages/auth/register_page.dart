@@ -21,6 +21,8 @@ class _RegisterPageState extends State<RegisterPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
+  bool _isLoading = false;
+
   @override
   void dispose() {
     firstNameController.dispose();
@@ -28,6 +30,42 @@ class _RegisterPageState extends State<RegisterPage> {
     emailController.dispose();
     passwordController.dispose();
     super.dispose();
+  }
+
+  Future<void> _handleRegister() async {
+    if (firstNameController.text.isEmpty ||
+        lastNameController.text.isEmpty ||
+        emailController.text.isEmpty ||
+        passwordController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Form tidak boleh kosong')),
+      );
+      return;
+    }
+
+    setState(() => _isLoading = true);
+
+    final success = await UserService.register(
+      firstNameController.text.trim(),
+      lastNameController.text.trim(),
+      emailController.text.trim(),
+      passwordController.text.trim(),
+    );
+
+    setState(() => _isLoading = false);
+
+    if (!mounted) return;
+
+    if (success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Registrasi berhasil, silakan login')),
+      );
+      Navigator.pushReplacementNamed(context, AppRoutes.login);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Registrasi gagal, coba lagi')),
+      );
+    }
   }
 
   @override
@@ -72,27 +110,8 @@ class _RegisterPageState extends State<RegisterPage> {
           title: AppStrings.password,
         ),
       ],
-      buttonText: "Register",
-      onButtonPressed: () async {
-        if (firstNameController.text.isEmpty ||
-            lastNameController.text.isEmpty ||
-            emailController.text.isEmpty ||
-            passwordController.text.isEmpty) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Form tidak boleh kosong')),
-          );
-          return;
-        }
-
-        final user = await UserService.register(
-          firstNameController.text,
-          lastNameController.text,
-          emailController.text,
-          passwordController.text,
-        );
-
-        Navigator.pushReplacementNamed(context, AppRoutes.login);
-      },
+      buttonText: _isLoading ? "Loading..." : "Register",
+      onButtonPressed: _isLoading ? null : _handleRegister,
     );
   }
 }

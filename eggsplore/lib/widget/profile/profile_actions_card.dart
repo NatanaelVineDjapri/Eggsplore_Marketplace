@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:eggsplore/pages/reviews.dart';
 import 'package:eggsplore/pages/onprocess.dart';
+import 'package:eggsplore/pages/sent_page.dart'; // pastiin import ini
 
 class ProfileActionsCard extends StatefulWidget {
   const ProfileActionsCard({super.key});
@@ -31,7 +32,12 @@ class _ProfileActionsCardState extends State<ProfileActionsCard> {
             child: _ActionItem(
               icon: Icons.receipt_long,
               label: "Transaction",
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const ProcessedPage()),
+                );
+              },
             ),
           ),
           Expanded(
@@ -47,7 +53,16 @@ class _ProfileActionsCardState extends State<ProfileActionsCard> {
             ),
           ),
           Expanded(
-            child: _ActionItem(icon: Icons.send, label: "Sent", onTap: () {}),
+            child: _ActionItem(
+              icon: Icons.send,
+              label: "Sent",
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const SentPage()),
+                );
+              },
+            ),
           ),
           Expanded(
             child: _ActionItem(

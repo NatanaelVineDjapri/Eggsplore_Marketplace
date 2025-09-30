@@ -4,7 +4,11 @@ class TopNavBar extends StatelessWidget {
   final VoidCallback onChatTap;
   final ValueChanged<String>? onSearch;
 
-  const TopNavBar({super.key, required this.onChatTap, this.onSearch});
+  const TopNavBar({
+    super.key,
+    required this.onChatTap,
+    this.onSearch,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +19,7 @@ class TopNavBar extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12),
             decoration: BoxDecoration(
-              color: Colors.white, // search box warna putih
+              color: Colors.white,
               borderRadius: BorderRadius.circular(25),
               boxShadow: [
                 BoxShadow(
@@ -26,7 +30,9 @@ class TopNavBar extends StatelessWidget {
               ],
             ),
             child: TextField(
-              onChanged: onSearch,
+              // ❌ Jangan pakai onTap untuk langsung search
+              // biarin TextField bisa fokus & diketik
+              onSubmitted: onSearch, // enter = trigger search
               decoration: const InputDecoration(
                 hintText: "Search Product",
                 border: InputBorder.none,
@@ -54,10 +60,7 @@ class TopNavBar extends StatelessWidget {
                 ),
               ],
             ),
-            child: const Icon(
-              Icons.chat_bubble_outline,
-              color: Colors.black87,
-            ),
+            child: const Icon(Icons.chat_bubble_outline, color: Colors.black87),
           ),
         ),
       ],

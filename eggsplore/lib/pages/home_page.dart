@@ -1,4 +1,5 @@
 import 'package:eggsplore/constants/sizes.dart';
+import 'package:eggsplore/service/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:eggsplore/widget/TopNavBar.dart';
@@ -13,7 +14,6 @@ import 'package:eggsplore/service/product_service.dart';
 import 'package:eggsplore/widget/product.dart';
 import 'package:intl/intl.dart';
 
-
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -24,7 +24,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   double balance = 0;
 
-  // Ambil token & fetch produk
   Future<List<Product>> _loadProducts() async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('auth_token') ?? '';
@@ -32,6 +31,20 @@ class _HomePageState extends State<HomePage> {
       throw Exception("User belum login atau token kosong");
     }
     return ProductService.fetchProducts(token);
+  }
+
+  void initState() {
+    super.initState();
+    _loadUser();
+  }
+
+  void _loadUser() async {
+    final user = await UserService.getCurrentUser();
+    if (user != null) {
+      setState(() {
+        balance = user.balance;
+      });
+    }
   }
 
   @override
@@ -58,13 +71,16 @@ class _HomePageState extends State<HomePage> {
                 // TopNavBar
                 Padding(
                   padding: EdgeInsets.symmetric(
-                      horizontal: size.md, vertical: size.sm),
+                    horizontal: size.md,
+                    vertical: size.sm,
+                  ),
                   child: TopNavBar(
                     onChatTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const ChatPage()),
+                          builder: (context) => const ChatPage(),
+                        ),
                       );
                     },
                     onSearch: (value) => print("Search: $value"),
@@ -83,17 +99,17 @@ class _HomePageState extends State<HomePage> {
                           final newBalance = await Navigator.push<double>(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  EggsplorePayPage(balance: balance),
+                              builder: (context) => const EggsplorePayPage(),
                             ),
                           );
                           if (newBalance != null) {
-                            setState(() => balance = newBalance);
+                            setState(
+                              () => balance = newBalance,
+                            ); // update balance di HomePage
                           }
                         },
                       ),
 
-                      // Produk Grid
                       Padding(
                         padding: EdgeInsets.all(size.md),
                         child: FutureBuilder<List<Product>>(
@@ -102,19 +118,23 @@ class _HomePageState extends State<HomePage> {
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
                               return const Center(
-                                  child: CircularProgressIndicator());
+                                child: CircularProgressIndicator(),
+                              );
                             }
 
                             if (snapshot.hasError) {
                               return Center(
-                                  child: Text(
-                                      "Gagal load produk: ${snapshot.error}"));
+                                child: Text(
+                                  "Gagal load produk: ${snapshot.error}",
+                                ),
+                              );
                             }
 
                             final products = snapshot.data ?? [];
                             if (products.isEmpty) {
                               return const Center(
-                                  child: Text("Belum ada produk"));
+                                child: Text("Belum ada produk"),
+                              );
                             }
 
                             return GridView.builder(
@@ -123,11 +143,11 @@ class _HomePageState extends State<HomePage> {
                               itemCount: products.length,
                               gridDelegate:
                                   SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                crossAxisSpacing: size.sm,
-                                mainAxisSpacing: size.sm,
-                                childAspectRatio: 0.7,
-                              ),
+                                    crossAxisCount: 2,
+                                    crossAxisSpacing: size.sm,
+                                    mainAxisSpacing: size.sm,
+                                    childAspectRatio: 0.7,
+                                  ),
                               itemBuilder: (context, index) {
                                 final product = products[index];
                                 return ProductCard(

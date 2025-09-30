@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:eggsplore/widget/formatter.dart';
+import 'package:eggsplore/constants/colors.dart';
+
 
 class BalanceDisplay extends StatelessWidget {
   final double balance;
@@ -18,7 +20,7 @@ class BalanceDisplay extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.primary,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -28,45 +30,26 @@ class BalanceDisplay extends StatelessWidget {
           ),
         ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
         children: [
-          const Text(
-            "Jumlah Saldo",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: const BoxDecoration(
+              color: AppColors.iconBg,
+              shape: BoxShape.circle,
+            ),
+            child: Image.asset(
+              imagePath,
+              width: imageSize * 0.7,
+              height: imageSize * 0.7,
+              fit: BoxFit.contain,
             ),
           ),
-          const SizedBox(height: 12),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              // Icon di lingkaran
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.orange.withOpacity(0.15),
-                  shape: BoxShape.circle,
-                ),
-                child: Image.asset(
-                  imagePath,
-                  width: imageSize * 0.7,
-                  height: imageSize * 0.7,
-                  fit: BoxFit.contain,
-                ),
-              ),
-              const SizedBox(width: 16),
-              // Text balance
-              Text(
-                formatRupiah(balance),
-                style: const TextStyle(
-                  color: Colors.orange,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold
-                ),
-              ),
-            ],
+          const SizedBox(width: 16),
+          Text(
+            formatRupiah(balance),
+            style: const TextStyle(
+                color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
           ),
         ],
       ),

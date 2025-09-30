@@ -20,7 +20,7 @@ class UserService {
    static Future<String?> getToken() async {
     return _getToken();
   }
-  
+
   static Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('auth_token');
@@ -154,4 +154,31 @@ class UserService {
     }
     return false;
   }
+
+ static Future<double?> topUp(double amount) async {
+  final token = await getToken();
+  if (token == null) return null;
+
+  final url = Uri.parse('$baseUrl/topup');
+  final response = await http.post(
+    url,
+    headers: {
+      "Authorization": "Bearer $token",
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    body: jsonEncode({"amount": amount}),
+  );
+
+  print('Status code: ${response.statusCode}');
+  print('Body: ${response.body}');
+
+  if (response.statusCode == 200) {
+    final json = jsonDecode(response.body);
+    return double.tryParse(json['balance'].toString()) ?? 0.0;
+  }
+
+  return null;
+}
+
 }

@@ -1,8 +1,7 @@
-import 'package:eggsplore/constants/text_string.dart';
 import 'package:flutter/material.dart';
-import 'package:eggsplore/constants/sizes.dart';
-import 'package:eggsplore/constants/colors.dart';
-import 'package:eggsplore/widget/formatter.dart';
+import '../constants/sizes.dart';
+import '../constants/colors.dart';
+import 'formatter.dart';
 
 class TopUpItem extends StatelessWidget {
   final double amount;
@@ -18,9 +17,8 @@ class TopUpItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // responsive width menggunakan media query
     final screenWidth = MediaQuery.of(context).size.width;
-    final cardWidth = screenWidth * 0.38; // bisa disesuaikan, 38% layar
+    final cardWidth = screenWidth * 0.38;
 
     return GestureDetector(
       onTap: () => onTap(amount),
@@ -28,7 +26,7 @@ class TopUpItem extends StatelessWidget {
         width: cardWidth,
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
         decoration: BoxDecoration(
-          color: AppColors.primary, // kuning lembut
+          color: AppColors.primary,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
@@ -42,12 +40,11 @@ class TopUpItem extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Lingkaran background ikon
             Container(
               width: cardWidth * 0.5,
               height: cardWidth * 0.5,
               decoration: const BoxDecoration(
-                color: AppColors.iconBg, // orange transparan
+                color: AppColors.iconBg,
                 shape: BoxShape.circle,
               ),
               padding: const EdgeInsets.all(12),
@@ -57,14 +54,12 @@ class TopUpItem extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
-            // Teks jumlah
             Text(
               formatRupiah(amount),
               style: const TextStyle(
-                color: Colors.white, // font putih
-                fontSize: Appsized.fontSm,
-                fontWeight: FontWeight.bold,
-              ),
+                  color: Colors.white,
+                  fontSize: Appsized.fontSm,
+                  fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
           ],

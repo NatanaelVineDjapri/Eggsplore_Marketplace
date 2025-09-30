@@ -6,7 +6,7 @@ class EggsploreHeader extends StatelessWidget {
 
   const EggsploreHeader({
     super.key,
-    required this.username,
+    this.username = 'Pengguna',
     this.avatarRadius = 28,
   });
 
@@ -69,7 +69,6 @@ class EggsploreHeader extends StatelessWidget {
                   color: Colors.white,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  letterSpacing: 0.5,
                 ),
               ),
             ],

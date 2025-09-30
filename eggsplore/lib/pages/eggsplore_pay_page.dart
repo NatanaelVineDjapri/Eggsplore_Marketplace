@@ -1,33 +1,54 @@
+import 'package:eggsplore/model/user.dart';
 import 'package:flutter/material.dart';
-import 'package:eggsplore/bar/backBar.dart';
-import 'package:eggsplore/widget/eggsplore_header.dart';
-import 'package:eggsplore/constants/sizes.dart'; 
+import 'package:eggsplore/constants/sizes.dart';
 import 'package:eggsplore/constants/colors.dart';
 import 'package:eggsplore/widget/eggsplore_pay/balance_display.dart';
 import 'package:eggsplore/widget/topup_item.dart';
 import 'package:eggsplore/service/user_service.dart';
-import 'package:eggsplore/model/user.dart';
+import 'package:eggsplore/widget/eggsplore_header.dart';
+import 'package:eggsplore/bar/backBar.dart';
+import 'package:eggsplore/widget/formatter.dart';
 
 class EggsplorePayPage extends StatefulWidget {
-  final double balance;
-  const EggsplorePayPage({super.key, required this.balance});
+  const EggsplorePayPage({super.key});
 
   @override
   State<EggsplorePayPage> createState() => _EggsplorePayPageState();
 }
 
 class _EggsplorePayPageState extends State<EggsplorePayPage> {
-  late double balance;
   late Future<User?> userFuture;
+  double balance = 0;
+  String username = "Pengguna";
 
   @override
   void initState() {
     super.initState();
-    balance = widget.balance;
+    // Ambil data user dari API
     userFuture = UserService.getCurrentUser();
+    userFuture.then((user) {
+      if (user != null) {
+        setState(() {
+          username = user.name;
+          balance = user.balance;
+        });
+      }
+    });
   }
 
-  void addBalance(double amount) => setState(() => balance += amount);
+  void _topUp(double amount) async {
+    final newBalance = await UserService.topUp(amount);
+    if (newBalance != null) {
+      setState(() => balance = newBalance);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Top Up berhasil: ${formatRupiah(amount)}")),
+      );
+    } else {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Top Up gagal, coba lagi")));
+    }
+  }
 
   Widget _buildPromotionalBanner(Appsized sizes) {
     return Container(
@@ -53,10 +74,14 @@ class _EggsplorePayPageState extends State<EggsplorePayPage> {
   @override
   Widget build(BuildContext context) {
     final sizes = Appsized(context);
-    final topUpAmounts = [10000.0, 30000.0, 50000.0, 70000.0, 100000.0, 200000.0];
-
-    final double screenWidth = MediaQuery.of(context).size.width;
-    final double horizontalPadding = sizes.md;
+    final topUpAmounts = [
+      10000.0,
+      30000.0,
+      50000.0,
+      70000.0,
+      100000.0,
+      200000.0,
+    ];
     final double spacing = sizes.sm;
 
     return Scaffold(
@@ -69,19 +94,18 @@ class _EggsplorePayPageState extends State<EggsplorePayPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // --- HEADER DENGAN USERNAME ---
-            FutureBuilder<User?>(
-              future: userFuture,
-              builder: (context, snapshot) {
-                final username = (snapshot.data?.name ?? "Pengguna");
-                return EggsploreHeader(username: username);
-              },
-            ),
+            // Header dengan nama user
+            EggsploreHeader(username: username),
 
-            // --- BAGIAN 1: BALANCE CARD ---
+            // Balance Card
             Container(
               color: Colors.white,
-              padding: EdgeInsets.fromLTRB(sizes.md, sizes.sm, sizes.md, sizes.sm),
+              padding: EdgeInsets.fromLTRB(
+                sizes.md,
+                sizes.sm,
+                sizes.md,
+                sizes.sm,
+              ),
               child: Container(
                 padding: EdgeInsets.all(sizes.md),
                 decoration: BoxDecoration(
@@ -104,12 +128,11 @@ class _EggsplorePayPageState extends State<EggsplorePayPage> {
               ),
             ),
 
-            // 🆕 Promotional Banner
+            // Banner
             _buildPromotionalBanner(sizes),
 
-            // --- BAGIAN 2: PILIH NOMINAL TOP UP ---
+            // TopUp Section
             SizedBox(height: sizes.lg),
-
             Padding(
               padding: EdgeInsets.symmetric(horizontal: sizes.md),
               child: Text(
@@ -121,9 +144,7 @@ class _EggsplorePayPageState extends State<EggsplorePayPage> {
                 ),
               ),
             ),
-
             SizedBox(height: sizes.sm),
-
             Padding(
               padding: EdgeInsets.symmetric(horizontal: sizes.md),
               child: GridView.count(
@@ -134,16 +155,11 @@ class _EggsplorePayPageState extends State<EggsplorePayPage> {
                 mainAxisSpacing: spacing,
                 childAspectRatio: 0.85,
                 children: topUpAmounts.map((amount) {
-                  return TopUpItem(
-                    amount: amount,
-                    onTap: addBalance,
-                  );
+                  return TopUpItem(amount: amount, onTap: _topUp);
                 }).toList(),
               ),
             ),
-
             SizedBox(height: sizes.lg),
-
             Divider(
               height: 1,
               thickness: 1,
@@ -151,22 +167,7 @@ class _EggsplorePayPageState extends State<EggsplorePayPage> {
               indent: sizes.md,
               endIndent: sizes.md,
             ),
-
             SizedBox(height: sizes.lg),
-
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: sizes.md),
-              child: Text(
-                "Metode Pembayaran Lain",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: Appsized.fontMd,
-                  color: Colors.black54,
-                ),
-              ),
-            ),
-
-            SizedBox(height: sizes.xl),
           ],
         ),
       ),

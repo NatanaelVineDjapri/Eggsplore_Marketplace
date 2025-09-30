@@ -9,6 +9,9 @@ import 'package:eggsplore/pages/myShop/add_product_page.dart';
 import 'package:eggsplore/pages/myShop/shop_orders_page.dart';
 import 'package:eggsplore/pages/myShop/completed_orders_page.dart';
 import 'package:eggsplore/pages/profile_page.dart';
+import 'package:eggsplore/pages/trending_page.dart';
+import 'package:eggsplore/pages/search_page.dart';
+import 'package:eggsplore/pages/shop_result_page.dart';
 import 'package:flutter/material.dart';
 import 'package:eggsplore/pages/cart_page.dart';
 
@@ -25,6 +28,9 @@ class AppRoutes {
   static const String completedOrders = '/completed-orders';
   static const String profile = '/profile';
   static const String cart = '/cart';
+  static const String trending = '/trending';
+  static const String search = '/search';
+  static const String shopresult = '/shopresult';
 
   static Map<String, WidgetBuilder> routes = {
     welcome: (context) => const WelcomeScreen(),
@@ -38,6 +44,11 @@ class AppRoutes {
     shopOrders: (context) => const ShopOrdersPage(),
     completedOrders: (context) => const CompletedOrdersPage(),
     profile: (context) => const ProfilePage(),
+
     cart: (context) => const CartPage(),
+    trending: (context) => const TrendingPage(),
+    shopresult: (context) => const ShopResultPage(query: ""),
+    search: (context) => const SearchPage(query: ""),
+
   };
 }

@@ -5,15 +5,24 @@ class Appsized{
   Appsized (this.context);
 
   //Padding and Margin sizes
-  double get xss => MediaQuery.of(context).size.height * 0.001; // ~0.5%
-  double get xs => MediaQuery.of(context).size.height * 0.005; // ~0.5%
-  double get sm => MediaQuery.of(context).size.height * 0.01;  // ~1%
-  double get md => MediaQuery.of(context).size.height * 0.02;  // ~2%
-  double get lg => MediaQuery.of(context).size.height * 0.03;  // ~3%
-  double get xl => MediaQuery.of(context).size.height * 0.04;  // ~4%
-  double get xxl => MediaQuery.of(context).size.height * 0.06; // ~6%
-  double get xxxl => MediaQuery.of(context).size.height * 0.08; // ~8%
-  double get defaultSpace => MediaQuery.of(context).size.height * 0.03;
+  double get width => MediaQuery.of(context).size.width;
+  double get height => MediaQuery.of(context).size.height;
+
+  // Padding / spacing
+  double get xss => height * 0.001; // ~0.1%
+  double get xs  => height * 0.005; // ~0.5%
+  double get sm  => height * 0.01;  // ~1%
+  double get md  => height * 0.02;  // ~2%
+  double get lg  => height * 0.03;  // ~3%
+  double get xl  => height * 0.04;  // ~4%
+  double get xxl => height * 0.06;  // ~6%
+  double get xxxl=> height * 0.08;  // ~8%
+  double get defaultSpace => height * 0.03;
+
+  double get hsm => width * 0.02;
+  double get hmd => width * 0.04;
+  double get hlg => width * 0.06;
+
   //Font sizes
   static const double fontSm = 14.0;
   static const double fontMd = 16.0;

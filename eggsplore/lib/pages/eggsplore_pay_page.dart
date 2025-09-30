@@ -1,7 +1,7 @@
-// lib/pages/eggsplore_pay_page.dart
 import 'package:flutter/material.dart';
+import 'package:eggsplore/bar/backBar.dart';
 import 'package:eggsplore/widget/eggsplore_header.dart';
-import 'package:eggsplore/widget/balance_display.dart';
+import 'package:eggsplore/widget/eggsplore_pay/balance_display.dart';
 import 'package:eggsplore/widget/topup_item.dart';
 
 class EggsplorePayPage extends StatefulWidget {
@@ -26,12 +26,9 @@ class _EggsplorePayPageState extends State<EggsplorePayPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Eggsplore pay"),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context, balance),
-        ),
+      appBar: backBar(
+        title: "Eggsplore Pay",
+        onBack: () => Navigator.pop(context, balance),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -49,7 +46,10 @@ class _EggsplorePayPageState extends State<EggsplorePayPage> {
             // Top Up title
             const Padding(
               padding: EdgeInsets.all(16),
-              child: Text("Top Up", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+              child: Text(
+                "Top Up",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              ),
             ),
 
             // grid/wrap of topup items using TopUpItem widget

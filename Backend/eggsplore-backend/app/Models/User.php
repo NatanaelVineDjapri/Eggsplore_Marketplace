@@ -35,6 +35,14 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    public function likedProducts() {
+        return $this->belongsToMany(Product::class, 'likes'); 
+    }
+
+    public function cart() {
+        return $this->hasOne(Cart::class);
+    }
+
     /**
      * Get the attributes that should be cast.
      *
@@ -47,4 +55,15 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    
+    public function sentMessages()
+    {
+        return $this->hasMany(Message::class, 'sender_id');
+    }
+
+    public function receivedMessages()
+    {
+        return $this->hasMany(Message::class, 'receiver_id');
+    }
 }
+

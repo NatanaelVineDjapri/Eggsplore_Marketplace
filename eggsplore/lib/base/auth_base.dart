@@ -17,7 +17,7 @@ class AuthPage extends StatelessWidget {
   final List<Widget> fields;
   final String buttonText;
   final String? footerText;
-  final VoidCallback onButtonPressed;
+  final VoidCallback? onButtonPressed;
   final String imagePaths;
 
   const AuthPage({
@@ -28,7 +28,7 @@ class AuthPage extends StatelessWidget {
     required this.fields,
     required this.buttonText,
     this.footerText,
-    required this.onButtonPressed,
+    this.onButtonPressed,
     required this.imagePaths,
   });
 

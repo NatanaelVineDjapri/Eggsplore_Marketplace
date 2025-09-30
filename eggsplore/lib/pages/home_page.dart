@@ -1,13 +1,18 @@
+import 'package:eggsplore/constants/sizes.dart';
+import 'package:eggsplore/service/user_service.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:eggsplore/widget/TopNavBar.dart';
 import 'package:eggsplore/widget/eggsplore_pay/Eggsplore_Pay_Card.dart';
 import 'package:eggsplore/widget/eggsplore_pay/banner_card.dart';
 import 'package:eggsplore/pages/eggsplore_pay_page.dart';
 import 'package:eggsplore/pages/chat_page.dart';
 import 'package:eggsplore/bar/bottom_nav.dart';
-import 'package:eggsplore/constants/images.dart'; // 🔹 biar bisa pake AppImages
-import 'package:eggsplore/pages/search_page.dart';
-import 'package:eggsplore/widget/trending_product_card.dart'; // 🔹 import widget produk
+import 'package:eggsplore/constants/images.dart';
+import 'package:eggsplore/model/product.dart';
+import 'package:eggsplore/service/product_service.dart';
+import 'package:eggsplore/widget/product.dart';
+import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -19,12 +24,38 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   double balance = 0;
 
+  Future<List<Product>> _loadProducts() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('auth_token') ?? '';
+    if (token.isEmpty) {
+      throw Exception("User belum login atau token kosong");
+    }
+    return ProductService.fetchProducts(token);
+  }
+
+  void initState() {
+    super.initState();
+    _loadUser();
+  }
+
+  void _loadUser() async {
+    final user = await UserService.getCurrentUser();
+    if (user != null) {
+      setState(() {
+        balance = user.balance;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final size = Appsized(context);
+    final formatter = NumberFormat('#,###');
+
     return Scaffold(
       body: Stack(
         children: [
-          /// 🔹 Background image
+          // Background image
           Positioned.fill(
             child: Image.asset(
               AppImages.homeHeader,
@@ -33,15 +64,15 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
 
-          /// 🔹 Foreground content
+          // Foreground content
           SafeArea(
             child: Column(
               children: [
                 // TopNavBar
                 Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 8,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: size.md,
+                    vertical: size.sm,
                   ),
                   child: TopNavBar(
                     onChatTap: () {
@@ -52,18 +83,11 @@ class _HomePageState extends State<HomePage> {
                         ),
                       );
                     },
-                    onSearch: (value) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SearchPage(query: value),
-                        ),
-                      );
-                    },
+                    onSearch: (value) => print("Search: $value"),
                   ),
                 ),
 
-                // Sisanya scrollable
+                // Scrollable content
                 Expanded(
                   child: ListView(
                     padding: EdgeInsets.zero,
@@ -75,51 +99,65 @@ class _HomePageState extends State<HomePage> {
                           final newBalance = await Navigator.push<double>(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  EggsplorePayPage(balance: balance),
+                              builder: (context) => const EggsplorePayPage(),
                             ),
                           );
-
                           if (newBalance != null) {
-                            setState(() {
-                              balance = newBalance;
-                            });
+                            setState(
+                              () => balance = newBalance,
+                            ); // update balance di HomePage
                           }
                         },
                       ),
 
-                      // 🔹 Tambah section produk di bawah top up
                       Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: GridView.count(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 12,
-                          mainAxisSpacing: 12,
-                          childAspectRatio: 0.75,
-                          children: const [
-                            TrendingProductCard(
-                              name: "Telur 1kg",
-                              price: "Rp. 1.000.000",
-                        
-                            ),
-                            TrendingProductCard(
-                              name: "Ayam Potong 1 Ekor",
-                              price: "Rp. 1.000.000",
-                            
-                            ),
-                            TrendingProductCard(
-                              name: "Cabai 500gr",
-                              price: "Rp. 1.000.000",
-                            
-                            ),
-                            TrendingProductCard(
-                              name: "ZGMF-X10A Freedom Gundam",
-                              price: "Rp. 1.000.000",
-                              
-                            ),
-                          ],
+                        padding: EdgeInsets.all(size.md),
+                        child: FutureBuilder<List<Product>>(
+                          future: _loadProducts(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+
+                            if (snapshot.hasError) {
+                              return Center(
+                                child: Text(
+                                  "Gagal load produk: ${snapshot.error}",
+                                ),
+                              );
+                            }
+
+                            final products = snapshot.data ?? [];
+                            if (products.isEmpty) {
+                              return const Center(
+                                child: Text("Belum ada produk"),
+                              );
+                            }
+
+                            return GridView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: products.length,
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    crossAxisSpacing: size.sm,
+                                    mainAxisSpacing: size.sm,
+                                    childAspectRatio: 0.7,
+                                  ),
+                              itemBuilder: (context, index) {
+                                final product = products[index];
+                                return ProductCard(
+                                  name: product.name,
+                                  price: product.price,
+                                  image: product.image,
+                                );
+                              },
+                            );
+                          },
                         ),
                       ),
                     ],

@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SearchController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\LikeController;
 
@@ -25,6 +27,12 @@ Route::middleware('auth:sanctum')->group(function() {
 
     Route::post('/products/{id}/rate', [ProductController::class,'rateProduct']);
 
+    Route::get('/search', [SearchController::class, 'search']);
+
+    Route::get('/messages/inbox', [MessageController::class, 'inbox']);
+    Route::get('/messages/{user}', [MessageController::class, 'index']);
+    Route::post('/messages/{user}', [MessageController::class, 'store']);
+    Route::delete('/messages/{user}/{message}', [MessageController::class, 'destroy']);
     Route::get('/shops', [ShopController::class, 'index']);
     Route::get('/shops/{id}', [ShopController::class, 'showShop']);
     Route::post('/shops', [ShopController::class, 'makeShop']);
@@ -36,5 +44,4 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::post('/cart', [CartController::class, 'addCart']);
     Route::put('/cart/{itemId}', [CartController::class, 'updateCart']);
     Route::delete('/cart/{itemId}', [CartController::class, 'removeCart']);
-
 });

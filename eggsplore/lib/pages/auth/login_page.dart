@@ -20,6 +20,8 @@ class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
+  bool _isLoading = false;
+
   @override
   void dispose() {
     emailController.dispose();
@@ -27,20 +29,20 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
+  @override
   Widget build(BuildContext context) {
     final spacing = Appsized(context);
 
     return AuthPage(
-      title: "Login",
-      accentTitle: "Account",
-      subtitle: "Welcome back to the app",
+      title: AppStrings.login,
+      accentTitle: AppStrings.account,
+      subtitle: AppStrings.loginSub,
       imagePaths: AppImages.thirdLogo,
       fields: [
-        // Email field
         CustomForm(
           controller: emailController,
           label: AppStrings.email,
-          prefixIcon: Icon(Icons.email),
+          prefixIcon: const Icon(Icons.email),
           width: MediaQuery.of(context).size.width * 0.8,
         ),
         SizedBox(height: spacing.xl),
@@ -55,7 +57,7 @@ class _LoginPageState extends State<LoginPage> {
             onTap: () {
               Navigator.pushNamed(context, AppRoutes.changepassword);
             },
-            child: Text(
+            child: const Text(
               AppStrings.forgetPassword,
               style: TextStyle(
                 color: Colors.indigo,
@@ -66,28 +68,43 @@ class _LoginPageState extends State<LoginPage> {
         ),
         const SizedBox(height: 90),
       ],
-      buttonText: "Login",
+      buttonText: _isLoading ? AppStrings.loading : AppStrings.login,
       onButtonPressed: () async {
+        if (_isLoading) return;
+
         if (emailController.text.isEmpty || passwordController.text.isEmpty) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Email & Password tidak boleh kosong'),
-            ),
+            const SnackBar(content: Text(AppStrings.formNull)),
           );
           return;
         }
 
+        setState(() => _isLoading = true);
+
         final user = await UserService.login(
-          emailController.text,
-          passwordController.text,
+          emailController.text.trim(),
+          passwordController.text.trim(),
         );
 
+        setState(() => _isLoading = false);
+
         if (user == null) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Login gagal, cek email/password')),
-          );
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text(AppStrings.failLogin)),
+            );
+          }
         } else {
-          Navigator.pushNamed(context, AppRoutes.homepage);
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("$AppStrings.WelcomeApp, ${user.name}")),
+            );
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              AppRoutes.homepage,
+              (route) => false,
+            );
+          }
         }
       },
       footerText: 'test',

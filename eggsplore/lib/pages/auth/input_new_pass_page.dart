@@ -3,13 +3,70 @@ import 'package:eggsplore/base/auth_base.dart';
 import 'package:eggsplore/constants/images.dart';
 import 'package:eggsplore/constants/sizes.dart';
 import 'package:eggsplore/constants/text_string.dart';
-import 'package:eggsplore/pages/auth/change_password_page.dart';
-import 'package:eggsplore/widget/customForm.dart';
+import 'package:eggsplore/service/user_service.dart';
 import 'package:eggsplore/widget/passwordForm.dart';
 import 'package:flutter/material.dart';
 
-class NewPasswordPage extends StatelessWidget {
-  const NewPasswordPage ({super.key});
+class NewPasswordPage extends StatefulWidget {
+  const NewPasswordPage({super.key});
+
+  @override
+  State<NewPasswordPage> createState() => _NewPasswordPageState();
+}
+
+class _NewPasswordPageState extends State<NewPasswordPage> {
+  final newPasswordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
+  bool _isLoading = false;
+
+  @override
+  void dispose() {
+    newPasswordController.dispose();
+    confirmPasswordController.dispose();
+    super.dispose();
+  }
+
+  void _handleUpdate() async {
+    if (newPasswordController.text.isEmpty ||
+        confirmPasswordController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Password tidak boleh kosong")),
+      );
+      return;
+    }
+
+    if (newPasswordController.text != confirmPasswordController.text) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Password tidak sama")),
+      );
+      return;
+    }
+
+    final email = ModalRoute.of(context)!.settings.arguments as String;
+
+    setState(() => _isLoading = true);
+
+    final success = await UserService.changePassword(
+      email,
+      newPasswordController.text.trim(),
+      confirmPasswordController.text.trim(),
+    );
+
+    setState(() => _isLoading = false);
+
+    if (!mounted) return;
+
+    if (success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Password berhasil diubah")),
+      );
+      Navigator.pushReplacementNamed(context, AppRoutes.login);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Gagal mengubah password")),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,17 +77,19 @@ class NewPasswordPage extends StatelessWidget {
       subtitle: "Let's set a new password for you!",
       imagePaths: AppImages.fourthLogo,
       fields: [
-        // Email field
-        const passwordForm(title: AppStrings.newPassword),
+        passwordForm(
+          controller: newPasswordController,
+          title: AppStrings.newPassword,
+        ),
         SizedBox(height: spacing.xl),
-        const passwordForm(title: AppStrings.confirmPassword,),
-        SizedBox(height: spacing.xs),
-        const SizedBox(height:62)
+        passwordForm(
+          controller: confirmPasswordController,
+          title: AppStrings.confirmPassword,
+        ),
+        const SizedBox(height: 62),
       ],
-      buttonText: "Update",
-      onButtonPressed: () {
-        Navigator.pushNamed(context, AppRoutes.register);
-      },
+      buttonText: _isLoading ? "Loading..." : "Update",
+      onButtonPressed: _isLoading ? null : _handleUpdate,
     );
   }
 }

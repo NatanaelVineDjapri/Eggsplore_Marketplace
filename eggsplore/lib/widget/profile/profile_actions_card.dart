@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:eggsplore/pages/reviews.dart';
 import 'package:eggsplore/pages/onprocess.dart';
-import 'package:eggsplore/pages/sent_page.dart'; // pastiin import ini
+import 'package:eggsplore/pages/sent_page.dart';
+import 'package:eggsplore/pages/transaction_page.dart';
 
 class ProfileActionsCard extends StatefulWidget {
   const ProfileActionsCard({super.key});
@@ -27,6 +28,7 @@ class _ProfileActionsCardState extends State<ProfileActionsCard> {
         ],
       ),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Expanded(
             child: _ActionItem(
@@ -35,7 +37,7 @@ class _ProfileActionsCardState extends State<ProfileActionsCard> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) => const ProcessedPage()),
+                  MaterialPageRoute(builder: (_) => TransactionPage()), // tanpa const
                 );
               },
             ),

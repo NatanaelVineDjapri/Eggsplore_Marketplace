@@ -17,7 +17,7 @@ class CustomBottomNavBar extends StatelessWidget {
         Navigator.pushReplacementNamed(context, AppRoutes.homepage);
         break;
       case 1:
-        Navigator.pushReplacementNamed(context, AppRoutes.homepage);
+        Navigator.pushReplacementNamed(context, AppRoutes.cart);
         break;
       case 2:
         Navigator.pushReplacementNamed(context, AppRoutes.trending);

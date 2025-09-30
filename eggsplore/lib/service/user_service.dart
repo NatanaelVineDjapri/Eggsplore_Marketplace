@@ -17,6 +17,10 @@ class UserService {
     return prefs.getString('auth_token');
   }
 
+   static Future<String?> getToken() async {
+    return _getToken();
+  }
+  
   static Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('auth_token');
@@ -58,7 +62,6 @@ class UserService {
     if (response.statusCode == 200) {
       var json = jsonDecode(response.body);
 
-      // Ambil token dari response
       String token = json['token'];
       await _saveToken(token);
 
@@ -68,7 +71,7 @@ class UserService {
     return null;
   }
 
-  // ---------- GET USER ----------
+  // ---------- GET USER BY ID ----------
   static Future<User?> getUser(int id) async {
     var token = await _getToken();
     var url = Uri.parse('$baseUrl/user/$id');
@@ -86,6 +89,35 @@ class UserService {
     }
     return null;
   }
+
+  // ---------- GET CURRENT AUTHENTICATED USER (VIA TOKEN) ----------
+  static Future<User?> getCurrentUser() async {
+    var token = await _getToken();
+
+    if (token == null) {
+        return null;
+    }
+
+    // Endpoint: Pastikan ini adalah rute yang dilindungi 'auth:sanctum' di Laravel
+    var url = Uri.parse('$baseUrl/user'); 
+
+    var response = await http.get(
+        url,
+        headers: {"Authorization": "Bearer $token", "Accept": "application/json"},
+    );
+
+    if (response.statusCode == 200) {
+        var json = jsonDecode(response.body);
+        // Mengembalikan objek User lengkap
+        return User.fromJson(json); 
+    }
+    
+    // Jika token tidak valid, hapus token
+    // if (response.statusCode == 401) {
+    //     await logout();
+    // }
+    // return null;
+}
 
   // ---------- VERIFY USER ----------
   static Future<bool> verifyUser(String firstname, String lastname, String email) async {
@@ -105,6 +137,7 @@ class UserService {
     return false;
   }
 
+  // ---------- CHANGE PASSWORD ----------
   static Future<bool> changePassword(String email, String newPassword, String confirmPassword) async {
     final url = Uri.parse('$baseUrl/change-password');
 

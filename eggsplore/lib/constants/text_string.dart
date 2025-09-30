@@ -9,13 +9,13 @@ class AppStrings{
   static const String introTitle_1 = "Ready to ";
   static const String introTitle_2 = "Eggsplore? ";
   static const String introSub = "Lorem Ipsum dolor sit amet, consectur adipsicing elit, sed do eiusmod tempor";
-  static const String login = "Login";
+  static const String login = "Login ";
   static const String register = "Register";
   static const String loading = "Loading...";
   static const String formNull = "Email and password cannot be empty.";
   static const String failLogin = "Login failed. Please check your email and password.";
   static const String WelcomeApp = "Welcome Back,";
-  static const String account =" Account";
+  static const String account ="Account";
   static const String loginSub="Welcome back to the app!";
   static const String registerSub="Set your account!";
   static const String firstName = "First Name";
@@ -42,6 +42,7 @@ class AppStrings{
   static const String completedOrders = "Completed Orders";
   static const String addProduct = "Add Product";
   static const String myProducts = "My Products";
+  static const String maybe = "Kamu Mungkin Juga Suka";
 
   //buttombanner
   static const List<String> bottomBannerText = [

@@ -1,29 +1,35 @@
 import 'package:eggsplore/constants/sizes.dart';
+import 'package:eggsplore/provider/like_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ProductCard extends StatelessWidget {
+class ProductCard extends ConsumerWidget {
+  final int productId;
   final String name;
   final double price;
   final String? image;
 
   const ProductCard({
     super.key,
+    required this.productId,
     required this.name,
     required this.price,
     this.image,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final sizes = Appsized(context);
-    final formatter = NumberFormat('#,###');
+    final formatter = NumberFormat('#,###', 'id_ID');
+    
+    final likeState = ref.watch(likeStateProvider);
+    final likeNotifier = ref.read(likeStateProvider.notifier);
+    final like = likeState[productId];
 
     final cardWidth = MediaQuery.of(context).size.width * 0.45;
-
     const addIconSize = Appsized.iconLg;
-
-    final addContainerDimension = addIconSize + 12.0; 
+    final addContainerDimension = addIconSize + 12.0;
 
     return SizedBox(
       width: cardWidth,
@@ -70,25 +76,35 @@ class ProductCard extends StatelessWidget {
                                   ),
                                 ),
                         ),
+                        // Tombol like
                         Positioned(
                           top: sizes.xs,
                           left: sizes.xs,
-                          child: Container(
-                            width: Appsized.iconMd,
-                            height: Appsized.iconMd,
-                            decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.9),
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: Colors.grey.shade300,
-                                width: 1.5,
+                          child: GestureDetector(
+                            onTap: () async {
+                              await likeNotifier.toggleLike(productId);
+                            },
+                            child: Container(
+                              width: Appsized.iconMd,
+                              height: Appsized.iconMd,
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.9),
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: Colors.grey.shade300,
+                                  width: 1.5,
+                                ),
                               ),
-                            ),
-                            child: Center(
-                              child: Icon(
-                                Icons.favorite_border,
-                                color: Colors.black,
-                                size: Appsized.iconSm,
+                              child: Center(
+                                child: Icon(
+                                  like?.userLiked ?? false
+                                      ? Icons.favorite
+                                      : Icons.favorite_border,
+                                  color: like?.userLiked ?? false
+                                      ? Colors.red
+                                      : Colors.black,
+                                  size: Appsized.iconSm,
+                                ),
                               ),
                             ),
                           ),
@@ -131,17 +147,12 @@ class ProductCard extends StatelessWidget {
               ),
             ),
           ),
-          
+          // Tombol add tetap di kanan bawah
           Positioned(
             right: -5,
             bottom: 15,
             child: ClipRRect(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(sizes.sm),
-                topRight: Radius.circular(sizes.sm),
-                bottomRight: Radius.circular(sizes.sm),
-                bottomLeft: Radius.circular(sizes.sm),
-              ),
+              borderRadius: BorderRadius.circular(sizes.sm),
               child: Material(
                 color: Colors.orange,
                 child: InkWell(

@@ -160,6 +160,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                               itemBuilder: (context, index) {
                                 final product = products[index];
                                 return ProductCard(
+                                  productId: product.id,
                                   name: product.name,
                                   price: product.price,
                                   image: product.image,

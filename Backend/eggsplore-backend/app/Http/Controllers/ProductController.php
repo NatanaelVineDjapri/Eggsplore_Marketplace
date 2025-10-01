@@ -133,4 +133,11 @@ class ProductController extends Controller
         ]);
     }
 
+    public function randomProducts(Request $request)
+    {
+        $count = $request->query('count', 6); // default 6
+        $products = Product::inRandomOrder()->take($count)->get();
+        return response()->json($products);
+    }
+
 }

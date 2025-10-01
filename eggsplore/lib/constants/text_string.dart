@@ -44,6 +44,8 @@ class AppStrings{
   static const String myProducts = "My Products";
   static const String maybe = "Kamu Mungkin Juga Suka";
 
+  //notif page
+  static const String notificationHeader = "NOTIFICATION";
   //buttombanner
   static const List<String> bottomBannerText = [
     "Hatch.",

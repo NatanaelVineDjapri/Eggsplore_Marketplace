@@ -27,7 +27,6 @@ class ProductService {
     }
   }
 
-  // --- Ambil produk random dari endpoint Laravel ---
   static Future<List<Product>> fetchRandomProducts(String token, {int count = 6}) async {
     final response = await http.get(
       Uri.parse("$baseUrl/products/random?count=$count"),
@@ -57,4 +56,69 @@ class ProductService {
     return [];
   }
 
+  static Future<List<Product>> fetchTrendingProducts() async {
+    final token = await UserService.getToken();
+    if (token == null) throw Exception("User belum login / token kosong");
+
+    final url = Uri.parse('$baseUrl/products/trending');
+    final response = await http.get(
+      url,
+      headers: {"Authorization": "Bearer $token"},
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      final List products = data['data'] ?? data;
+      return products.map((e) => Product.fromJson(e)).toList();
+    } else {
+      throw Exception("Gagal ambil produk trending");
+    }
+  }
+
+  static Future<bool> addProduct(Product product) async {
+    final token = await UserService.getToken();
+    if (token == null) throw Exception("User belum login / token kosong");
+
+    final url = Uri.parse('$baseUrl/products');
+    final response = await http.post(
+      url,
+      headers: {
+        "Authorization": "Bearer $token",
+        "Content-Type": "application/json",
+      },
+      body: jsonEncode(product.toJson()),
+    );
+
+    return response.statusCode == 200 || response.statusCode == 201;
+  }
+
+  static Future<bool> updateProduct(Product product) async {
+    final token = await UserService.getToken();
+    if (token == null) throw Exception("User belum login / token kosong");
+
+    final url = Uri.parse('$baseUrl/products/${product.id}');
+    final response = await http.put(
+      url,
+      headers: {
+        "Authorization": "Bearer $token",
+        "Content-Type": "application/json",
+      },
+      body: jsonEncode(product.toJson()),
+    );
+
+    return response.statusCode == 200;
+  }
+
+  static Future<bool> deleteProduct(int id) async {
+    final token = await UserService.getToken();
+    if (token == null) throw Exception("User belum login / token kosong");
+
+    final url = Uri.parse('$baseUrl/products/$id');
+    final response = await http.delete(
+      url,
+      headers: {"Authorization": "Bearer $token"},
+    );
+
+    return response.statusCode == 200;
+  }
 }

@@ -1,24 +1,25 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eggsplore/app_routes.dart';
 import 'package:eggsplore/base/auth_base.dart';
 import 'package:eggsplore/constants/images.dart';
 import 'package:eggsplore/constants/sizes.dart';
 import 'package:eggsplore/constants/text_string.dart';
-import 'package:eggsplore/pages/auth/change_password_page.dart';
-import 'package:eggsplore/service/user_service.dart';
 import 'package:eggsplore/widget/customForm.dart';
 import 'package:eggsplore/widget/passwordForm.dart';
-import 'package:flutter/material.dart';
+import 'package:eggsplore/provider/auth_provider.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  ConsumerState<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends ConsumerState<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -27,20 +28,20 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
+  @override
   Widget build(BuildContext context) {
     final spacing = Appsized(context);
 
     return AuthPage(
-      title: "Login",
-      accentTitle: "Account",
-      subtitle: "Welcome back to the app",
+      title: AppStrings.login,
+      accentTitle: AppStrings.account,
+      subtitle: AppStrings.loginSub,
       imagePaths: AppImages.thirdLogo,
       fields: [
-        // Email field
         CustomForm(
           controller: emailController,
           label: AppStrings.email,
-          prefixIcon: Icon(Icons.email),
+          prefixIcon: const Icon(Icons.email),
           width: MediaQuery.of(context).size.width * 0.8,
         ),
         SizedBox(height: spacing.xl),
@@ -55,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
             onTap: () {
               Navigator.pushNamed(context, AppRoutes.changepassword);
             },
-            child: Text(
+            child: const Text(
               AppStrings.forgetPassword,
               style: TextStyle(
                 color: Colors.indigo,
@@ -66,30 +67,47 @@ class _LoginPageState extends State<LoginPage> {
         ),
         const SizedBox(height: 90),
       ],
-      buttonText: "Login",
-      onButtonPressed: () async {
-        if (emailController.text.isEmpty || passwordController.text.isEmpty) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Email & Password tidak boleh kosong'),
-            ),
-          );
-          return;
-        }
+      buttonText: _isLoading ? AppStrings.loading : AppStrings.login,
+      onButtonPressed: _isLoading
+          ? null
+          : () async {
+              if (emailController.text.isEmpty ||
+                  passwordController.text.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text(AppStrings.formNull)),
+                );
+                return;
+              }
 
-        final user = await UserService.login(
-          emailController.text,
-          passwordController.text,
-        );
+              setState(() => _isLoading = true);
+              final success = await ref
+                  .read(authProvider.notifier)
+                  .login(
+                    emailController.text.trim(),
+                    passwordController.text.trim(),
+                  );
+              setState(() => _isLoading = false);
 
-        if (user == null) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Login gagal, cek email/password')),
-          );
-        } else {
-          Navigator.pushNamed(context, AppRoutes.homepage);
-        }
-      },
+              if (!success) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text(AppStrings.failLogin)),
+                );
+              } else {
+                final user = ref.read(authProvider);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      "${AppStrings.welcomeBack}, ${user?.name}",
+                    ),
+                  ),
+                );
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  AppRoutes.homepage,
+                  (route) => false,
+                );
+              }
+            },
       footerText: 'test',
     );
   }

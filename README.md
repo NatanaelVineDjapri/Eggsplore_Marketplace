@@ -27,4 +27,19 @@ Eggsplore is a Mobile Marketplace App built using The Flutter Framework, this ap
 - 📈 Start selling your own products
   
 Now where shall we begin?
+
 ---
+## ⚙️ Local Installation
+1. Clone the repository
+git clone https://github.com/NatanaelVineDjapri/Eggsplore_Marketplace.git
+
+2. Go to the project directory
+cd eggsplore
+
+3. Install dependencies
+flutter pub get
+
+4. Debug the Project
+- Make sure you are on the main.dart file
+- Choose your device
+- start debug

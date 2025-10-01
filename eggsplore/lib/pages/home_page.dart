@@ -13,6 +13,7 @@ import 'package:eggsplore/model/product.dart';
 import 'package:eggsplore/service/product_service.dart';
 import 'package:eggsplore/widget/product.dart';
 import 'package:intl/intl.dart';
+import 'package:eggsplore/pages/search_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -60,7 +61,7 @@ class _HomePageState extends State<HomePage> {
             top: 0,
             left: 0,
             right: 0,
-            height: size.height * 0.36, 
+            height: size.height * 0.36,
             child: Image.asset(
               AppImages.homeHeader,
               fit: BoxFit.cover,
@@ -87,7 +88,16 @@ class _HomePageState extends State<HomePage> {
                         ),
                       );
                     },
-                    onSearch: (value) => print("Search: $value"),
+                    // 🔹 Update onSearch -> pindah ke SearchPage (selalu jalan walau kosong)
+                    onSearch: (value) {
+                      final query = value.trim();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => SearchPage(query: query),
+                        ),
+                      );
+                    },
                   ),
                 ),
 
@@ -147,11 +157,11 @@ class _HomePageState extends State<HomePage> {
                               itemCount: products.length,
                               gridDelegate:
                                   SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
-                                    crossAxisSpacing: size.sm,
-                                    mainAxisSpacing: size.sm,
-                                    childAspectRatio: 0.7,
-                                  ),
+                                crossAxisCount: 2,
+                                crossAxisSpacing: size.sm,
+                                mainAxisSpacing: size.sm,
+                                childAspectRatio: 0.7,
+                              ),
                               itemBuilder: (context, index) {
                                 final product = products[index];
                                 return ProductCard(

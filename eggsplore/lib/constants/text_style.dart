@@ -40,5 +40,11 @@ static const TextStyle footerAccent = TextStyle(
     color: Colors.indigo,
     fontWeight: FontWeight.bold,
   );
+
+    static const TextStyle notificationHeader = TextStyle(
+    fontSize: Appsized.fontLg,
+    fontWeight: FontWeight.bold,
+    color: Colors.black,
+  );
 }
 

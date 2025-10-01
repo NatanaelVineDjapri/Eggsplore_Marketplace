@@ -1,17 +1,79 @@
 import 'package:flutter/material.dart';
+import 'package:eggsplore/constants/images.dart';
+import 'package:eggsplore/constants/text_string.dart';
+import 'package:eggsplore/constants/text_style.dart';
+import 'package:eggsplore/bar/bottom_nav.dart'; 
 
-class NotificationPage extends StatelessWidget {
-  const NotificationPage({super.key});
+class NotificationsPage extends StatelessWidget {
+  const NotificationsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text(
-          "Notification Page",
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false, 
+        title: Text(
+          AppStrings.notificationHeader,
+          style: AppTextStyle.notificationHeader,
         ),
+        centerTitle: true,
+        backgroundColor: Colors.orange,
+        elevation: 0,
       ),
+      body: Stack(
+        children: [
+          // 🔹 Background notif_bg full
+          Positioned.fill(
+            child: Image.asset(
+              AppImages.notif_bg,
+              fit: BoxFit.cover,
+            ),
+          ),
+
+          // 🔹 Konten utama
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start, 
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Image.asset(
+                      AppImages.voucher20,
+                      height: 150,
+                      fit: BoxFit.contain,
+                    ),
+                    const SizedBox(height: 20),
+
+                    Image.asset(
+                      AppImages.voucher30,
+                      height: 150,
+                      fit: BoxFit.contain,
+                    ),
+                    const SizedBox(height: 20),
+
+                    Image.asset(
+                      AppImages.voucher50,
+                      height: 150,
+                      fit: BoxFit.contain,
+                    ),
+                    const SizedBox(height: 20),
+                  ],
+                ),
+              ),
+
+              // 🔹 Garis kuning full mentok kiri–kanan
+              Container(
+                height: 6,
+                width: double.infinity,
+                color: Colors.orange,
+              ),
+            ],
+          ),
+        ],
+      ),  
+      bottomNavigationBar: const CustomBottomNavBar(currentIndex: 3),    
     );
   }
 }

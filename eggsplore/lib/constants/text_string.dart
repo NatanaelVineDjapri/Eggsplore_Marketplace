@@ -40,6 +40,8 @@ class AppStrings{
   static const String addProduct = "Add Product";
   static const String myProducts = "My Products";
 
+  //notif page
+  static const String notificationHeader = "NOTIFICATION";
   //buttombanner
   static const List<String> bottomBannerText = [
     "Hatch.",

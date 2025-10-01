@@ -12,6 +12,8 @@ import 'package:eggsplore/pages/profile_page.dart';
 import 'package:eggsplore/pages/trending_page.dart';
 import 'package:eggsplore/pages/search_page.dart';
 import 'package:eggsplore/pages/shop_result_page.dart';
+import 'package:eggsplore/pages/notification_page.dart';
+
 import 'package:flutter/material.dart';
 
 class AppRoutes {
@@ -29,6 +31,8 @@ class AppRoutes {
   static const String trending = '/trending';
   static const String search = '/search';
   static const String shopresult = '/shopresult';
+  static const String notifications = '/notifications';
+
 
   static Map<String, WidgetBuilder> routes = {
     welcome: (context) => const WelcomeScreen(),
@@ -44,8 +48,7 @@ class AppRoutes {
     profile: (context) => const ProfilePage(),
     trending: (context) => const TrendingPage(),
     shopresult: (context) => const ShopResultPage(query: ""),
-
-    // ✅ kasih default query kosong biar ga error
+    notifications: (context) => const NotificationsPage(),
     search: (context) => const SearchPage(query: ""),
   };
 }

@@ -12,4 +12,8 @@ class AppImages {
   static const String homeHeader = 'assets/images/homeHeader.png';
   static const String shopPattern = 'assets/images/patterns.png';
   static const String homeBanner = 'assets/images/banner.jpg';
+  static const String voucher30 = 'assets/images/voucher30.png';
+  static const String voucher50 = 'assets/images/voucher50.png';
+  static const String voucher20 = 'assets/images/voucher20.png';
+  static const String notif_bg = 'assets/images/notif_bg.png';
 }

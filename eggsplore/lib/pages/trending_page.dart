@@ -3,6 +3,9 @@ import 'package:eggsplore/bar/bottom_nav.dart';
 import 'package:eggsplore/widget/trending_product_card.dart';
 import 'package:eggsplore/widget/TopNavBar.dart';
 
+// 🔹 Import SearchPage
+import 'package:eggsplore/pages/search_page.dart';
+
 class TrendingPage extends StatefulWidget {
   const TrendingPage({super.key});
 
@@ -52,14 +55,19 @@ class _TrendingPageState extends State<TrendingPage> {
                   /// 🔎 Top Navigation Bar (Search + Chat)
                   TopNavBar(
                     onChatTap: () {
-                      // Aksi ketika tombol chat ditekan
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text("Chat tapped!")),
                       );
                     },
-                    onSearch: (query) {
-                      // Aksi ketika user ngetik di search
-                      debugPrint("User cari: $query");
+                    // 🔹 Sama kayak HomePage → pindah ke SearchPage
+                    onSearch: (value) {
+                      final query = value.trim();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => SearchPage(query: query),
+                        ),
+                      );
                     },
                   ),
 
@@ -69,7 +77,7 @@ class _TrendingPageState extends State<TrendingPage> {
                   Center(
                     child: Image.asset(
                       "assets/images/trending.png",
-                      height: 100, // bisa kamu gedein biar jelas
+                      height: 100,
                       fit: BoxFit.contain,
                     ),
                   ),
@@ -81,17 +89,17 @@ class _TrendingPageState extends State<TrendingPage> {
                       itemCount: products.length,
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            childAspectRatio: 0.75,
-                            crossAxisSpacing: 8,
-                            mainAxisSpacing: 8,
-                          ),
+                        crossAxisCount: 2,
+                        childAspectRatio: 0.75,
+                        crossAxisSpacing: 8,
+                        mainAxisSpacing: 8,
+                      ),
                       itemBuilder: (context, index) {
                         final product = products[index];
                         return TrendingProductCard(
                           name: product["name"]!,
                           price: product["price"]!,
-                          //image: product["image"], nnti aja ini pas dah msukin foto
+                          // image: product["image"], // aktifin kalau mau pake gambar asli
                         );
                       },
                     ),

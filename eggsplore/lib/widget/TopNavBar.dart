@@ -30,8 +30,6 @@ class TopNavBar extends StatelessWidget {
               ],
             ),
             child: TextField(
-              // ❌ Jangan pakai onTap untuk langsung search
-              // biarin TextField bisa fokus & diketik
               onSubmitted: onSearch, // enter = trigger search
               decoration: const InputDecoration(
                 hintText: "Search Product",

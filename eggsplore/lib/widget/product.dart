@@ -1,3 +1,4 @@
+import 'package:eggsplore/constants/colors.dart';
 import 'package:eggsplore/constants/sizes.dart';
 import 'package:eggsplore/provider/like_provider.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ class ProductCard extends ConsumerWidget {
   final String name;
   final double price;
   final String? image;
+  final bool? isLiked; // menerima dari luar
 
   const ProductCard({
     super.key,
@@ -16,20 +18,20 @@ class ProductCard extends ConsumerWidget {
     required this.name,
     required this.price,
     this.image,
+    this.isLiked,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final sizes = Appsized(context);
-    final formatter = NumberFormat('#,###', 'id_ID');
-    
-    final likeState = ref.watch(likeStateProvider);
-    final likeNotifier = ref.read(likeStateProvider.notifier);
-    final like = likeState[productId];
-
+    final formatter = NumberFormat('#,###');
     final cardWidth = MediaQuery.of(context).size.width * 0.45;
     const addIconSize = Appsized.iconLg;
     final addContainerDimension = addIconSize + 12.0;
+
+    // pakai isLiked dari luar jika ada, kalau tidak fallback ke provider
+    final likeState = ref.watch(likeStateProvider);
+    final liked = isLiked ?? likeState[productId]?.userLiked ?? false;
 
     return SizedBox(
       width: cardWidth,
@@ -76,13 +78,12 @@ class ProductCard extends ConsumerWidget {
                                   ),
                                 ),
                         ),
-                        // Tombol like
                         Positioned(
                           top: sizes.xs,
                           left: sizes.xs,
                           child: GestureDetector(
-                            onTap: () async {
-                              await likeNotifier.toggleLike(productId);
+                            onTap: () {
+                              ref.read(likeStateProvider.notifier).toggleLike(productId);
                             },
                             child: Container(
                               width: Appsized.iconMd,
@@ -97,12 +98,8 @@ class ProductCard extends ConsumerWidget {
                               ),
                               child: Center(
                                 child: Icon(
-                                  like?.userLiked ?? false
-                                      ? Icons.favorite
-                                      : Icons.favorite_border,
-                                  color: like?.userLiked ?? false
-                                      ? Colors.red
-                                      : Colors.black,
+                                  liked ? Icons.favorite : Icons.favorite_border,
+                                  color: liked ? AppColors.primary : Colors.black,
                                   size: Appsized.iconSm,
                                 ),
                               ),
@@ -147,7 +144,6 @@ class ProductCard extends ConsumerWidget {
               ),
             ),
           ),
-          // Tombol add tetap di kanan bawah
           Positioned(
             right: -5,
             bottom: 15,

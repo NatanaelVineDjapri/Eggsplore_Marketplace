@@ -13,6 +13,7 @@ import 'package:eggsplore/pages/trending_page.dart';
 import 'package:eggsplore/pages/search_page.dart';
 import 'package:eggsplore/pages/shop_result_page.dart';
 import 'package:eggsplore/pages/notification_page.dart';
+import 'package:eggsplore/pages/product_page.dart';
 
 import 'package:flutter/material.dart';
 import 'package:eggsplore/pages/cart_page.dart';
@@ -34,6 +35,7 @@ class AppRoutes {
   static const String search = '/search';
   static const String shopresult = '/shopresult';
   static const String notifications = '/notifications';
+  static const String product = '/product';
 
 
   static Map<String, WidgetBuilder> routes = {
@@ -54,6 +56,8 @@ class AppRoutes {
     shopresult: (context) => const ShopResultPage(query: ""),
     notifications: (context) => const NotificationsPage(),
     search: (context) => const SearchPage(query: ""),
+
+    product: (context) => const ProductPage(),
 
   };
 }

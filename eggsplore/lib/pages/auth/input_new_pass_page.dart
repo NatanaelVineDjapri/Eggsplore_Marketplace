@@ -1,20 +1,21 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eggsplore/app_routes.dart';
 import 'package:eggsplore/base/auth_base.dart';
 import 'package:eggsplore/constants/images.dart';
 import 'package:eggsplore/constants/sizes.dart';
 import 'package:eggsplore/constants/text_string.dart';
-import 'package:eggsplore/service/user_service.dart';
 import 'package:eggsplore/widget/passwordForm.dart';
-import 'package:flutter/material.dart';
+import 'package:eggsplore/provider/auth_provider.dart';
 
-class NewPasswordPage extends StatefulWidget {
+class NewPasswordPage extends ConsumerStatefulWidget {
   const NewPasswordPage({super.key});
 
   @override
-  State<NewPasswordPage> createState() => _NewPasswordPageState();
+  ConsumerState<NewPasswordPage> createState() => _NewPasswordPageState();
 }
 
-class _NewPasswordPageState extends State<NewPasswordPage> {
+class _NewPasswordPageState extends ConsumerState<NewPasswordPage> {
   final newPasswordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
   bool _isLoading = false;
@@ -45,13 +46,11 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
     final email = ModalRoute.of(context)!.settings.arguments as String;
 
     setState(() => _isLoading = true);
-
-    final success = await UserService.changePassword(
-      email,
-      newPasswordController.text.trim(),
-      confirmPasswordController.text.trim(),
-    );
-
+    final success = await ref.read(authProvider.notifier).changePassword(
+          email,
+          newPasswordController.text.trim(),
+          confirmPasswordController.text.trim(),
+        );
     setState(() => _isLoading = false);
 
     if (!mounted) return;

@@ -1,26 +1,26 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eggsplore/app_routes.dart';
 import 'package:eggsplore/base/auth_base.dart';
 import 'package:eggsplore/constants/images.dart';
 import 'package:eggsplore/constants/sizes.dart';
 import 'package:eggsplore/constants/text_string.dart';
-import 'package:eggsplore/service/user_service.dart';
 import 'package:eggsplore/widget/customForm.dart';
 import 'package:eggsplore/widget/passwordForm.dart';
-import 'package:flutter/material.dart';
+import 'package:eggsplore/provider/auth_provider.dart';
 
-class RegisterPage extends StatefulWidget {
+class RegisterPage extends ConsumerStatefulWidget {
   const RegisterPage({super.key});
 
   @override
-  State<RegisterPage> createState() => _RegisterPageState();
+  ConsumerState<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _RegisterPageState extends ConsumerState<RegisterPage> {
   final firstNameController = TextEditingController();
   final lastNameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-
   bool _isLoading = false;
 
   @override
@@ -44,14 +44,12 @@ class _RegisterPageState extends State<RegisterPage> {
     }
 
     setState(() => _isLoading = true);
-
-    final success = await UserService.register(
-      firstNameController.text.trim(),
-      lastNameController.text.trim(),
-      emailController.text.trim(),
-      passwordController.text.trim(),
-    );
-
+    final success = await ref.read(authProvider.notifier).register(
+          firstNameController.text.trim(),
+          lastNameController.text.trim(),
+          emailController.text.trim(),
+          passwordController.text.trim(),
+        );
     setState(() => _isLoading = false);
 
     if (!mounted) return;
@@ -71,7 +69,6 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     final spacing = Appsized(context);
-
     return AuthPage(
       title: "Register",
       accentTitle: "Account",

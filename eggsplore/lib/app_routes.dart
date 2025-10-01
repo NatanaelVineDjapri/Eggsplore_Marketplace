@@ -36,7 +36,7 @@ class AppRoutes {
     welcome: (context) => const WelcomeScreen(),
     login: (context) => const LoginPage(),
     register: (context) => const RegisterPage(),
-    changepassword: (context) => const ChangePassword(),
+    changepassword: (context) => const ChangePasswordPage(),
     newpassword: (context) => const NewPasswordPage(),
     homepage: (context) => const HomePage(),
     myshop: (context) => const MyShopPage(),

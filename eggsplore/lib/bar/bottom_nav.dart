@@ -4,10 +4,7 @@ import 'package:eggsplore/app_routes.dart';
 class CustomBottomNavBar extends StatelessWidget {
   final int currentIndex;
 
-  const CustomBottomNavBar({
-    super.key,
-    required this.currentIndex,
-  });
+  const CustomBottomNavBar({super.key, required this.currentIndex});
 
   void _onItemTapped(BuildContext context, int index) {
     if (index == currentIndex) return;
@@ -32,10 +29,13 @@ class CustomBottomNavBar extends StatelessWidget {
   }
 
   @override
+  @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed, // biar semua icon keliatan
       currentIndex: currentIndex,
+      selectedItemColor: Colors.orange, // <- ini untuk item aktif
+      unselectedItemColor: Colors.grey, // optional: warna item yang tidak aktif
       onTap: (index) => _onItemTapped(context, index),
       items: const [
         BottomNavigationBarItem(

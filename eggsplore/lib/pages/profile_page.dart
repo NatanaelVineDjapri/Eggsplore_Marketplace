@@ -3,7 +3,7 @@ import 'package:eggsplore/constants/text_string.dart';
 import 'package:eggsplore/constants/text_style.dart';
 import 'package:eggsplore/model/product.dart';
 import 'package:eggsplore/model/user.dart';
-import 'package:eggsplore/service/product_service.dart';
+import 'package:eggsplore/provider/product_provider.dart';
 import 'package:eggsplore/service/user_service.dart';
 import 'package:eggsplore/widget/product.dart';
 import 'package:eggsplore/widget/profile/profile_actions_card.dart';
@@ -12,23 +12,22 @@ import 'package:eggsplore/widget/profile/profile_shop_card.dart';
 import 'package:eggsplore/bar/bottom_nav.dart';
 import 'package:eggsplore/constants/sizes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ProfilePage extends StatefulWidget {
+class ProfilePage extends ConsumerStatefulWidget {
   const ProfilePage({super.key});
 
   @override
-  State<ProfilePage> createState() => _ProfilePageState();
+  ConsumerState<ProfilePage> createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _ProfilePageState extends ConsumerState<ProfilePage> {
   late Future<User?> userFuture;
-  late Future<List<Product>> productsFuture;
 
   @override
   void initState() {
     super.initState();
     userFuture = UserService.getCurrentUser();
-    productsFuture = ProductService.fetchRandomProductsForCurrentUser();
   }
 
   String _getUsername(User user) {
@@ -38,6 +37,8 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     final size = Appsized(context);
+
+    final productsAsync = ref.watch(randomProductsProvider);
 
     return Scaffold(
       body: Stack(
@@ -96,14 +97,13 @@ class _ProfilePageState extends State<ProfilePage> {
                           SizedBox(height: size.md),
                           const ProfileActionsCard(),
                           SizedBox(height: size.xxxl),
-                          // Text di tengah
                           Row(
                             children: [
                               Expanded(
                                 child: Divider(
                                   color: Colors.grey,
-                                  thickness: 1, // ketebalan garis
-                                  endIndent: 10, // jarak ke teks
+                                  thickness: 1,
+                                  endIndent: 10,
                                 ),
                               ),
                               Text(
@@ -118,12 +118,11 @@ class _ProfilePageState extends State<ProfilePage> {
                                 child: Divider(
                                   color: Colors.grey,
                                   thickness: 1,
-                                  indent: 10, // jarak ke teks
+                                  indent: 10,
                                 ),
                               ),
                             ],
                           ),
-
                           SizedBox(height: size.sm),
                         ],
                       ),
@@ -133,19 +132,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     Expanded(
                       child: Padding(
                         padding: EdgeInsets.symmetric(horizontal: size.hmd),
-                        child: FutureBuilder<List<Product>>(
-                          future: productsFuture,
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return const Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            }
-
-                            if (snapshot.hasError ||
-                                !snapshot.hasData ||
-                                snapshot.data!.isEmpty) {
+                        child: productsAsync.when(
+                          data: (products) {
+                            if (products.isEmpty) {
                               return Center(
                                 child: Text(
                                   "Tidak ada produk rekomendasi.",
@@ -154,24 +143,20 @@ class _ProfilePageState extends State<ProfilePage> {
                               );
                             }
 
-                            final products = snapshot.data!;
-
                             return GridView.builder(
                               padding: EdgeInsets.only(
                                 bottom: size.lg,
                                 left: size.xs,
-                                right: size
-                                    .xs, // ← ini biar card nggak nempel ke tepi
+                                right: size.xs,
                               ),
                               itemCount: products.length,
                               gridDelegate:
                                   SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
-                                    crossAxisSpacing: size.sm,
-                                    mainAxisSpacing: size.sm,
-                                    childAspectRatio:
-                                        0.7, // sama seperti HomePage
-                                  ),
+                                crossAxisCount: 2,
+                                crossAxisSpacing: size.sm,
+                                mainAxisSpacing: size.sm,
+                                childAspectRatio: 0.7,
+                              ),
                               itemBuilder: (context, index) {
                                 final product = products[index];
                                 return ProductCard(
@@ -182,6 +167,10 @@ class _ProfilePageState extends State<ProfilePage> {
                               },
                             );
                           },
+                          loading: () =>
+                              const Center(child: CircularProgressIndicator()),
+                          error: (err, stack) =>
+                              Center(child: Text("Error: $err")),
                         ),
                       ),
                     ),

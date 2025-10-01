@@ -56,11 +56,15 @@ class _HomePageState extends State<HomePage> {
       body: Stack(
         children: [
           // Background image
-          Positioned.fill(
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            height: size.height * 0.36, 
             child: Image.asset(
               AppImages.homeHeader,
               fit: BoxFit.cover,
-              alignment: Alignment.topCenter,
+              alignment: Alignment.bottomCenter,
             ),
           ),
 

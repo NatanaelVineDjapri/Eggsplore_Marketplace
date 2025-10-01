@@ -1,24 +1,24 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eggsplore/app_routes.dart';
 import 'package:eggsplore/base/auth_base.dart';
 import 'package:eggsplore/constants/images.dart';
 import 'package:eggsplore/constants/sizes.dart';
 import 'package:eggsplore/constants/text_string.dart';
-import 'package:eggsplore/service/user_service.dart';
 import 'package:eggsplore/widget/customForm.dart';
-import 'package:flutter/material.dart';
+import 'package:eggsplore/provider/auth_provider.dart';
 
-class ChangePassword extends StatefulWidget {
-  const ChangePassword({super.key});
+class ChangePasswordPage extends ConsumerStatefulWidget {
+  const ChangePasswordPage({super.key});
 
   @override
-  State<ChangePassword> createState() => _ChangePasswordState();
+  ConsumerState<ChangePasswordPage> createState() => _ChangePasswordPageState();
 }
 
-class _ChangePasswordState extends State<ChangePassword> {
+class _ChangePasswordPageState extends ConsumerState<ChangePasswordPage> {
   final firstNameController = TextEditingController();
   final lastNameController = TextEditingController();
   final emailController = TextEditingController();
-
   bool _isLoading = false;
 
   @override
@@ -40,13 +40,11 @@ class _ChangePasswordState extends State<ChangePassword> {
     }
 
     setState(() => _isLoading = true);
-
-    final success = await UserService.verifyUser(
-      firstNameController.text.trim(),
-      lastNameController.text.trim(),
-      emailController.text.trim(),
-    );
-
+    final success = await ref.read(authProvider.notifier).verifyUser(
+          firstNameController.text.trim(),
+          lastNameController.text.trim(),
+          emailController.text.trim(),
+        );
     setState(() => _isLoading = false);
 
     if (!mounted) return;
@@ -76,7 +74,6 @@ class _ChangePasswordState extends State<ChangePassword> {
         Row(
           children: [
             Expanded(
-              flex: 1,
               child: CustomForm(
                 controller: firstNameController,
                 label: AppStrings.firstName,
@@ -85,7 +82,6 @@ class _ChangePasswordState extends State<ChangePassword> {
             ),
             const SizedBox(width: 12),
             Expanded(
-              flex: 1,
               child: CustomForm(
                 controller: lastNameController,
                 label: AppStrings.lastName,

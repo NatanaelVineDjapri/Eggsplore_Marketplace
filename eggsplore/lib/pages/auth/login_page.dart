@@ -1,25 +1,24 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eggsplore/app_routes.dart';
 import 'package:eggsplore/base/auth_base.dart';
 import 'package:eggsplore/constants/images.dart';
 import 'package:eggsplore/constants/sizes.dart';
 import 'package:eggsplore/constants/text_string.dart';
-import 'package:eggsplore/pages/auth/change_password_page.dart';
-import 'package:eggsplore/service/user_service.dart';
 import 'package:eggsplore/widget/customForm.dart';
 import 'package:eggsplore/widget/passwordForm.dart';
-import 'package:flutter/material.dart';
+import 'package:eggsplore/provider/auth_provider.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  ConsumerState<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends ConsumerState<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-
   bool _isLoading = false;
 
   @override
@@ -69,44 +68,46 @@ class _LoginPageState extends State<LoginPage> {
         const SizedBox(height: 90),
       ],
       buttonText: _isLoading ? AppStrings.loading : AppStrings.login,
-      onButtonPressed: () async {
-        if (_isLoading) return;
+      onButtonPressed: _isLoading
+          ? null
+          : () async {
+              if (emailController.text.isEmpty ||
+                  passwordController.text.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text(AppStrings.formNull)),
+                );
+                return;
+              }
 
-        if (emailController.text.isEmpty || passwordController.text.isEmpty) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text(AppStrings.formNull)),
-          );
-          return;
-        }
+              setState(() => _isLoading = true);
+              final success = await ref
+                  .read(authProvider.notifier)
+                  .login(
+                    emailController.text.trim(),
+                    passwordController.text.trim(),
+                  );
+              setState(() => _isLoading = false);
 
-        setState(() => _isLoading = true);
-
-        final user = await UserService.login(
-          emailController.text.trim(),
-          passwordController.text.trim(),
-        );
-
-        setState(() => _isLoading = false);
-
-        if (user == null) {
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text(AppStrings.failLogin)),
-            );
-          }
-        } else {
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text("$AppStrings.WelcomeApp, ${user.name}")),
-            );
-            Navigator.pushNamedAndRemoveUntil(
-              context,
-              AppRoutes.homepage,
-              (route) => false,
-            );
-          }
-        }
-      },
+              if (!success) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text(AppStrings.failLogin)),
+                );
+              } else {
+                final user = ref.read(authProvider);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      "${AppStrings.welcomeBack}, ${user?.name}",
+                    ),
+                  ),
+                );
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  AppRoutes.homepage,
+                  (route) => false,
+                );
+              }
+            },
       footerText: 'test',
     );
   }

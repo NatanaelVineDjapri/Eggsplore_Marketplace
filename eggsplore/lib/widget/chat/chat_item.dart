@@ -1,13 +1,17 @@
-import 'package:flutter/material.dart';
 import 'package:eggsplore/pages/chat_account_page.dart';
+import 'package:flutter/material.dart';
 
 class ChatItem extends StatelessWidget {
+  final int userId;     // tambahin id user lawan chat
   final String name;
+  final String username; // bisa ditampilin juga
   final String date;
 
   const ChatItem({
     super.key,
+    required this.userId,
     required this.name,
+    required this.username,
     required this.date,
   });
 
@@ -15,10 +19,14 @@ class ChatItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        // bener2 buka ChatDetailPage, bukan snackbar
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ChatDetailPage(username: name),
+            builder: (context) => ChatDetailPage(
+              userId: userId,
+              username: name,
+            ),
           ),
         );
       },
@@ -35,12 +43,21 @@ class ChatItem extends StatelessWidget {
                 ),
                 const SizedBox(width: 12),
                 Expanded(
-                  child: Text(
-                    name,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        name,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Text(
+                        username,
+                        style: const TextStyle(color: Colors.grey),
+                      ),
+                    ],
                   ),
                 ),
                 Text(

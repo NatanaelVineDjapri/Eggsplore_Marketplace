@@ -17,12 +17,36 @@ class Message {
 
   factory Message.fromJson(Map<String, dynamic> json) {
     return Message(
-      id: json['id'],
-      senderId: json['sender_id'],
-      receiverId: json['receiver_id'],
-      message: json['message'] ?? "",
-      createdAt: DateTime.parse(json['created_at']),
-      updatedAt: DateTime.parse(json['updated_at']),
+      id: json['id'] ?? 0,
+      senderId: json['sender_id'] ?? 0,
+      receiverId: json['receiver_id'] ?? 0,
+      message: json['message'] ?? "", // default "" biar ga null
+      createdAt: json['created_at'] != null
+          ? DateTime.parse(json['created_at'])
+          : DateTime.now(), // fallback biar ga crash
+      updatedAt: json['updated_at'] != null
+          ? DateTime.parse(json['updated_at'])
+          : DateTime.now(),
+    );
+  }
+}
+
+class UserChat {
+  final int id;
+  final String name;
+  final String email;
+
+  UserChat({
+    required this.id,
+    required this.name,
+    required this.email,
+  });
+
+  factory UserChat.fromJson(Map<String, dynamic> json) {
+    return UserChat(
+      id: json['id'] ?? 0,
+      name: json['name'] ?? "Unknown", // default "Unknown"
+      email: json['email'] ?? "-",     // default "-" biar ga null
     );
   }
 }

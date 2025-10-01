@@ -107,12 +107,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                                 ),
                               ),
                               Text(
-                                AppStrings.maybe,
-                                style: AppTextStyle.mainTitle2.copyWith(
-                                  color: Colors.black87,
-                                  fontSize: Appsized.fontSm,
-                                  fontWeight: FontWeight.normal,
-                                ),
+                                AppStrings.myWishlist,
+                                style: AppTextStyle.accentTitle,
                               ),
                               Expanded(
                                 child: Divider(

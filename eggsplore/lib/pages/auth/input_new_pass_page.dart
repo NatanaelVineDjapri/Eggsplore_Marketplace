@@ -75,7 +75,7 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
       title: "Input a new",
       accentTitle: "Password",
       subtitle: "Let's set a new password for you!",
-      imagePaths: AppImages.fourthLogo,
+      imagePaths: AppImages.forgetPassLogo,
       fields: [
         passwordForm(
           controller: newPasswordController,

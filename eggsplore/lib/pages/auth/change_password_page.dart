@@ -71,7 +71,7 @@ class _ChangePasswordState extends State<ChangePassword> {
       title: "Forgot Your ",
       accentTitle: AppStrings.password,
       subtitle: "Time to update your password!",
-      imagePaths: AppImages.fourthLogo,
+      imagePaths: AppImages.forgetPassLogo,
       fields: [
         Row(
           children: [

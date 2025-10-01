@@ -121,4 +121,23 @@ class ProductService {
 
     return response.statusCode == 200;
   }
+
+  static Future<bool> rateProduct(int productId, int rating, {String? comment}) async {
+      final token = await UserService.getToken(); 
+      if (token == null) return false;
+
+      final response = await http.post(
+        Uri.parse('$baseUrl/products/$productId/rate'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode({
+          "rating": rating,
+          "comment": comment ?? "",
+        }),
+      );
+
+      return response.statusCode == 200;
+  }
 }

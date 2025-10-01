@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: AppRoutes.search, // ✅ langsung buka search page
+      initialRoute: AppRoutes.homepage, 
       routes: AppRoutes.routes,
     );
   }

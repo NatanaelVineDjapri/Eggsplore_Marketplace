@@ -5,26 +5,26 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\User;
 use App\Models\Product;
+use App\Models\Shop;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Product>
- */
 class ProductFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+    protected $model = Product::class;
+
     public function definition(): array
     {
+        $user = User::inRandomOrder()->first();
+        $shop = Shop::inRandomOrder()->first();
+
         return [
-            'name' => $this->faker->words(3, true),
-            'description' => $this->faker->sentence(),
-            'price' => $this->faker->numberBetween(100000, 1000000),
-            'stock' => $this->faker->numberBetween(1, 20),
-            'user_id' => User::inRandomOrder()->first()->id,
-            'image' => 'images/products/' . $this->faker->image(public_path('images/products'), 640, 480, null, false)
+            'name' => $this->faker->randomElement(['Telur', 'Daging', 'Sayuran', 'Laptop', 'Meja', 'Bangku', 'Sepatu'])
+                        . ' ' . $this->faker->words(2, true),
+            'description' => $this->faker->paragraphs(2, true),
+            'price' => $this->faker->numberBetween(10000, 500000), 
+            'stock' => $this->faker->numberBetween(10, 500),
+            'user_id' => $user?->id ?? 1, 
+            'shop_id' => $shop?->id ?? 1,  
+            'image' => 'https://picsum.photos/640/480?' . $this->faker->randomNumber(5, true),
         ];
     }
 }

@@ -48,7 +48,6 @@ class AuthNotifier extends StateNotifier<User?> {
   }
 }
 
-// Provider global
 final authProvider = StateNotifierProvider<AuthNotifier, User?>((ref) {
   return AuthNotifier();
 });

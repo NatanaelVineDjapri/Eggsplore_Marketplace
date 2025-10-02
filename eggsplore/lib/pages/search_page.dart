@@ -18,24 +18,40 @@ class SearchPage extends StatelessWidget {
         body: SafeArea(
           child: Column(
             children: [
-              // 🔹 Top NavBar (sama kayak HomePage)
+              // 🔹 Top NavBar + tombol back khusus SearchPage
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                child: TopNavBar(
-                  onChatTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const ChatPage()),
-                    );
-                  },
-                  onSearch: (value) {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => SearchPage(query: value),
+                child: Row(
+                  children: [
+                    // 🔙 Tombol Back
+                    IconButton(
+                      icon: const Icon(Icons.arrow_back, color: Colors.black),
+                      onPressed: () {
+                        Navigator.pop(context); // balik ke HomePage
+                      },
+                    ),
+
+                    // 🔎 Search bar
+                    Expanded(
+                      child: TopNavBar(
+                        onChatTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const ChatPage()),
+                          );
+                        },
+                        onSearch: (value) {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => SearchPage(query: value),
+                            ),
+                          );
+                        },
                       ),
-                    );
-                  },
+                    ),
+                  ],
                 ),
               ),
 

@@ -7,6 +7,8 @@ use App\Http\Controllers\SearchController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\LikeController;
+use App\Http\Controllers\BalanceController;
+use App\Http\Controllers\CartController;
 
 Route::post('register', [AuthController::class, 'register']);
 Route::get('users', [AuthController::class, 'allUsers']);
@@ -15,9 +17,17 @@ Route::post('verify-user', [AuthController::class, 'verifyUser']);
 Route::put('change-password', [AuthController::class, 'changePassword']);
 
 Route::middleware('auth:sanctum')->group(function() {
+    Route::post('/update-profile', [AuthController::class, 'updateProfile']);
+
     Route::post('/logout', [AuthController::class, 'logout']);
-    
+    Route::get('/user', [AuthController::class, 'getAuthenticatedUser']);
+
     Route::get('/products', [ProductController::class,'index']);
+    Route::get('/products/random', [ProductController::class, 'randomProducts']);
+
+    Route::post('/topup', [BalanceController::class, 'topUp']);
+    Route::post('/reduce', [BalanceController::class, 'reduce']);
+
     Route::get('/products/{id}', [ProductController::class,'showProduct']);
     Route::post('/products', [ProductController::class,'addProduct']);
     Route::put('/products/{id}', [ProductController::class,'updateProduct']);
@@ -27,7 +37,7 @@ Route::middleware('auth:sanctum')->group(function() {
 
     Route::post('/products/{id}/rate', [ProductController::class,'rateProduct']);
 
-    Route::get('/search', [SearchController::class, 'search']);
+    Route::get('/search', [SearchController::class, 'search']); //blm 
 
     Route::get('/messages/inbox', [MessageController::class, 'inbox']);
     Route::get('/messages/{user}', [MessageController::class, 'index']);
@@ -39,6 +49,8 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::put('/shops/{id}', [ShopController::class, 'updateShop']);
     
     Route::post('/products/{id}/like', [LikeController::class, 'toggleLike']);
+    Route::get('/user/liked-products', [LikeController::class, 'likedProducts']);
+
 
     Route::get('/cart', [CartController::class, 'showCart']);
     Route::post('/cart', [CartController::class, 'addCart']);

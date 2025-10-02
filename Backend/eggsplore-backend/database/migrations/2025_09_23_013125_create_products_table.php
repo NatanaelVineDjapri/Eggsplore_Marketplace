@@ -19,6 +19,8 @@ return new class extends Migration
             $table->integer('stock');
             $table->string('image');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('shop_id')->constrained()->onDelete('cascade');
+
             $table->timestamps();
         });
 

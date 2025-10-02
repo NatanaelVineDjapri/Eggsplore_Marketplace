@@ -1,227 +1,79 @@
+import 'package:eggsplore/widget/cart_item.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:eggsplore/provider/cart_provider.dart';
 
-class CartPage extends StatelessWidget {
+class CartPage extends ConsumerStatefulWidget {
   const CartPage({super.key});
 
   @override
+  ConsumerState<CartPage> createState() => _CartPageState();
+}
+
+class _CartPageState extends ConsumerState<CartPage> {
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      ref.read(cartProvider.notifier).loadCart();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // Hardcode data produk
-    final List<Map<String, dynamic>> cartItems = [
-      {
-        "shop": "Claudiva Official",
-        "name": "Capybara Import",
-        "price": "Rp 999.999.999",
-        "image": "assets/images/capy.jpeg",
-      },
-      {
-        "shop": "Claudiva Official",
-        "name": "Capybara Import",
-        "price": "Rp 999.999.999",
-        "image": "assets/images/capy.jpeg",
-      },
-      {
-        "shop": "Claudiva Official",
-        "name": "Capybara Import",
-        "price": "Rp 999.999.999",
-        "image": "assets/images/capy.jpeg",
-      },
-    ];
+    final cartItems = ref.watch(cartProvider);
+    final cartNotifier = ref.read(cartProvider.notifier);
 
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context); // balik ke home page
-          },
-        ),
-        title: Text(
-          "My Cart (${cartItems.length})", // jumlah otomatis
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
-        actions: [
-          TextButton(
-            onPressed: () {},
-            child: const Text(
-              "Edit",
-              style: TextStyle(color: Colors.black),
-            ),
-          ),
-        ],
-        backgroundColor: const Color(0xFFDADADA),
-        elevation: 1,
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              physics: const BouncingScrollPhysics(),
-              padding: const EdgeInsets.all(8),
+      appBar: AppBar(title: const Text("Keranjang")),
+      body: cartItems.isEmpty
+          ? const Center(child: Text("Keranjang masih kosong"))
+          : ListView.builder(
               itemCount: cartItems.length,
               itemBuilder: (context, index) {
                 final item = cartItems[index];
-                return Card(
-                  margin: const EdgeInsets.symmetric(vertical: 6),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Checkbox
-                        Column(
-                          children: [
-                            Checkbox(
-                              value: false,
-                              onChanged: (val) {},
-                            ),
-                          ],
-                        ),
-                        const SizedBox(width: 4),
-                        // Content
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // Shop name + edit
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    item["shop"],
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 13),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {},
-                                    child: const Text(
-                                      "Edit",
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.blue,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 8),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  // Image
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(8),
-                                    child: Image.network(
-                                      item["image"],
-                                      width: 80,
-                                      height: 80,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 10),
-                                  // Info produk
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          item["name"],
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 6),
-                                        // Quantity selector
-                                        Row(
-                                          children: [
-                                            IconButton(
-                                              onPressed: () {},
-                                              icon: const Icon(Icons.remove,
-                                                  size: 18),
-                                            ),
-                                            const Text("1"),
-                                            IconButton(
-                                              onPressed: () {},
-                                              icon: const Icon(Icons.add,
-                                                  size: 18),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 6),
-                                        Text(
-                                          item["price"],
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
+                return CartItemWidget(
+                  item: item,
+                  onQuantityChanged: (newQty) async {
+                    try {
+                      await cartNotifier.updateItem(item.id, newQty);
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("❌ Gagal update: $e")),
+                      );
+                    }
+                  },
+                  onRemove: () async {
+                    try {
+                      await cartNotifier.removeItem(item.id);
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("❌ Gagal hapus: $e")),
+                      );
+                    }
+                  },
                 );
               },
             ),
-          ),
-          // Bottom bar
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black12,
-                  blurRadius: 6,
-                  offset: Offset(0, -2),
-                ),
-              ],
+      bottomNavigationBar: Container(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              "Total: Rp ${cartNotifier.totalPrice.toStringAsFixed(0)}",
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            child: Row(
-              children: [
-                Checkbox(value: false, onChanged: (val) {}),
-                const Text("All"),
-                const Spacer(),
-                const Text(
-                  "Rp999.999.999",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orange,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 18, vertical: 12),
-                  ),
-                  child: const Text(
-                    "Checkout (1)",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
+            ElevatedButton(
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Checkout belum dibuat 😅")),
+                );
+              },
+              child: const Text("Checkout"),
+            )
+          ],
+        ),
       ),
     );
   }

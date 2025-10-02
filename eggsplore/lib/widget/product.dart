@@ -1,6 +1,7 @@
 import 'package:eggsplore/constants/colors.dart';
 import 'package:eggsplore/constants/sizes.dart';
 import 'package:eggsplore/provider/like_provider.dart';
+import 'package:eggsplore/provider/cart_provider.dart'; // <- tambahin ini
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -83,7 +84,9 @@ class ProductCard extends ConsumerWidget {
                           left: sizes.xs,
                           child: GestureDetector(
                             onTap: () {
-                              ref.read(likeStateProvider.notifier).toggleLike(productId);
+                              ref
+                                  .read(likeStateProvider.notifier)
+                                  .toggleLike(productId);
                             },
                             child: Container(
                               width: Appsized.iconMd,
@@ -98,8 +101,12 @@ class ProductCard extends ConsumerWidget {
                               ),
                               child: Center(
                                 child: Icon(
-                                  liked ? Icons.favorite : Icons.favorite_border,
-                                  color: liked ? AppColors.primary : Colors.black,
+                                  liked
+                                      ? Icons.favorite
+                                      : Icons.favorite_border,
+                                  color: liked
+                                      ? AppColors.primary
+                                      : Colors.black,
                                   size: Appsized.iconSm,
                                 ),
                               ),
@@ -152,7 +159,21 @@ class ProductCard extends ConsumerWidget {
               child: Material(
                 color: Colors.orange,
                 child: InkWell(
-                  onTap: () {},
+                  onTap: () async {
+                    try {
+                      await ref
+                          .read(cartProvider.notifier)
+                          .addItem(productId, 1);
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("$name ditambahkan ke keranjang")),
+                      );
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("Gagal tambah ke keranjang: $e")),
+                      );
+                    }
+                  },
                   child: Container(
                     width: addContainerDimension,
                     height: addContainerDimension,

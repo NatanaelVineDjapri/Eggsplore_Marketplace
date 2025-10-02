@@ -4,6 +4,7 @@ class User {
   final String email;
   final String role;
   final double balance;
+  final String image; 
   final String createdAt;
   final String updatedAt;
 
@@ -13,6 +14,7 @@ class User {
     required this.email,
     required this.role,
     required this.balance,
+    required this.image, 
     required this.createdAt,
     required this.updatedAt,
   });
@@ -34,6 +36,7 @@ class User {
       email: json['email'],
       role: json['role'],
       balance: balanceValue,
+      image: json['image'] ?? '', // <-- ambil dari JSON, default kosong
       createdAt: json['created_at'],
       updatedAt: json['updated_at'],
     );

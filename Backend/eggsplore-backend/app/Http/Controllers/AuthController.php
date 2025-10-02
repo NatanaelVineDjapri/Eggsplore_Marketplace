@@ -33,6 +33,8 @@ class AuthController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => 'user',
+            'image' => url('images/products/eggsplore1.jpg'), 
+
         ]);
 
         return response()->json([
@@ -139,5 +141,44 @@ class AuthController extends Controller
         }
         return response()->json(['message' => 'Unauthenticated.'], 401);
     }
+
+    public function updateProfile(Request $request)
+    {
+    $user = $request->user(); 
+
+    $validator = Validator::make($request->all(), [
+        'firstname' => 'sometimes|string|max:255',
+        'lastname'  => 'sometimes|string|max:255',
+        'email'     => 'sometimes|email|unique:users,email,' . $user->id,
+        'image'     => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048',
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json(['message' => $validator->errors()->first()], 422);
+    }
+
+    if ($request->has('firstname') || $request->has('lastname')) {
+        $user->name = trim(($request->firstname ?? explode(' ', $user->name)[0]) . ' ' . ($request->lastname ?? explode(' ', $user->name)[1] ?? ''));
+    }
+
+    if ($request->has('email')) {
+        $user->email = $request->email;
+    }
+
+    if ($request->hasFile('image')) {
+        $file = $request->file('image');
+        $filename = 'user_' . $user->id . '_' . time() . '.' . $file->getClientOriginalExtension();
+        $file->move(public_path('images/users'), $filename);
+        $user->image = url('images/users/' . $filename);
+    }
+
+    $user->save();
+
+    return response()->json([
+        'message' => 'Profile berhasil diperbarui',
+        'user' => $user,
+    ], 200);
+}
+
 
 }

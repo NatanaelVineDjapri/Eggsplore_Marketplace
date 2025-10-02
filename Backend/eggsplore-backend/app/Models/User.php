@@ -61,6 +61,17 @@ class User extends Authenticatable
     {
         return $this->hasMany(Message::class, 'receiver_id');
     }
+<<<<<<< HEAD
+=======
+
+    // app/Models/User.php
+    public function likedProducts()
+    {
+        return $this->belongsToMany(Product::class, 'likes')->withTimestamps();
+    }
+
+}
+>>>>>>> e2f4d98b06d2db56e3f7915a9b3b1dde66c9a406
 
     // app/Models/User.php
     public function likedProducts()

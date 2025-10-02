@@ -32,20 +32,13 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     userFuture = UserService.getCurrentUser();
   }
 
-  String _getUsername(User user) {
-    return user.name ?? 'Pengguna';
-  }
+  String _getUsername(User user) => user.name;
 
   Widget buildSectionTitle(BuildContext context, String title, double fontSize, FontWeight fontWeight) {
     final size = Appsized(context);
     return Row(
       children: [
-        Expanded(
-          child: Divider(
-            color: Colors.grey.shade400,
-            thickness: 1,
-          ),
-        ),
+        Expanded(child: Divider(color: Colors.grey.shade400, thickness: 1)),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: size.sm),
           child: Text(
@@ -58,12 +51,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
             ),
           ),
         ),
-        Expanded(
-          child: Divider(
-            color: Colors.grey.shade400,
-            thickness: 1,
-          ),
-        ),
+        Expanded(child: Divider(color: Colors.grey.shade400, thickness: 1)),
       ],
     );
   }
@@ -71,7 +59,6 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     final size = Appsized(context);
-
     final randomProductsAsync = ref.watch(randomProductsProvider);
     final likedProductsAsync = ref.watch(likedProductsProvider);
 
@@ -104,12 +91,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                   children: [
                     // HEADER TEXT & CARDS
                     Padding(
-                      padding: EdgeInsets.fromLTRB(
-                        size.hmd,
-                        size.md,
-                        size.hmd,
-                        size.md,
-                      ),
+                      padding: EdgeInsets.fromLTRB(size.hmd, size.md, size.hmd, size.md),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -131,6 +113,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                           SizedBox(height: size.md),
                           const ProfileActionsCard(),
                           SizedBox(height: size.xxxl),
+<<<<<<< HEAD
                           Row(
                             children: [
                               Expanded(
@@ -154,6 +137,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                             ],
                           ),
                           SizedBox(height: size.sm),
+=======
+>>>>>>> e2f4d98b06d2db56e3f7915a9b3b1dde66c9a406
                         ],
                       ),
                     ),
@@ -165,16 +150,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Wishlist Title with line
-                            buildSectionTitle(
-                              context,
-                              "$username's Wishlist",
-                              Appsized.fontMd,
-                              FontWeight.bold,
-                            ),
+                            buildSectionTitle(context, "$username's Wishlist", Appsized.fontMd, FontWeight.bold),
                             SizedBox(height: size.md),
-
-                            // Wishlist Products
                             likedProductsAsync.when(
                               data: (likedProducts) {
                                 WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -183,11 +160,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                                     if (!notifier.state.containsKey(product.id)) {
                                       notifier.state = {
                                         ...notifier.state,
-                                        product.id: Like(
-                                          productId: product.id,
-                                          totalLikes: 0,
-                                          userLiked: true,
-                                        ),
+                                        product.id: Like(productId: product.id, totalLikes: 0, userLiked: true),
                                       };
                                     }
                                   }
@@ -195,7 +168,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
 
                                 return GridView.builder(
                                   shrinkWrap: true,
-                                  physics: NeverScrollableScrollPhysics(),
+                                  physics: const NeverScrollableScrollPhysics(),
                                   itemCount: likedProducts.length,
                                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                                     crossAxisCount: 2,
@@ -205,8 +178,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                                   ),
                                   itemBuilder: (context, index) {
                                     final product = likedProducts[index];
-                                    final isLiked =
-                                        ref.watch(likeStateProvider)[product.id]?.userLiked ?? false;
+                                    final isLiked = ref.watch(likeStateProvider)[product.id]?.userLiked ?? false;
 
                                     return ProductCard(
                                       productId: product.id,
@@ -218,36 +190,20 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                                   },
                                 );
                               },
-                              loading: () => const Center(
-                                child: CircularProgressIndicator(),
-                              ),
+                              loading: () => const Center(child: CircularProgressIndicator()),
                               error: (err, stack) => Text("Error: $err"),
                             ),
-
                             SizedBox(height: size.xl),
-
-                            // Maybe you like Title with line
-                            buildSectionTitle(
-                              context,
-                              AppStrings.maybe,
-                              Appsized.fontSm,
-                              FontWeight.normal,
-                            ),
+                            buildSectionTitle(context, AppStrings.maybe, Appsized.fontSm, FontWeight.normal),
                             SizedBox(height: size.md),
-
-                            // Recommended Products
                             randomProductsAsync.when(
                               data: (products) {
                                 if (products.isEmpty) {
-                                  return Text(
-                                    "Tidak ada produk rekomendasi.",
-                                    style: TextStyle(color: Colors.grey),
-                                  );
+                                  return const Text("Tidak ada produk rekomendasi.", style: TextStyle(color: Colors.grey));
                                 }
-
                                 return GridView.builder(
                                   shrinkWrap: true,
-                                  physics: NeverScrollableScrollPhysics(),
+                                  physics: const NeverScrollableScrollPhysics(),
                                   itemCount: products.length,
                                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                                     crossAxisCount: 2,
@@ -257,8 +213,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                                   ),
                                   itemBuilder: (context, index) {
                                     final product = products[index];
-                                    final isLiked =
-                                        ref.watch(likeStateProvider)[product.id]?.userLiked ?? false;
+                                    final isLiked = ref.watch(likeStateProvider)[product.id]?.userLiked ?? false;
 
                                     return ProductCard(
                                       productId: product.id,
@@ -270,9 +225,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                                   },
                                 );
                               },
-                              loading: () => const Center(
-                                child: CircularProgressIndicator(),
-                              ),
+                              loading: () => const Center(child: CircularProgressIndicator()),
                               error: (err, stack) => Text("Error: $err"),
                             ),
                           ],

@@ -19,6 +19,8 @@ return new class extends Migration
             $table->rememberToken();
             $table->string('role')->default('user');
             $table->decimal('balance', 15, 2)->default(0); 
+            $table->string('image')->nullable(); // kolom image baru
+
             $table->timestamps();
         });
     }

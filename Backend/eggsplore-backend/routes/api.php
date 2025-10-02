@@ -17,6 +17,8 @@ Route::post('verify-user', [AuthController::class, 'verifyUser']);
 Route::put('change-password', [AuthController::class, 'changePassword']);
 
 Route::middleware('auth:sanctum')->group(function() {
+    Route::post('/update-profile', [AuthController::class, 'updateProfile']);
+
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'getAuthenticatedUser']);
 

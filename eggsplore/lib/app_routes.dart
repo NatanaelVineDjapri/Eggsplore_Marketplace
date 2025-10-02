@@ -40,10 +40,6 @@ class AppRoutes {
   static const String product = '/product';
   static const String shopProfile = '/shop-profile';
 
-<<<<<<< HEAD
-
-=======
->>>>>>> e2f4d98b06d2db56e3f7915a9b3b1dde66c9a406
   static Map<String, WidgetBuilder> routes = {
     welcome: (context) => const WelcomeScreen(),
     login: (context) => const LoginPage(),

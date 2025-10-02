@@ -113,32 +113,6 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                           SizedBox(height: size.md),
                           const ProfileActionsCard(),
                           SizedBox(height: size.xxxl),
-<<<<<<< HEAD
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Divider(
-                                  color: Colors.grey,
-                                  thickness: 1,
-                                  endIndent: 10,
-                                ),
-                              ),
-                              Text(
-                                AppStrings.myWishlist,
-                                style: AppTextStyle.accentTitle,
-                              ),
-                              Expanded(
-                                child: Divider(
-                                  color: Colors.grey,
-                                  thickness: 1,
-                                  indent: 10,
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: size.sm),
-=======
->>>>>>> e2f4d98b06d2db56e3f7915a9b3b1dde66c9a406
                         ],
                       ),
                     ),

@@ -14,7 +14,7 @@ class _ProfileShopCardState extends State<ProfileShopCard> {
     return Expanded(
       child: GestureDetector(
         onTap: () {
-          Navigator.pushNamed(context, AppRoutes.myshop);
+          Navigator.pushNamed(context, AppRoutes.profileShopTransition);
         },
         child: Container(
           height: 100, // disamain dengan ProfileInfoCard

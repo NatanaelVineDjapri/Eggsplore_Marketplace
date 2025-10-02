@@ -40,21 +40,21 @@ class NotificationsPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Image.asset(
-                      AppImages.voucher20,
+                      AppImages.voucher1,
                       height: 150,
                       fit: BoxFit.contain,
                     ),
                     const SizedBox(height: 20),
 
                     Image.asset(
-                      AppImages.voucher30,
+                      AppImages.voucher2,
                       height: 150,
                       fit: BoxFit.contain,
                     ),
                     const SizedBox(height: 20),
 
                     Image.asset(
-                      AppImages.voucher50,
+                      AppImages.voucher3,
                       height: 150,
                       fit: BoxFit.contain,
                     ),

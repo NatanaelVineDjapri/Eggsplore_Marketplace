@@ -9,10 +9,10 @@ class ProductResultPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final products = [
-      {"name": "Telur 1kg", "price": "Rp. 25.000", "image": "assets/images/eggs.jpg"},
-      {"name": "Ayam Potong 1 Ekor", "price": "Rp. 40.000", "image": "assets/images/chicken.jpg"},
-      {"name": "Cabai 500gr", "price": "Rp. 30.000", "image": "assets/images/chili.jpg"},
-      {"name": "ZGMF-X10A Freedom Gundam", "price": "Rp. 1.500.000", "image": "assets/images/gundam.jpg"},
+      {"name": "Telur 1kg", "price": "Rp. 25.000"},
+      {"name": "Ayam Potong 1 Ekor", "price": "Rp. 40.000"},
+      {"name": "Cabai 500gr", "price": "Rp. 30.000"},
+      {"name": "ZGMF-X10A Freedom Gundam", "price": "Rp. 1.500.000"},
     ];
 
     final filtered = query.isEmpty
@@ -33,7 +33,6 @@ class ProductResultPage extends StatelessWidget {
         return TrendingProductCard(
           name: p["name"]!,
           price: p["price"]!,
-          image: p["image"],
         );
       },
     );

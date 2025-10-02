@@ -14,6 +14,8 @@ import 'package:eggsplore/pages/search_page.dart';
 import 'package:eggsplore/pages/shop_result_page.dart';
 import 'package:eggsplore/pages/notification_page.dart';
 import 'package:eggsplore/pages/profile_shop_transition.dart';
+import 'package:eggsplore/pages/product_page.dart';
+import 'package:eggsplore/pages/shop_profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:eggsplore/pages/cart_page.dart';
 
@@ -35,6 +37,9 @@ class AppRoutes {
   static const String shopresult = '/shopresult';
   static const String notifications = '/notifications';
   static const String profileShopTransition = '/profile-shop-transition';
+  static const String product = '/product';
+  static const String shopProfile = '/shop-profile';
+
 
   static Map<String, WidgetBuilder> routes = {
     welcome: (context) => const WelcomeScreen(),
@@ -54,5 +59,7 @@ class AppRoutes {
     shopresult: (context) => const ShopResultPage(query: ""),
     notifications: (context) => const NotificationsPage(),
     search: (context) => const SearchPage(query: ""),
+    product: (context) => const ProductPage(),
+    shopProfile: (context) => const ShopProfilePage(),
   };
 }

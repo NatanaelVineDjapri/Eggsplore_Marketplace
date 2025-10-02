@@ -1,29 +1,37 @@
+import 'package:eggsplore/constants/colors.dart';
 import 'package:eggsplore/constants/sizes.dart';
+import 'package:eggsplore/provider/like_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ProductCard extends StatelessWidget {
+class ProductCard extends ConsumerWidget {
+  final int productId;
   final String name;
   final double price;
   final String? image;
+  final bool? isLiked; // menerima dari luar
 
   const ProductCard({
     super.key,
+    required this.productId,
     required this.name,
     required this.price,
     this.image,
+    this.isLiked,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final sizes = Appsized(context);
     final formatter = NumberFormat('#,###');
-
     final cardWidth = MediaQuery.of(context).size.width * 0.45;
-
     const addIconSize = Appsized.iconLg;
+    final addContainerDimension = addIconSize + 12.0;
 
-    final addContainerDimension = addIconSize + 12.0; 
+    // pakai isLiked dari luar jika ada, kalau tidak fallback ke provider
+    final likeState = ref.watch(likeStateProvider);
+    final liked = isLiked ?? likeState[productId]?.userLiked ?? false;
 
     return SizedBox(
       width: cardWidth,
@@ -73,22 +81,27 @@ class ProductCard extends StatelessWidget {
                         Positioned(
                           top: sizes.xs,
                           left: sizes.xs,
-                          child: Container(
-                            width: Appsized.iconMd,
-                            height: Appsized.iconMd,
-                            decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.9),
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: Colors.grey.shade300,
-                                width: 1.5,
+                          child: GestureDetector(
+                            onTap: () {
+                              ref.read(likeStateProvider.notifier).toggleLike(productId);
+                            },
+                            child: Container(
+                              width: Appsized.iconMd,
+                              height: Appsized.iconMd,
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.9),
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: Colors.grey.shade300,
+                                  width: 1.5,
+                                ),
                               ),
-                            ),
-                            child: Center(
-                              child: Icon(
-                                Icons.favorite_border,
-                                color: Colors.black,
-                                size: Appsized.iconSm,
+                              child: Center(
+                                child: Icon(
+                                  liked ? Icons.favorite : Icons.favorite_border,
+                                  color: liked ? AppColors.primary : Colors.black,
+                                  size: Appsized.iconSm,
+                                ),
                               ),
                             ),
                           ),
@@ -131,17 +144,11 @@ class ProductCard extends StatelessWidget {
               ),
             ),
           ),
-          
           Positioned(
             right: -5,
             bottom: 15,
             child: ClipRRect(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(sizes.sm),
-                topRight: Radius.circular(sizes.sm),
-                bottomRight: Radius.circular(sizes.sm),
-                bottomLeft: Radius.circular(sizes.sm),
-              ),
+              borderRadius: BorderRadius.circular(sizes.sm),
               child: Material(
                 color: Colors.orange,
                 child: InkWell(

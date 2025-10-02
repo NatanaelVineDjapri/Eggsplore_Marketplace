@@ -1,5 +1,3 @@
-
-// lib/model/cart_item.dart
 class CartItem {
   final String shop;
   final String name;

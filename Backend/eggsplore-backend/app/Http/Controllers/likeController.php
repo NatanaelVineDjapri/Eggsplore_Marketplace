@@ -34,5 +34,15 @@ class LikeController extends Controller
         ]);
     }
 
-}
+    public function likedProducts()
+    {
+        $user = auth()->user();
 
+        // Ambil semua produk yang user like
+        $products = $user->likedProducts()->get();
+
+        return response()->json($products);
+    }
+
+
+}

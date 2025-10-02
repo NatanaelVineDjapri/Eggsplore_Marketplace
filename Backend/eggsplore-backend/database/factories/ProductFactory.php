@@ -18,13 +18,14 @@ class ProductFactory extends Factory
      */
     public function definition(): array
     {
+
         return [
-            'name' => $this->faker->words(3, true),
-            'description' => $this->faker->sentence(),
-            'price' => $this->faker->numberBetween(100000, 1000000),
-            'stock' => $this->faker->numberBetween(1, 20),
+            'name' => $this->faker->randomElement(['Telur', 'Daging', 'Sayuran',"Laptop","Meja","Bangku","Sepatu"]) . ' ' . $this->faker->words(2, true),
+            'description' => $this->faker->paragraphs(2, true),
+            'price' => $this->faker->numberBetween(10000, 500000), 
+            'stock' => $this->faker->numberBetween(10, 500),
             'user_id' => User::inRandomOrder()->first()->id,
-            'image' => 'images/products/' . $this->faker->image(public_path('images/products'), 640, 480, null, false)
+            'image' => 'https://picsum.photos/640/480?' . $this->faker->randomNumber(5, true),
         ];
     }
 }

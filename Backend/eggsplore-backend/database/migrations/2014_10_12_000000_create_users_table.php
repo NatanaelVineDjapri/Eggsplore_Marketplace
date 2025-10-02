@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->string('role')->default('user');
+            $table->decimal('balance', 15, 2)->default(0); 
             $table->timestamps();
         });
     }

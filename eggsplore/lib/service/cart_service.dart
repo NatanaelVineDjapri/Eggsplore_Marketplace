@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'package:eggsplore/model/cart_item.dart';
 import 'package:http/http.dart' as http;
-import 'user_service.dart'; // <- ambil token dari sini
+import 'user_service.dart';
 
 class CartService {
-  static const String baseUrl = 'http://10.0.2.2:8000/api'; // sama kayak UserService
+  static const String baseUrl = 'http://10.0.2.2:8000/api';
 
   static Future<List<CartItem>> fetchCart() async {
     final token = await UserService.getToken();
@@ -18,12 +18,14 @@ class CartService {
       },
     );
 
+    print("📥 FETCH CART => ${response.statusCode} : ${response.body}");
+
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       List items = data['items'] ?? [];
       return items.map((item) => CartItem.fromJson(item)).toList();
     } else {
-      throw Exception('Failed to load cart');
+      throw Exception('Failed to load cart (${response.statusCode})');
     }
   }
 
@@ -35,6 +37,7 @@ class CartService {
       Uri.parse('$baseUrl/cart'),
       headers: {
         'Authorization': 'Bearer $token',
+        'Accept': 'application/json', // tambahin biar jelas
         'Content-Type': 'application/json',
       },
       body: jsonEncode({
@@ -43,11 +46,13 @@ class CartService {
       }),
     );
 
-    if (response.statusCode == 200) {
+    print("📤 ADD CART => ${response.statusCode} : ${response.body}");
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
       final data = json.decode(response.body);
       return CartItem.fromJson(data['item']);
     } else {
-      throw Exception('Failed to add cart item');
+      throw Exception('Failed to add cart item (${response.statusCode})');
     }
   }
 
@@ -59,13 +64,16 @@ class CartService {
       Uri.parse('$baseUrl/cart/$itemId'),
       headers: {
         'Authorization': 'Bearer $token',
+        'Accept': 'application/json',
         'Content-Type': 'application/json',
       },
       body: jsonEncode({'quantity': quantity}),
     );
 
+    print("✏️ UPDATE CART => ${response.statusCode} : ${response.body}");
+
     if (response.statusCode != 200) {
-      throw Exception('Failed to update cart item');
+      throw Exception('Failed to update cart item (${response.statusCode})');
     }
   }
 
@@ -77,11 +85,14 @@ class CartService {
       Uri.parse('$baseUrl/cart/$itemId'),
       headers: {
         'Authorization': 'Bearer $token',
+        'Accept': 'application/json',
       },
     );
 
+    print("🗑 REMOVE CART => ${response.statusCode} : ${response.body}");
+
     if (response.statusCode != 200) {
-      throw Exception('Failed to remove cart item');
+      throw Exception('Failed to remove cart item (${response.statusCode})');
     }
   }
 }

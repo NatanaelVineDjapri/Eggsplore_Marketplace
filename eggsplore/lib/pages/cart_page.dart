@@ -14,7 +14,6 @@ class _CartPageState extends ConsumerState<CartPage> {
   @override
   void initState() {
     super.initState();
-    // load cart pertama kali
     Future.microtask(() {
       ref.read(cartProvider.notifier).loadCart();
     });
@@ -35,11 +34,23 @@ class _CartPageState extends ConsumerState<CartPage> {
                 final item = cartItems[index];
                 return CartItemWidget(
                   item: item,
-                  onQuantityChanged: (newQty) {
-                    cartNotifier.updateItem(item.id, newQty);
+                  onQuantityChanged: (newQty) async {
+                    try {
+                      await cartNotifier.updateItem(item.id, newQty);
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("❌ Gagal update: $e")),
+                      );
+                    }
                   },
-                  onRemove: () {
-                    cartNotifier.removeItem(item.id);
+                  onRemove: () async {
+                    try {
+                      await cartNotifier.removeItem(item.id);
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("❌ Gagal hapus: $e")),
+                      );
+                    }
                   },
                 );
               },

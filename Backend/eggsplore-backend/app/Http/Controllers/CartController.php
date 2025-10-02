@@ -3,26 +3,43 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Cart;
+use App\Models\CartItem;
+use App\Models\Product;
 
 class CartController extends Controller
 {
     public function showCart(){
-        $cart = auth()->user()->cart()->with('items.product')->first();
+    $user = auth()->user();
+    $cart = $user->cart()->with('items.product')->first();
 
-        if(!$cart){
-            return response()->json([
-                'cart' => null,
-                'items' => [],
-                'total_price' => 0
-            ]);
-        }
-
+    if(!$cart){
         return response()->json([
-            'cart' => $cart,
-            'items' => $cart->items,
-            'total_price' => $cart->totalPrice()
+            'cart_id' => null,
+            'items' => [],
+            'total_price' => 0
         ]);
     }
+
+    return response()->json([
+        'cart_id' => $cart->id,
+        'items' => $cart->items->map(function($item) {
+            return [
+                'id' => $item->id,
+                'product' => [
+                    'id' => $item->product->id,
+                    'name' => $item->product->name,
+                    'price' => $item->product->price,
+                    'image' => $item->product->image,
+                ],
+                'quantity' => $item->quantity,
+                'subtotal' => $item->quantity * $item->product->price,
+            ];
+        })->values(),
+        'total_price' => $cart->totalPrice()
+    ]);
+}
+
 
     public function addCart(Request $request){
         $request->validate([

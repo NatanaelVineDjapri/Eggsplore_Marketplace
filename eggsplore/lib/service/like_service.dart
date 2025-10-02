@@ -36,9 +36,13 @@ class LikeService {
     });
 
     if (response.statusCode == 200) {
-      final List data = json.decode(response.body);
+      final decoded = json.decode(response.body);
+      print("Response body: $decoded");
+      final List data = decoded is List ? decoded : decoded['data'];
       return data.map((e) => Product.fromJson(e)).toList();
     } else {
+      print("Status: ${response.statusCode}");
+      print("Body: ${response.body}");
       throw Exception('Failed to fetch liked products');
     }
   }

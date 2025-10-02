@@ -37,6 +37,8 @@ class LikeController extends Controller
     public function likedProducts()
     {
         $user = auth()->user();
+<<<<<<< HEAD
+=======
 
         // Ambil semua produk yang user like
         $products = $user->likedProducts()->get();
@@ -46,4 +48,13 @@ class LikeController extends Controller
 
 
 }
+>>>>>>> e2f4d98b06d2db56e3f7915a9b3b1dde66c9a406
 
+        // Ambil semua produk yang user like
+        $products = $user->likedProducts()->get();
+
+        return response()->json($products);
+    }
+
+
+}

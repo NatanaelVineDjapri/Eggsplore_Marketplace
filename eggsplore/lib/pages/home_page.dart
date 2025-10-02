@@ -14,6 +14,7 @@ import 'package:eggsplore/service/product_service.dart';
 import 'package:eggsplore/widget/product.dart';
 import 'package:intl/intl.dart';
 import 'package:eggsplore/pages/search_page.dart';
+import 'package:eggsplore/widget/bannerSlider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -25,6 +26,10 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   double balance = 0;
 
+  // Scroll controller & offset untuk menggerakkan background
+  final ScrollController _scrollController = ScrollController();
+  double _scrollOffset = 0.0;
+
   Future<List<Product>> _loadProducts() async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('auth_token') ?? '';
@@ -34,9 +39,24 @@ class _HomePageState extends State<HomePage> {
     return ProductService.fetchProducts(token);
   }
 
+  @override
   void initState() {
     super.initState();
     _loadUser();
+
+    // Listener scroll: update offset untuk background
+    _scrollController.addListener(() {
+      if (!mounted) return;
+      setState(() {
+        _scrollOffset = _scrollController.offset;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   void _loadUser() async {
@@ -53,15 +73,19 @@ class _HomePageState extends State<HomePage> {
     final size = Appsized(context);
     final formatter = NumberFormat('#,###');
 
+    final bgHeight = size.height * 0.36;
+    // pastikan top hanya antara -bgHeight .. 0
+    final bgTop = -_scrollOffset.clamp(0.0, bgHeight).toDouble();
+
     return Scaffold(
       body: Stack(
         children: [
-          // Background image
+          // 🔹 Background image (mentok atas, full lebar)
           Positioned(
-            top: 0,
+            top: -_scrollOffset.clamp(0.0, bgHeight).toDouble(),
             left: 0,
             right: 0,
-            height: size.height * 0.36,
+            height: bgHeight,
             child: Image.asset(
               AppImages.homeHeader,
               fit: BoxFit.cover,
@@ -69,7 +93,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
 
-          // Foreground content
+          // 🔹 Konten di atas background, pake SafeArea biar gak ketiban status bar
           SafeArea(
             child: Column(
               children: [
@@ -83,12 +107,9 @@ class _HomePageState extends State<HomePage> {
                     onChatTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => const ChatPage(),
-                        ),
+                        MaterialPageRoute(builder: (context) => const ChatPage()),
                       );
                     },
-                    // 🔹 Update onSearch -> pindah ke SearchPage (selalu jalan walau kosong)
                     onSearch: (value) {
                       final query = value.trim();
                       Navigator.push(
@@ -104,9 +125,16 @@ class _HomePageState extends State<HomePage> {
                 // Scrollable content
                 Expanded(
                   child: ListView(
+                    controller: _scrollController,
                     padding: EdgeInsets.zero,
                     children: [
-                      const BannerCard(imagePath: "assets/images/banner.jpg"),
+                      BannerSlider(
+                        images: [
+                          "assets/images/banner.jpg",
+                          "assets/images/banner.jpg",
+                          "assets/images/banner.jpg",
+                        ],
+                      ),
                       EggsplorePayCard(
                         balance: balance,
                         onTap: () async {
@@ -117,13 +145,10 @@ class _HomePageState extends State<HomePage> {
                             ),
                           );
                           if (newBalance != null) {
-                            setState(
-                              () => balance = newBalance,
-                            ); // update balance di HomePage
+                            setState(() => balance = newBalance);
                           }
                         },
                       ),
-
                       Padding(
                         padding: EdgeInsets.all(size.md),
                         child: FutureBuilder<List<Product>>(
@@ -146,9 +171,7 @@ class _HomePageState extends State<HomePage> {
 
                             final products = snapshot.data ?? [];
                             if (products.isEmpty) {
-                              return const Center(
-                                child: Text("Belum ada produk"),
-                              );
+                              return const Center(child: Text("Belum ada produk"));
                             }
 
                             return GridView.builder(

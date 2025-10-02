@@ -37,7 +37,7 @@ Route::middleware('auth:sanctum')->group(function() {
 
     Route::post('/products/{id}/rate', [ProductController::class,'rateProduct']);
 
-    Route::get('/search', [SearchController::class, 'search']); //blm 
+    Route::get('/search', [SearchController::class, 'search']); //blm
 
     Route::get('/messages/inbox', [MessageController::class, 'inbox']);
     Route::get('/messages/{user}', [MessageController::class, 'index']);
@@ -47,7 +47,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('/shops/{id}', [ShopController::class, 'showShop']);
     Route::post('/shops', [ShopController::class, 'makeShop']);
     Route::put('/shops/{id}', [ShopController::class, 'updateShop']);
-    
+
     Route::post('/products/{id}/like', [LikeController::class, 'toggleLike']);
     Route::get('/user/liked-products', [LikeController::class, 'likedProducts']);
 

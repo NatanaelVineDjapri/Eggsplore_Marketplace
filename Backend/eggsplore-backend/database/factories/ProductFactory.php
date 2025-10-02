@@ -22,8 +22,8 @@ class ProductFactory extends Factory
             'description' => $this->faker->paragraphs(2, true),
             'price' => $this->faker->numberBetween(10000, 500000), 
             'stock' => $this->faker->numberBetween(10, 500),
-            'user_id' => $user?->id ?? 1,  // fallback ke user id 1
-            'shop_id' => $shop?->id ?? 1,  // fallback ke shop id 1
+            'user_id' => $user?->id ?? 1, 
+            'shop_id' => $shop?->id ?? 1,  
             'image' => 'https://picsum.photos/640/480?' . $this->faker->randomNumber(5, true),
         ];
     }

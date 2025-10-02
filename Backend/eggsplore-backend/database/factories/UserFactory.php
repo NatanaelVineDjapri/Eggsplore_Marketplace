@@ -12,11 +12,17 @@ class UserFactory extends Factory
 {
     public function definition(): array
     {
+        $imagePaths = [
+            '/images/products/eggsplore1.jpg',
+            '/images/products/eggsplore2.jpg',
+        ];
+
         return [
             'name' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
             'password' => Hash::make('password123'),
             'role' => 'user',
+            'image' => $this->faker->randomElement($imagePaths), 
         ];
     }
 }

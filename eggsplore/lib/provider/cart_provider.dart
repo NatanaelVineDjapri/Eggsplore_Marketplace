@@ -6,12 +6,8 @@ class CartNotifier extends StateNotifier<List<CartItem>> {
   CartNotifier() : super([]);
 
   double get totalPrice {
-  return state.fold(
-    0,
-    (sum, item) => sum + (item.price * item.quantity),
-  );
-}
-
+    return state.fold(0, (sum, item) => sum + (item.price * item.quantity));
+  }
 
   Future<void> loadCart() async {
     try {
@@ -26,7 +22,7 @@ class CartNotifier extends StateNotifier<List<CartItem>> {
   Future<void> addItem(int productId, int quantity) async {
     try {
       final item = await CartService.addCartItem(productId, quantity);
-      // kalau item udah ada, update quantity
+
       final existingIndex = state.indexWhere((i) => i.productId == productId);
       if (existingIndex != -1) {
         final updated = [...state];
@@ -62,5 +58,4 @@ class CartNotifier extends StateNotifier<List<CartItem>> {
   }
 }
 
-final cartProvider =
-    StateNotifierProvider<CartNotifier, List<CartItem>>((ref) => CartNotifier());
+final cartProvider = StateNotifierProvider<CartNotifier, List<CartItem>>((ref) => CartNotifier());

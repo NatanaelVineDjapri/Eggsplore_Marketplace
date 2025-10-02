@@ -34,17 +34,13 @@ class CartItemWidget extends StatelessWidget {
             IconButton(
               icon: const Icon(Icons.remove),
               onPressed: () {
-                if (item.quantity > 1) {
-                  onQuantityChanged(item.quantity - 1);
-                }
+                if (item.quantity > 1) onQuantityChanged(item.quantity - 1);
               },
             ),
             Text(item.quantity.toString()),
             IconButton(
               icon: const Icon(Icons.add),
-              onPressed: () {
-                onQuantityChanged(item.quantity + 1);
-              },
+              onPressed: () => onQuantityChanged(item.quantity + 1),
             ),
             IconButton(
               icon: const Icon(Icons.delete, color: Colors.red),

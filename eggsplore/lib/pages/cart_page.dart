@@ -1,7 +1,7 @@
-import 'package:eggsplore/model/cart_item.dart';
 import 'package:eggsplore/widget/cart_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:eggsplore/model/cart_item.dart';
 import 'package:eggsplore/provider/cart_provider.dart';
 
 class CartPage extends ConsumerStatefulWidget {
@@ -15,9 +15,7 @@ class _CartPageState extends ConsumerState<CartPage> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() {
-      ref.read(cartProvider.notifier).loadCart();
-    });
+    Future.microtask(() => ref.read(cartProvider.notifier).loadCart());
   }
 
   @override
@@ -25,14 +23,11 @@ class _CartPageState extends ConsumerState<CartPage> {
     final cartItems = ref.watch(cartProvider);
     final cartNotifier = ref.read(cartProvider.notifier);
 
-    // Grup item berdasarkan toko
+    // Group per toko
     final Map<String, List<CartItem>> groupedItems = {};
     for (var item in cartItems) {
-      final store = item.name ?? "Toko Tidak Diketahui";
-      if (!groupedItems.containsKey(store)) {
-        groupedItems[store] = [];
-      }
-      groupedItems[store]!.add(item);
+      final store = item.shopName ?? "Toko Tidak Diketahui";
+      groupedItems.putIfAbsent(store, () => []).add(item);
     }
 
     return Scaffold(
@@ -53,8 +48,7 @@ class _CartPageState extends ConsumerState<CartPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                       color: Colors.grey[200],
                       child: Text(
                         storeName,
@@ -65,22 +59,10 @@ class _CartPageState extends ConsumerState<CartPage> {
                     ...items.map((item) => CartItemWidget(
                           item: item,
                           onQuantityChanged: (newQty) async {
-                            try {
-                              await cartNotifier.updateItem(item.id, newQty);
-                            } catch (e) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text("Gagal update: $e")),
-                              );
-                            }
+                            await cartNotifier.updateItem(item.id, newQty);
                           },
                           onRemove: () async {
-                            try {
-                              await cartNotifier.removeItem(item.id);
-                            } catch (e) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text("Gagal hapus: $e")),
-                              );
-                            }
+                            await cartNotifier.removeItem(item.id);
                           },
                         )),
                   ],
@@ -94,8 +76,7 @@ class _CartPageState extends ConsumerState<CartPage> {
           children: [
             Text(
               "Total: Rp ${cartNotifier.totalPrice.toStringAsFixed(0)}",
-              style: const TextStyle(
-                  fontSize: 18, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             ElevatedButton(
               onPressed: () {

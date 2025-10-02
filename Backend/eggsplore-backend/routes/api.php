@@ -8,6 +8,7 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\BalanceController;
+use App\Http\Controllers\CartController;
 
 Route::post('register', [AuthController::class, 'register']);
 Route::get('users', [AuthController::class, 'allUsers']);
@@ -46,6 +47,8 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::put('/shops/{id}', [ShopController::class, 'updateShop']);
     
     Route::post('/products/{id}/like', [LikeController::class, 'toggleLike']);
+    Route::get('/user/liked-products', [LikeController::class, 'likedProducts']);
+
 
     Route::get('/cart', [CartController::class, 'showCart']);
     Route::post('/cart', [CartController::class, 'addCart']);

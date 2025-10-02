@@ -35,10 +35,6 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    public function likedProducts() {
-        return $this->belongsToMany(Product::class, 'likes'); 
-    }
-
     public function cart() {
         return $this->hasOne(Cart::class);
     }
@@ -65,5 +61,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(Message::class, 'receiver_id');
     }
+
+    // app/Models/User.php
+    public function likedProducts()
+    {
+        return $this->belongsToMany(Product::class, 'likes')->withTimestamps();
+    }
+
 }
 

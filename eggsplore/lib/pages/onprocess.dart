@@ -39,7 +39,7 @@ class _ProcessedPageState extends State<ProcessedPage> {
         setState(() {
           items = [
             items[0],
-            ...data.map((item) => item as Map<String, dynamic>).toList(),
+            ...data.map((item) => item as Map<String, dynamic>),
           ];
           isLoading = false;
         });

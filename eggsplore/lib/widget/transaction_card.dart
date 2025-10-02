@@ -5,7 +5,7 @@ import 'package:eggsplore/pages/transaction_detail_page.dart';
 class TransactionCard extends StatelessWidget {
   final Transaction transaction;
 
-  const TransactionCard({Key? key, required this.transaction}) : super(key: key);
+  const TransactionCard({super.key, required this.transaction});
 
   Color getStatusColor(String status) {
     switch (status) {

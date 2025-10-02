@@ -42,4 +42,12 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::post('/cart', [CartController::class, 'addCart']);
     Route::put('/cart/{itemId}', [CartController::class, 'updateCart']);
     Route::delete('/cart/{itemId}', [CartController::class, 'removeCart']);
+
+    Route::get('/profile', [AuthController::class, 'profile']);
+    Route::put('/profile', [AuthController::class, 'updateProfile']);
+    Route::put('/profile/password', [AuthController::class, 'updatePassword']);
+    Route::post('/profile/avatar', [AuthController::class, 'updateAvatar']);
+
+    Route::middleware('auth:sanctum')->get('/user', [AuthController::class, 'me']);
+
 });

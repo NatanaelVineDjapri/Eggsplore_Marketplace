@@ -95,4 +95,23 @@ class CartService {
       throw Exception('Failed to remove cart item (${response.statusCode})');
     }
   }
+
+static Future<void> removeShopItems(String shopName) async {
+  final token = await UserService.getToken();
+  if (token == null) throw Exception('User not logged in');
+
+  final response = await http.delete(
+    Uri.parse('$baseUrl/cart/shop/$shopName'),
+    headers: {
+      'Authorization': 'Bearer $token',
+      'Accept': 'application/json',
+    },
+  );
+
+  print("🗑 REMOVE SHOP ITEMS => ${response.statusCode} : ${response.body}");
+
+  if (response.statusCode != 200) {
+    throw Exception('Failed to remove shop items (${response.statusCode})');
+  }
+}
 }

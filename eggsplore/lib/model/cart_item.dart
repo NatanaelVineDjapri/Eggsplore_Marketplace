@@ -1,20 +1,22 @@
 class CartItem {
   final int id;
   final int productId;
-  final String? name; 
-  final String? shopName; 
+  final String name;
+  final String shopName;
   final double price;
   final int quantity;
   final String? image;
+  final bool isSelected;
 
   CartItem({
     required this.id,
     required this.productId,
-    this.name,
-    this.shopName,
+    required this.name,
+    required this.shopName,
     required this.price,
     required this.quantity,
     this.image,
+    this.isSelected = false, // default false
   });
 
   CartItem copyWith({
@@ -23,6 +25,7 @@ class CartItem {
     String? shopName,
     double? price,
     String? image,
+    bool? isSelected,
   }) {
     return CartItem(
       id: id,
@@ -32,31 +35,25 @@ class CartItem {
       price: price ?? this.price,
       quantity: quantity ?? this.quantity,
       image: image ?? this.image,
+      isSelected: isSelected ?? this.isSelected,
     );
   }
 
   factory CartItem.fromJson(Map<String, dynamic> json) {
     final product = json['product'] as Map<String, dynamic>?;
-    final shop = product != null
-        ? product['shop'] as Map<String, dynamic>?
-        : null;
+    final shop = product?['shop'] as Map<String, dynamic>?;
 
     return CartItem(
-      id: json['id'] is int ? json['id'] : 0,
-      productId: product != null && product['id'] is int ? product['id'] : 0,
-      name: product != null && product['name'] is String
-          ? product['name']
-          : null,
-      shopName: shop != null && shop['name'] is String
-          ? shop['name']
-          : "Toko Tidak Diketahui",
+      id: json['id'] as int? ?? 0,
+      productId: product?['id'] as int? ?? 0,
+      name: product?['name'] as String? ?? "Produk tidak ditemukan",
+      shopName: shop?['name'] as String? ?? "Toko Tidak Diketahui",
       price: product != null && product['price'] != null
           ? double.tryParse(product['price'].toString()) ?? 0.0
           : 0.0,
-      quantity: json['quantity'] is int ? json['quantity'] : 1,
-      image: product != null && product['image'] is String
-          ? product['image']
-          : null,
+      quantity: json['quantity'] as int? ?? 1,
+      image: product?['image'] as String?,
+      isSelected: false,
     );
   }
 

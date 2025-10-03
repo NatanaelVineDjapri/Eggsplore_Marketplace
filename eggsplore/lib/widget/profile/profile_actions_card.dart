@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:eggsplore/constants/colors.dart';
 
 class ProfileActionsCard extends StatefulWidget {
   const ProfileActionsCard({super.key});
@@ -13,11 +14,11 @@ class _ProfileActionsCardState extends State<ProfileActionsCard> {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: AppColors.bleki.withOpacity(0.1),
             blurRadius: 6,
             offset: const Offset(0, 3),
           )
@@ -46,7 +47,7 @@ class _ActionItem extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(icon, size: 28, color: Colors.orange),
+        Icon(icon, size: 28, color: AppColors.primary),
         const SizedBox(height: 6),
         Text(label, style: const TextStyle(fontSize: 12)),
       ],

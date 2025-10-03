@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:eggsplore/constants/colors.dart';
 
 class ChatInput extends StatelessWidget {
   final TextEditingController controller;
@@ -12,10 +13,10 @@ class ChatInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea( // ✅ biar naik pas keyboard muncul
+    return SafeArea( 
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-        color: Colors.white,
+        color: AppColors.white,
         child: Row(
           children: [
             Expanded(
@@ -28,7 +29,7 @@ class ChatInput extends StatelessWidget {
               ),
             ),
             IconButton(
-              icon: const Icon(Icons.send, color: Colors.orange),
+              icon: const Icon(Icons.send, color: AppColors.primary),
               onPressed: onSend,
             ),
           ],

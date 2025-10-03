@@ -1,3 +1,4 @@
+import 'package:eggsplore/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:eggsplore/constants/sizes.dart';
 
@@ -10,36 +11,34 @@ class ProductPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.orange,
+        backgroundColor: AppColors.primary,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.arrow_back, color: AppColors.white),
           onPressed: () => Navigator.pop(context),
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.chat_bubble_outline, color: Colors.white),
-            onPressed: () {}, // ke chat toko nanti
+            icon: const Icon(Icons.chat_bubble_outline, color: AppColors.white),
+            onPressed: () {}, 
           ),
           IconButton(
-            icon: const Icon(Icons.shopping_cart_outlined, color: Colors.white),
-            onPressed: () {}, // ke cart nanti
+            icon: const Icon(Icons.shopping_cart_outlined, color: AppColors.white),
+            onPressed: () {}, 
           ),
         ],
       ),
       body: ListView(
         children: [
-          // Gambar Produk
           Container(
             height: size.height * 0.3,
-            color: Colors.grey[300],
+            color: AppColors.grey[300],
             child: const Center(
               child: Text("Product Image",
-                  style: TextStyle(color: Colors.black54)),
+                  style: TextStyle(color: AppColors.bleki)),
             ),
           ),
 
-          // Info Produk
           Padding(
             padding: EdgeInsets.all(size.md),
             child: Column(
@@ -58,7 +57,7 @@ class ProductPage extends StatelessWidget {
                   children: const [
                     Row(
                       children: [
-                        Icon(Icons.star, color: Colors.black87, size: 18),
+                        Icon(Icons.star, color: AppColors.bleki, size: 18),
                         SizedBox(width: 4),
                         Text("4.8 (20)"),
                       ],
@@ -70,14 +69,12 @@ class ProductPage extends StatelessWidget {
             ),
           ),
 
-          // 🔶 Divider Kuning
           Container(
             height: 2,
-            color: Colors.orange,
+            color: AppColors.primary,
             margin: EdgeInsets.symmetric(vertical: size.sm),
           ),
 
-          // Review Section
           Padding(
             padding:
                 EdgeInsets.symmetric(horizontal: size.md, vertical: size.sm),
@@ -87,7 +84,7 @@ class ProductPage extends StatelessWidget {
                 Text("Review",
                     style:
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                Text("See all", style: TextStyle(color: Colors.blue)),
+                Text("See all", style: TextStyle(color: AppColors.blu)),
               ],
             ),
           ),
@@ -100,7 +97,7 @@ class ProductPage extends StatelessWidget {
                     style: TextStyle(fontWeight: FontWeight.bold)),
                 Row(
                   children: const [
-                    Icon(Icons.star, size: 18, color: Colors.black87),
+                    Icon(Icons.star, size: 18, color: AppColors.bleki),
                     SizedBox(width: 4),
                     Text("3.1/5"),
                   ],
@@ -115,7 +112,7 @@ class ProductPage extends StatelessWidget {
                       margin: EdgeInsets.only(right: size.sm),
                       width: 60,
                       height: 60,
-                      color: Colors.grey[300],
+                      color: AppColors.grey[300],
                       child: const Center(child: Text("Img")),
                     ),
                   ),
@@ -124,23 +121,22 @@ class ProductPage extends StatelessWidget {
             ),
           ),
 
-          Divider(thickness: 1, color: Colors.grey[300]),
+          Divider(thickness: 1, color: AppColors.grey[300]),
 
-          // Toko Section
           Padding(
             padding: EdgeInsets.all(size.md),
             child: Container(
               padding: EdgeInsets.all(size.md),
               decoration: BoxDecoration(
-                color: Colors.orange[100],
+                color: AppColors.primary[100],
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Row(
                 children: [
                   const CircleAvatar(
                     radius: 30,
-                    backgroundColor: Colors.grey,
-                    child: Icon(Icons.store, color: Colors.white, size: 30),
+                    backgroundColor: AppColors.grey,
+                    child: Icon(Icons.store, color: AppColors.white, size: 30),
                   ),
                   SizedBox(width: size.md),
                   Expanded(
@@ -152,14 +148,14 @@ class ProductPage extends StatelessWidget {
                                 fontSize: 16, fontWeight: FontWeight.bold)),
                         SizedBox(height: 2),
                         Text("Jakarta Barat",
-                            style: TextStyle(color: Colors.black54)),
+                            style: TextStyle(color: AppColors.bleki)),
                       ],
                     ),
                   ),
                   OutlinedButton(
                     onPressed: () {},
                     style: OutlinedButton.styleFrom(
-                      side: const BorderSide(color: Colors.black),
+                      side: const BorderSide(color: AppColors.bleki),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(20))),
                     ),
@@ -170,14 +166,12 @@ class ProductPage extends StatelessWidget {
             ),
           ),
 
-          // 🔶 Divider Kuning bawah deskripsi
           Container(
             height: 2,
-            color: Colors.orange,
+            color: AppColors.primary,
             margin: EdgeInsets.symmetric(vertical: size.sm),
           ),
 
-          // Deskripsi
           Padding(
             padding: EdgeInsets.all(size.md),
             child: Column(

@@ -1,7 +1,7 @@
 import 'package:eggsplore/constants/colors.dart';
 import 'package:eggsplore/constants/sizes.dart';
 import 'package:eggsplore/provider/like_provider.dart';
-import 'package:eggsplore/provider/cart_provider.dart'; // <- tambahin ini
+import 'package:eggsplore/provider/cart_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,8 +11,7 @@ class ProductCard extends ConsumerWidget {
   final String name;
   final double price;
   final String? image;
-  final bool? isLiked; // menerima dari luar
-
+  final bool? isLiked;
   const ProductCard({
     super.key,
     required this.productId,
@@ -30,7 +29,6 @@ class ProductCard extends ConsumerWidget {
     const addIconSize = Appsized.iconLg;
     final addContainerDimension = addIconSize + 12.0;
 
-    // pakai isLiked dari luar jika ada, kalau tidak fallback ke provider
     final likeState = ref.watch(likeStateProvider);
     final liked = isLiked ?? likeState[productId]?.userLiked ?? false;
 
@@ -56,7 +54,7 @@ class ProductCard extends ConsumerWidget {
                       children: [
                         Container(
                           width: double.infinity,
-                          color: Colors.white,
+                          color: AppColors.white,
                           child: image != null && image!.isNotEmpty
                               ? Image.network(
                                   image!,
@@ -67,7 +65,7 @@ class ProductCard extends ConsumerWidget {
                                         child: Icon(
                                           Icons.broken_image,
                                           size: Appsized.iconSm,
-                                          color: Colors.grey,
+                                          color: AppColors.grey,
                                         ),
                                       ),
                                 )
@@ -75,7 +73,7 @@ class ProductCard extends ConsumerWidget {
                                   child: Icon(
                                     Icons.image,
                                     size: Appsized.iconLg,
-                                    color: Colors.grey,
+                                    color: AppColors.grey,
                                   ),
                                 ),
                         ),
@@ -92,10 +90,10 @@ class ProductCard extends ConsumerWidget {
                               width: Appsized.iconMd,
                               height: Appsized.iconMd,
                               decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.9),
+                                color: AppColors.white.withOpacity(0.9),
                                 shape: BoxShape.circle,
                                 border: Border.all(
-                                  color: Colors.grey.shade300,
+                                  color: AppColors.grey.shade300,
                                   width: 1.5,
                                 ),
                               ),
@@ -106,7 +104,7 @@ class ProductCard extends ConsumerWidget {
                                       : Icons.favorite_border,
                                   color: liked
                                       ? AppColors.primary
-                                      : Colors.black,
+                                      : AppColors.bleki,
                                   size: Appsized.iconSm,
                                 ),
                               ),
@@ -141,7 +139,7 @@ class ProductCard extends ConsumerWidget {
                           style: const TextStyle(
                             fontSize: Appsized.fontMd,
                             fontWeight: FontWeight.bold,
-                            color: Colors.orange,
+                            color: AppColors.primary,
                           ),
                         ),
                       ],
@@ -157,7 +155,7 @@ class ProductCard extends ConsumerWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(sizes.sm),
               child: Material(
-                color: Colors.orange,
+                color: AppColors.primary,
                 child: InkWell(
                   onTap: () async {
                     try {
@@ -180,7 +178,7 @@ class ProductCard extends ConsumerWidget {
                     child: Center(
                       child: Icon(
                         Icons.add,
-                        color: Colors.white,
+                        color: AppColors.white,
                         size: addIconSize,
                       ),
                     ),

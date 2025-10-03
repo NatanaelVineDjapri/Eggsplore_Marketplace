@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:eggsplore/app_routes.dart';
+import 'package:eggsplore/constants/colors.dart';
 
 class ShopActionsCard extends StatelessWidget {
   const ShopActionsCard({super.key});
@@ -14,8 +15,8 @@ class ShopActionsCard extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: 28,
-            backgroundColor: Colors.grey[300],
-            child: Icon(icon, size: 28, color: Colors.black87),
+            backgroundColor: AppColors.grey[300],
+            child: Icon(icon, size: 28, color: AppColors.bleki),
           ),
           const SizedBox(height: 8),
           Text(label,
@@ -35,7 +36,7 @@ class ShopActionsCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: AppColors.bleki.withOpacity(0.1),
             blurRadius: 6,
             offset: const Offset(0, 3),
           ),

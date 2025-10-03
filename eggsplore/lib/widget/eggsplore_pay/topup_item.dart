@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:eggsplore/widget/formatter.dart';
+import 'package:eggsplore/constants/colors.dart';
 
 class TopUpItem extends StatelessWidget {
   final double amount;
@@ -23,9 +24,9 @@ class TopUpItem extends StatelessWidget {
         width: width,
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: Colors.grey[100],
+          color: AppColors.grey[100],
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: Colors.orange),
+          border: Border.all(color: AppColors.primary),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -34,7 +35,7 @@ class TopUpItem extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               formatRupiah(amount),
-              style: const TextStyle(color: Colors.orange, fontWeight: FontWeight.bold),
+              style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold),
             ),
           ],
         ),

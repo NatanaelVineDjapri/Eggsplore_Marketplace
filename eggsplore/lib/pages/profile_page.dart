@@ -15,6 +15,7 @@ import 'package:eggsplore/widget/profile/profile_info_card.dart';
 import 'package:eggsplore/widget/profile/profile_shop_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:eggsplore/constants/colors.dart';
 
 class ProfilePage extends ConsumerStatefulWidget {
   const ProfilePage({super.key});
@@ -89,7 +90,6 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // HEADER TEXT & CARDS
                     Padding(
                       padding: EdgeInsets.fromLTRB(size.hmd, size.md, size.hmd, size.md),
                       child: Column(
@@ -98,7 +98,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                           Text(
                             'Halo, $username',
                             style: AppTextStyle.mainTitle2.copyWith(
-                              color: Colors.white,
+                              color: AppColors.white,
                               fontSize: Appsized.fontxxl,
                             ),
                           ),
@@ -117,7 +117,6 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                       ),
                     ),
 
-                    // WISHLIST & RECOMMENDATIONS
                     Expanded(
                       child: SingleChildScrollView(
                         padding: EdgeInsets.symmetric(horizontal: size.hmd),
@@ -173,7 +172,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                             randomProductsAsync.when(
                               data: (products) {
                                 if (products.isEmpty) {
-                                  return const Text("Tidak ada produk rekomendasi.", style: TextStyle(color: Colors.grey));
+                                  return const Text("Tidak ada produk rekomendasi.", style: TextStyle(color: AppColors.grey));
                                 }
                                 return GridView.builder(
                                   shrinkWrap: true,

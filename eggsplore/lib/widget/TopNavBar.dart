@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:eggsplore/constants/colors.dart';
 
 class TopNavBar extends StatelessWidget {
   final VoidCallback onChatTap;
@@ -14,7 +15,6 @@ class TopNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        // Search bar
         Expanded(
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -23,18 +23,18 @@ class TopNavBar extends StatelessWidget {
               borderRadius: BorderRadius.circular(25),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: AppColors.bleki.withOpacity(0.05),
                   blurRadius: 4,
                   offset: const Offset(0, 2),
                 ),
               ],
             ),
             child: TextField(
-              onSubmitted: onSearch, // enter = trigger search
+              onSubmitted: onSearch,
               decoration: const InputDecoration(
                 hintText: "Search Product",
                 border: InputBorder.none,
-                icon: Icon(Icons.search, color: Colors.grey),
+                icon: Icon(Icons.search, color: AppColors.grey),
                 contentPadding: EdgeInsets.symmetric(vertical: 12),
               ),
             ),
@@ -48,17 +48,17 @@ class TopNavBar extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppColors.white,
               shape: BoxShape.circle,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: AppColors.bleki.withOpacity(0.05),
                   blurRadius: 4,
                   offset: const Offset(0, 2),
                 ),
               ],
             ),
-            child: const Icon(Icons.chat_bubble_outline, color: Colors.black87),
+            child: const Icon(Icons.chat_bubble_outline, color: AppColors.bleki),
           ),
         ),
       ],

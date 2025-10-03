@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:eggsplore/constants/colors.dart';
 class ProductRating extends StatelessWidget {
   final double averageRating;
   final int totalReviews;
@@ -14,7 +14,7 @@ class ProductRating extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const Icon(Icons.star_border, size: 18, color: Colors.black87),
+        const Icon(Icons.star_border, size: 18, color: AppColors.bleki),
         const SizedBox(width: 4),
         Text("${averageRating.toStringAsFixed(1)} ($totalReviews)"),
       ],

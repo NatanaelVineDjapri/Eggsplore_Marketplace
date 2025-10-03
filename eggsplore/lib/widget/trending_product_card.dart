@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:eggsplore/constants/colors.dart';
+import 'package:eggsplore/constants/colors.dart';
 
 class TrendingProductCard extends StatelessWidget {
   final String name;
   final String price;
-  final String? image; // bikin nullable
+  final String? image;
 
   const TrendingProductCard({
     super.key,
@@ -21,7 +23,6 @@ class TrendingProductCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // 🔹 Bagian gambar / placeholder
           Expanded(
   child: image != null
       ? ClipRRect(
@@ -36,13 +37,10 @@ class TrendingProductCard extends StatelessWidget {
           ),
         )
       : Container(
-          color: Colors.grey[300],
+          color: AppColors.grey[300],
           child: const Icon(Icons.image, size: 50, color: Colors.grey),
         ),
 ),
-
-
-          // 🔹 Info produk
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
@@ -56,12 +54,10 @@ class TrendingProductCard extends StatelessWidget {
                     style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
-                        color: Colors.red)),
+                        color: AppColors.redd)),
               ],
             ),
           ),
-
-          // 🔹 Tombol bawah
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -71,7 +67,7 @@ class TrendingProductCard extends StatelessWidget {
               ),
               IconButton(
                 onPressed: () {},
-                icon: const Icon(Icons.add_circle, color: Colors.orange),
+                icon: const Icon(Icons.add_circle, color: AppColors.primary),
               ),
             ],
           ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:eggsplore/model/cart_item.dart';
+import 'package:eggsplore/constants/colors.dart';
 
 class CartItemWidget extends StatelessWidget {
   final CartItem item;
@@ -43,7 +44,7 @@ class CartItemWidget extends StatelessWidget {
               onPressed: () => onQuantityChanged(item.quantity + 1),
             ),
             IconButton(
-              icon: const Icon(Icons.delete, color: Colors.red),
+              icon: const Icon(Icons.delete, color: AppColors.redd),
               onPressed: onRemove,
             ),
           ],

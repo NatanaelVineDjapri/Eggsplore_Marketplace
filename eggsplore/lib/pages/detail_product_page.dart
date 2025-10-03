@@ -1,3 +1,4 @@
+import 'package:eggsplore/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:eggsplore/widget/detail_product/topbar.dart';
 import 'package:eggsplore/widget/detail_product/follow_button.dart';
@@ -11,7 +12,7 @@ class DetailProductPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       appBar: const TopBar(title: "Detail Produk"),
       body: SingleChildScrollView(
         child: Padding(
@@ -24,7 +25,7 @@ class DetailProductPage extends StatelessWidget {
                 height: 220,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
-                  color: Colors.grey[200],
+                  color: AppColors.grey[200],
                   image: const DecorationImage(
                     image: AssetImage("assets/images/sample_product.png"),
                     fit: BoxFit.cover,
@@ -48,11 +49,11 @@ class DetailProductPage extends StatelessWidget {
                 style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: Colors.orange),
+                    color: AppColors.primary),
               ),
 
               const Divider(
-                color: Colors.orange,
+                color: AppColors.primary,
                 thickness: 1,
                 height: 24,
               ),
@@ -70,7 +71,7 @@ class DetailProductPage extends StatelessWidget {
               ),
 
               const Divider(
-                color: Colors.orange,
+                color: AppColors.primary,
                 thickness: 1,
                 height: 24,
               ),
@@ -79,8 +80,8 @@ class DetailProductPage extends StatelessWidget {
               Row(
                 children: [
                   const CircleAvatar(
-                    backgroundColor: Colors.orange,
-                    child: Icon(Icons.store, color: Colors.white),
+                    backgroundColor:AppColors.primary,
+                    child: Icon(Icons.store, color: AppColors.white),
                   ),
                   const SizedBox(width: 12),
                   Column(
@@ -90,7 +91,7 @@ class DetailProductPage extends StatelessWidget {
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold)),
                       Text("Online 5 menit lalu",
-                          style: TextStyle(fontSize: 13, color: Colors.grey)),
+                          style: TextStyle(fontSize: 13, color: AppColors.grey)),
                     ],
                   ),
                   const Spacer(),
@@ -107,7 +108,7 @@ class DetailProductPage extends StatelessWidget {
               ),
 
               const Divider(
-                color: Colors.orange,
+                color: AppColors.primary,
                 thickness: 1,
                 height: 24,
               ),
@@ -122,7 +123,7 @@ class DetailProductPage extends StatelessWidget {
               ),
 
               const Divider(
-                color: Colors.orange,
+                color: AppColors.primary,
                 thickness: 1,
                 height: 24,
               ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:eggsplore/constants/colors.dart';
 
 class EggsplorePayCard extends StatelessWidget {
   final double balance;
@@ -20,7 +21,7 @@ class EggsplorePayCard extends StatelessWidget {
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.orange,
+          color: AppColors.primary,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Row(
@@ -32,7 +33,7 @@ class EggsplorePayCard extends StatelessWidget {
                 const Text(
                   "EggsplorePay's Balance",
                   style: TextStyle(
-                    color: Colors.white,
+                    color: AppColors.white,
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
                   ),
@@ -40,7 +41,7 @@ class EggsplorePayCard extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text("Rp. ${formatter.format(balance)}",
                   style: const TextStyle(
-                    color: Colors.white,
+                    color: AppColors.white,
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
                   ),
@@ -50,17 +51,17 @@ class EggsplorePayCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.white,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: const Row(
                 children: [
-                  Icon(Icons.account_balance_wallet, color: Colors.orange),
+                  Icon(Icons.account_balance_wallet, color: AppColors.primary),
                   SizedBox(width: 4),
                   Text(
                     "Top Up",
                     style: TextStyle(
-                      color: Colors.orange,
+                      color: AppColors.primary,
                       fontWeight: FontWeight.bold,
                     ),
                   )

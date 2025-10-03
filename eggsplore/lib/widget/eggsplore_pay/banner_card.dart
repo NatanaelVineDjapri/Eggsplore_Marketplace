@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:eggsplore/constants/colors.dart';
 
 class BannerCard extends StatelessWidget {
   final String imagePath;
@@ -11,7 +12,7 @@ class BannerCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        color: Colors.grey.shade300,
+        color: AppColors.grey.shade300,
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12),

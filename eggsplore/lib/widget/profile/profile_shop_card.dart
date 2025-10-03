@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:eggsplore/app_routes.dart';
+import 'package:eggsplore/constants/colors.dart';
 
 class ProfileShopCard extends StatefulWidget {
   const ProfileShopCard({super.key});
@@ -17,14 +18,14 @@ class _ProfileShopCardState extends State<ProfileShopCard> {
           Navigator.pushNamed(context, AppRoutes.profileShopTransition);
         },
         child: Container(
-          height: 100, // disamain dengan ProfileInfoCard
+          height: 100,
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.white,
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
+                color: AppColors.bleki.withOpacity(0.1),
                 blurRadius: 6,
                 offset: const Offset(0, 3),
               )
@@ -34,9 +35,9 @@ class _ProfileShopCardState extends State<ProfileShopCard> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: const [
               Icon(
-                Icons.storefront, // 🔹 simbol toko
+                Icons.storefront,
                 size: 32,
-                color: Colors.orange, // bisa diubah sesuai tema
+                color: AppColors.primary,
               ),
               SizedBox(width: 10),
               Text(

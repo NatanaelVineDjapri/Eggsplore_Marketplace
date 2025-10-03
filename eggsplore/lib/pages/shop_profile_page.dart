@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:eggsplore/constants/colors.dart';
 
 class ShopProfilePage extends StatelessWidget {
   const ShopProfilePage({super.key});
@@ -6,26 +7,24 @@ class ShopProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       body: Column(
         children: [
-          // Header dengan background kuning
           Container(
             padding: const EdgeInsets.only(top: 40, left: 16, right: 16, bottom: 16),
-            color: Colors.orange,
+            color: AppColors.primary,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Search bar
                 Row(
                   children: [
-                    const Icon(Icons.arrow_back, color: Colors.black),
+                    const Icon(Icons.arrow_back, color: AppColors.bleki),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 12),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: AppColors.white,
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: const TextField(
@@ -39,19 +38,14 @@ class ShopProfilePage extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 16),
-
-                // Info toko
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    // Avatar toko
                     const CircleAvatar(
                       radius: 30,
-                      backgroundColor: Colors.grey,
+                      backgroundColor: AppColors.grey,
                     ),
                     const SizedBox(width: 12),
-
-                    // Nama toko + lokasi + rating
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -62,15 +56,13 @@ class ShopProfilePage extends StatelessWidget {
                           ),
                           const Text(
                             "Jakarta Barat",
-                            style: TextStyle(fontSize: 14, color: Colors.black54),
+                            style: TextStyle(fontSize: 14, color: AppColors.bleki),
                           ),
                           const SizedBox(height: 4),
-
-                          // Rating & terjual
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: const [
-                              Icon(Icons.star, size: 16, color: Colors.black),
+                              Icon(Icons.star, size: 16, color: AppColors.bleki),
                               SizedBox(width: 4),
                               Text("4.8 (20)", style: TextStyle(fontSize: 14)),
                               SizedBox(width: 12),
@@ -80,12 +72,10 @@ class ShopProfilePage extends StatelessWidget {
                         ],
                       ),
                     ),
-
-                    // Tombol Follow
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
                       decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black),
+                        border: Border.all(color: AppColors.bleki),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: const Text("Follow", style: TextStyle(fontWeight: FontWeight.bold)),
@@ -95,8 +85,6 @@ class ShopProfilePage extends StatelessWidget {
               ],
             ),
           ),
-
-          // List produk
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(12.0),
@@ -117,7 +105,6 @@ class ShopProfilePage extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Gambar produk
                         Expanded(
                           child: ClipRRect(
                             borderRadius: const BorderRadius.only(
@@ -125,15 +112,13 @@ class ShopProfilePage extends StatelessWidget {
                               topRight: Radius.circular(12),
                             ),
                             child: Container(
-                              color: Colors.grey[300], // placeholder image
+                              color: AppColors.grey[300], 
                               child: const Center(
-                                child: Icon(Icons.image, size: 40, color: Colors.black45),
+                                child: Icon(Icons.image, size: 40, color: AppColors.bleki),
                               ),
                             ),
                           ),
                         ),
-
-                        // Info produk
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Column(
@@ -147,7 +132,7 @@ class ShopProfilePage extends StatelessWidget {
                                 style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.orange),
+                                    color: AppColors.primary),
                               ),
                             ],
                           ),

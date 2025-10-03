@@ -1,3 +1,4 @@
+import 'package:eggsplore/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:eggsplore/model/message.dart';
 import 'package:eggsplore/service/message_service.dart';
@@ -61,7 +62,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
-        backgroundColor: Colors.orange,
+        backgroundColor: AppColors.primary,
         title: Text(widget.username),
       ),
       body: FutureBuilder<Map<String, dynamic>>(
@@ -69,7 +70,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
-              child: CircularProgressIndicator(color: Colors.orange),
+              child: CircularProgressIndicator(color:AppColors.primary),
             );
           }
 
@@ -99,13 +100,13 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                         margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
                         padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
-                          color: isMe ? Colors.orange.shade200 : Colors.grey.shade300,
+                          color: isMe ? AppColors.primary.shade200 : AppColors.grey.shade300,
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(
                           msg.message,
                           style: TextStyle(
-                            color: isMe ? Colors.black : Colors.black87,
+                            color: isMe ? AppColors.bleki: Colors.black87,
                           ),
                         ),
                       ),

@@ -85,7 +85,7 @@ class _EggsplorePayPageState extends State<EggsplorePayPage> {
     final double spacing = sizes.sm;
 
     return Scaffold(
-      backgroundColor: Colors.grey.shade50,
+      backgroundColor: AppColors.grey.shade50,
       appBar: backBar(
         title: "Eggsplore Pay",
         onBack: () => Navigator.pop(context, balance),
@@ -99,7 +99,7 @@ class _EggsplorePayPageState extends State<EggsplorePayPage> {
 
             // Balance Card
             Container(
-              color: Colors.white,
+              color: AppColors.white,
               padding: EdgeInsets.fromLTRB(
                 sizes.md,
                 sizes.sm,
@@ -122,7 +122,7 @@ class _EggsplorePayPageState extends State<EggsplorePayPage> {
                       blurRadius: sizes.sm,
                     ),
                   ],
-                  border: Border.all(color: Colors.white70, width: 0.5),
+                  border: Border.all(color: AppColors.white, width: 0.5),
                 ),
                 child: BalanceDisplay(balance: balance, imageSize: sizes.xxl),
               ),
@@ -140,7 +140,7 @@ class _EggsplorePayPageState extends State<EggsplorePayPage> {
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: Appsized.fontLg,
-                  color: Colors.black,
+                  color: AppColors.bleki,
                 ),
               ),
             ),
@@ -163,7 +163,7 @@ class _EggsplorePayPageState extends State<EggsplorePayPage> {
             Divider(
               height: 1,
               thickness: 1,
-              color: Colors.grey.shade200,
+              color: AppColors.grey.shade200,
               indent: sizes.md,
               endIndent: sizes.md,
             ),

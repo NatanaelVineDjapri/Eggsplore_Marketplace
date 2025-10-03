@@ -1,3 +1,4 @@
+import 'package:eggsplore/constants/colors.dart';
 import 'package:flutter/material.dart';
 
 class ReviewInput extends StatefulWidget {
@@ -27,7 +28,7 @@ class _ReviewInputState extends State<ReviewInput> {
     return IconButton(
       icon: Icon(
         index <= _rating ? Icons.star : Icons.star_border,
-        color: Colors.amber,
+        color: AppColors.amber,
         size: 30,
       ),
       onPressed: () {
@@ -50,8 +51,6 @@ class _ReviewInputState extends State<ReviewInput> {
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
           const SizedBox(height: 8),
-
-          /// Row of Stars (manual)
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: List.generate(5, (index) => _buildStar(index + 1)),

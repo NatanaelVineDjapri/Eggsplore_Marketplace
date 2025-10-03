@@ -1,9 +1,8 @@
+import 'package:eggsplore/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:eggsplore/bar/bottom_nav.dart';
 import 'package:eggsplore/widget/trending_product_card.dart';
 import 'package:eggsplore/widget/TopNavBar.dart';
-
-// 🔹 Import SearchPage
 import 'package:eggsplore/pages/search_page.dart';
 
 class TrendingPage extends StatefulWidget {
@@ -42,24 +41,19 @@ class _TrendingPageState extends State<TrendingPage> {
     return Scaffold(
       body: Stack(
         children: [
-          /// 🔹 Background image
-          Positioned.fill(child: Container(color: Colors.orange)),
-
-          /// 🔹 Foreground content
+          Positioned.fill(child: Container(color: AppColors.primary)),
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.all(12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  /// 🔎 Top Navigation Bar (Search + Chat)
                   TopNavBar(
                     onChatTap: () {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text("Chat tapped!")),
                       );
                     },
-                    // 🔹 Sama kayak HomePage → pindah ke SearchPage
                     onSearch: (value) {
                       final query = value.trim();
                       Navigator.push(
@@ -72,8 +66,6 @@ class _TrendingPageState extends State<TrendingPage> {
                   ),
 
                   const SizedBox(height: 16),
-
-                  /// 🔥 Banner trending pakai image (langsung gambar figma)
                   Center(
                     child: Image.asset(
                       "assets/images/trending.png",
@@ -82,8 +74,6 @@ class _TrendingPageState extends State<TrendingPage> {
                     ),
                   ),
                   const SizedBox(height: 16),
-
-                  /// 🛒 Produk list (grid)
                   Expanded(
                     child: GridView.builder(
                       itemCount: products.length,
@@ -99,7 +89,6 @@ class _TrendingPageState extends State<TrendingPage> {
                         return TrendingProductCard(
                           name: product["name"]!,
                           price: product["price"]!,
-                          // image: product["image"], // aktifin kalau mau pake gambar asli
                         );
                       },
                     ),

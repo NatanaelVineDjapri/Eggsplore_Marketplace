@@ -1,3 +1,4 @@
+import 'package:eggsplore/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:eggsplore/constants/images.dart';
 import 'package:eggsplore/constants/text_string.dart';
@@ -67,7 +68,7 @@ class NotificationsPage extends StatelessWidget {
               Container(
                 height: 6,
                 width: double.infinity,
-                color: Colors.orange,
+                color: AppColors.primary,
               ),
             ],
           ),

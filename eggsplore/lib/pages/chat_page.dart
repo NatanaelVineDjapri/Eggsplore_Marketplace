@@ -6,6 +6,7 @@ import 'package:eggsplore/service/message_service.dart';
 import 'package:eggsplore/service/product_service.dart';
 import 'package:eggsplore/widget/product.dart';
 import 'package:eggsplore/pages/chat_account_page.dart';
+import 'package:eggsplore/constants/colors.dart';
 
 // Provider untuk chat
 final chatProvider = FutureProvider<List<UserChat>>((ref) async {
@@ -31,7 +32,7 @@ class ChatPage extends ConsumerWidget {
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
         title: const Text("Chat"),
-        backgroundColor: Colors.orange,
+        backgroundColor: AppColors.primary,
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -49,7 +50,7 @@ class ChatPage extends ConsumerWidget {
                         child: Text(
                           "💬 Belum ada chat.\nMulai percakapan dengan mencari user!",
                           textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.grey, fontSize: 16),
+                          style: TextStyle(color: AppColors.grey, fontSize: 16),
                         ),
                       ),
                     );
@@ -65,10 +66,10 @@ class ChatPage extends ConsumerWidget {
                         children: [
                           ListTile(
                             leading: CircleAvatar(
-                              backgroundColor: Colors.orange,
+                              backgroundColor: AppColors.primary,
                               child: Text(
                                 user.name[0].toUpperCase(),
-                                style: const TextStyle(color: Colors.white),
+                                style: const TextStyle(color: AppColors.white),
                               ),
                             ),
                             title: Text(user.name),
@@ -98,7 +99,7 @@ class ChatPage extends ConsumerWidget {
                 loading: () => const Center(
                   child: Padding(
                     padding: EdgeInsets.symmetric(vertical: 20),
-                    child: CircularProgressIndicator(color: Colors.orange),
+                    child: CircularProgressIndicator(color: AppColors.primary),
                   ),
                 ),
                 error: (err, stack) => Center(
@@ -125,7 +126,7 @@ class ChatPage extends ConsumerWidget {
                     return const Center(
                       child: Text(
                         "Tidak ada produk rekomendasi.",
-                        style: TextStyle(color: Colors.grey),
+                        style: TextStyle(color:AppColors.grey),
                       ),
                     );
                   }
@@ -155,7 +156,7 @@ class ChatPage extends ConsumerWidget {
                 loading: () => const Center(
                   child: Padding(
                     padding: EdgeInsets.symmetric(vertical: 20),
-                    child: CircularProgressIndicator(color: Colors.orange),
+                    child: CircularProgressIndicator(color: AppColors.primary),
                   ),
                 ),
                 error: (err, stack) => Center(

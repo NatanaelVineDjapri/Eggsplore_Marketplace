@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:eggsplore/constants/colors.dart';
 
 class ProductStock extends StatelessWidget {
   final int stock;
@@ -12,7 +13,7 @@ class ProductStock extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const Icon(Icons.inventory_2_outlined, size: 18, color: Colors.black87),
+        const Icon(Icons.inventory_2_outlined, size: 18, color: AppColors.bleki),
         const SizedBox(width: 4),
         Text("stok : $stock"),
       ],

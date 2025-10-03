@@ -1,10 +1,11 @@
 import 'package:eggsplore/pages/chat_account_page.dart';
 import 'package:flutter/material.dart';
+import 'package:eggsplore/constants/colors.dart';
 
 class ChatItem extends StatelessWidget {
-  final int userId;     // tambahin id user lawan chat
+  final int userId;
   final String name;
-  final String username; // bisa ditampilin juga
+  final String username;
   final String date;
 
   const ChatItem({
@@ -19,7 +20,6 @@ class ChatItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // bener2 buka ChatDetailPage, bukan snackbar
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -33,13 +33,13 @@ class ChatItem extends StatelessWidget {
       child: Column(
         children: [
           Container(
-            color: Colors.white,
+            color: AppColors.white,
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
             child: Row(
               children: [
                 const CircleAvatar(
                   radius: 24,
-                  backgroundColor: Colors.grey,
+                  backgroundColor: AppColors.grey,
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -55,21 +55,21 @@ class ChatItem extends StatelessWidget {
                       ),
                       Text(
                         username,
-                        style: const TextStyle(color: Colors.grey),
+                        style: const TextStyle(color: AppColors.grey),
                       ),
                     ],
                   ),
                 ),
                 Text(
                   date,
-                  style: const TextStyle(color: Colors.grey),
+                  style: const TextStyle(color: AppColors.grey),
                 ),
               ],
             ),
           ),
           Container(
             height: 1,
-            color: Colors.orange,
+            color: AppColors.primary,
           ),
         ],
       ),

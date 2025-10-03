@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:eggsplore/constants/colors.dart';
 
 class EggsploreHeader extends StatelessWidget {
   final String username;
@@ -15,14 +16,14 @@ class EggsploreHeader extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
       decoration: BoxDecoration(
-        color: Colors.orange,
+        color: AppColors.primary,
         borderRadius: const BorderRadius.only(
           bottomLeft: Radius.circular(24),
           bottomRight: Radius.circular(24),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: AppColors.bleki.withOpacity(0.1),
             offset: const Offset(0, 3),
             blurRadius: 6,
           ),
@@ -35,7 +36,7 @@ class EggsploreHeader extends StatelessWidget {
               shape: BoxShape.circle,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.15),
+                  color: AppColors.bleki.withOpacity(0.15),
                   blurRadius: 6,
                   offset: const Offset(0, 3),
                 ),
@@ -43,11 +44,11 @@ class EggsploreHeader extends StatelessWidget {
             ),
             child: CircleAvatar(
               radius: avatarRadius,
-              backgroundColor: Colors.white,
+              backgroundColor: AppColors.white,
               child: Icon(
                 Icons.person,
                 size: avatarRadius * 0.9,
-                color: Colors.orange,
+                color: AppColors.primary,
               ),
             ),
           ),
@@ -58,7 +59,7 @@ class EggsploreHeader extends StatelessWidget {
               const Text(
                 "Selamat datang,",
                 style: TextStyle(
-                  color: Colors.white70,
+                  color: AppColors.white,
                   fontSize: 14,
                   fontWeight: FontWeight.w400,
                 ),
@@ -66,7 +67,7 @@ class EggsploreHeader extends StatelessWidget {
               Text(
                 username,
                 style: const TextStyle(
-                  color: Colors.white,
+                  color: AppColors.white,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),

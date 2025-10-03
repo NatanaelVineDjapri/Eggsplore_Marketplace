@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:eggsplore/constants/colors.dart';
 
 class FollowButton extends StatefulWidget {
   final bool isInitiallyFollowing;
@@ -41,13 +42,13 @@ class _FollowButtonState extends State<FollowButton> {
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        backgroundColor: isFollowing ? Colors.grey[300] : Colors.black,
+        backgroundColor: isFollowing ? AppColors.grey[300] : AppColors.bleki,
       ),
       onPressed: toggleFollow,
       child: Text(
         isFollowing ? "Following" : "Follow",
         style: TextStyle(
-          color: isFollowing ? Colors.black : Colors.white,
+          color: isFollowing ? AppColors.bleki : AppColors.white,
         ),
       ),
     );

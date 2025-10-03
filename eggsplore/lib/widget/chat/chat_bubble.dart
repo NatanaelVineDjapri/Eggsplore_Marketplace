@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:eggsplore/constants/colors.dart';
 class ChatBubble extends StatelessWidget {
   final String message;
   final bool isMe;
@@ -18,13 +18,13 @@ class ChatBubble extends StatelessWidget {
         margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: isMe ? Colors.orange[300] : Colors.grey[300],
+          color: isMe ? AppColors.primary[300] : AppColors.grey[300],
           borderRadius: BorderRadius.circular(8),
         ),
         child: Text(
           message,
           style: TextStyle(
-            color: isMe ? Colors.white : Colors.black87,
+            color: isMe ? AppColors.white : AppColors.bleki,
           ),
         ),
       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:eggsplore/constants/colors.dart';
 
 class ShopInfoCard extends StatelessWidget {
   final String shopName;
@@ -24,11 +25,11 @@ class ShopInfoCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 8),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: AppColors.bleki.withOpacity(0.1),
             blurRadius: 6,
             offset: const Offset(0, 3),
           ),
@@ -56,7 +57,7 @@ class ShopInfoCard extends StatelessWidget {
             ),
           ),
           IconButton(
-            icon: const Icon(Icons.edit, color: Colors.orange),
+            icon: const Icon(Icons.edit, color: AppColors.primary),
             onPressed: onModify,
             tooltip: "Modify Shop Info",
           ),

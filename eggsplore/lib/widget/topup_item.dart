@@ -30,7 +30,7 @@ class TopUpItem extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.08),
+              color: AppColors.bleki.withOpacity(0.08),
               offset: const Offset(0, 4),
               blurRadius: 8,
             ),
@@ -57,7 +57,7 @@ class TopUpItem extends StatelessWidget {
             Text(
               formatRupiah(amount),
               style: const TextStyle(
-                  color: Colors.white,
+                  color: AppColors.white,
                   fontSize: Appsized.fontSm,
                   fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,

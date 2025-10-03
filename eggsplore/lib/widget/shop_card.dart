@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:eggsplore/constants/colors.dart';
 
 class ShopCard extends StatelessWidget {
   final String name;
@@ -16,11 +17,11 @@ class ShopCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: AppColors.bleki.withOpacity(0.05),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -30,7 +31,7 @@ class ShopCard extends StatelessWidget {
         children: [
           const CircleAvatar(
             radius: 24,
-            backgroundColor: Colors.red, // nanti bisa ganti pakai gambar
+            backgroundColor: AppColors.redd, 
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -40,12 +41,12 @@ class ShopCard extends StatelessWidget {
                 Text(
                   name,
                   style: const TextStyle(fontWeight: FontWeight.bold),
-                  maxLines: 1, // 🔹 Batasi 1 baris
-                  overflow: TextOverflow.ellipsis, // 🔹 Tambah titik "..."
+                  maxLines: 1, 
+                  overflow: TextOverflow.ellipsis,
                 ),
                 Text(
                   location,
-                  maxLines: 1, // 🔹 Batasi 1 baris
+                  maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
               ],
@@ -54,8 +55,8 @@ class ShopCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(color: Colors.black),
+              color: AppColors.white,
+              border: Border.all(color: AppColors.bleki),
               borderRadius: BorderRadius.circular(20),
             ),
             child: const Text("explore shop"),

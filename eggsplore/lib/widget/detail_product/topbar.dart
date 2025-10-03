@@ -3,6 +3,8 @@ import 'package:eggsplore/app_routes.dart';
 import 'package:eggsplore/pages/search_page.dart';
 import 'package:eggsplore/pages/chat_page.dart';
 import 'package:eggsplore/pages/cart_page.dart';
+import 'package:eggsplore/constants/colors.dart';
+
 class TopBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
 
@@ -11,11 +13,11 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.orange,
+      backgroundColor: AppColors.primary,
       elevation: 0,
       title: Text(title),
       leading: IconButton(
-        icon: const Icon(Icons.arrow_back, color: Colors.white),
+        icon: const Icon(Icons.arrow_back, color: AppColors.white),
         onPressed: () {
           Navigator.pushReplacement(
             context,
@@ -27,13 +29,13 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       actions: [
         IconButton(
-          icon: const Icon(Icons.chat_bubble_outline, color: Colors.white),
+          icon: const Icon(Icons.chat_bubble_outline, color: AppColors.white),
           onPressed: () {
             Navigator.pushNamed(context, AppRoutes.chat);
           },
         ),
         IconButton(
-          icon: const Icon(Icons.shopping_cart_outlined, color: Colors.white),
+          icon: const Icon(Icons.shopping_cart_outlined, color: AppColors.white),
           onPressed: () {
             Navigator.pushNamed(context, AppRoutes.cart);
           },

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../constants/sizes.dart';
 import '../constants/text_string.dart';
+import 'package:eggsplore/constants/colors.dart';
 
 class richTextTitle extends StatelessWidget {
   final String mainTitle;
@@ -14,8 +15,8 @@ class richTextTitle extends StatelessWidget {
     required this.mainTitle,
     required this.accentTitle,
     this.fontSize = Appsized.fontxxl,
-    this.mainColor = Colors.black,
-    this.accentColor = Colors.orange,
+    this.mainColor = AppColors.bleki,
+    this.accentColor = AppColors.primary,
   });
 
   @override

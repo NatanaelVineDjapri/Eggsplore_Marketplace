@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:eggsplore/model/user.dart';
+import 'package:eggsplore/constants/colors.dart';
 
 class ProfileInfoCard extends StatelessWidget {
   final User? user;
@@ -28,11 +29,11 @@ class ProfileInfoCard extends StatelessWidget {
           height: 100,
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.white,
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
+                color: AppColors.bleki.withOpacity(0.1),
                 blurRadius: 6,
                 offset: const Offset(0, 3),
               ),

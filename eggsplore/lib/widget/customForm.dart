@@ -44,7 +44,6 @@ class CustomForm extends StatelessWidget {
             controller: controller,
             obscureText: obscureText,
             decoration: InputDecoration(
-              // labelText: label,
               border:  OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
               ),

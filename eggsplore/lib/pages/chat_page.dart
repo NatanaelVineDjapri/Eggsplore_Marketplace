@@ -95,18 +95,7 @@ class ChatPage extends ConsumerWidget {
                 ),
               ),
 
-              const SizedBox(height: 20),
-
-              // PRODUCT RECOMMENDATION
-              Text(
-                "Produk Rekomendasi",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87,
-                ),
-              ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 20),              
               RandomProductsGrid()
             ],
           ),

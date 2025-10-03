@@ -1,6 +1,8 @@
+import 'package:eggsplore/helper/image_helper.dart'; 
 import 'package:eggsplore/pages/review_page.dart';
 import 'package:eggsplore/widget/detail_product/add_to_cart_button2.dart';
 import 'package:eggsplore/widget/detail_product/buy_now_button.dart';
+import 'package:eggsplore/widget/detail_product/chat_button_product.dart';
 import 'package:eggsplore/widget/product.dart';
 import 'package:eggsplore/widget/random_product_grid.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +17,6 @@ import '../widget/detail_product/product_rating.dart';
 import '../widget/detail_product/product_stock.dart';
 import '../widget/expandable_description.dart';
 import '../widget/review_tile.dart';
-
 
 class DetailProductPage extends ConsumerWidget {
   final int productId;
@@ -35,6 +36,8 @@ class DetailProductPage extends ConsumerWidget {
         ),
         error: (err, stack) => Center(child: Text("Gagal memuat produk: $err")),
         data: (product) {
+          final String shopImageUrl = ImageHelper.getImageUrl(product.shopImage); 
+
           return Stack(
             children: [
               SingleChildScrollView(
@@ -86,9 +89,14 @@ class DetailProductPage extends ConsumerWidget {
                       const Divider(color: AppColors.primary, thickness: 1, height: 24),
                       Row(
                         children: [
-                          const CircleAvatar(
+                          CircleAvatar(
+                            backgroundImage: shopImageUrl.isNotEmpty 
+                                ? NetworkImage(shopImageUrl)
+                                : null,
+                            child: shopImageUrl.isEmpty 
+                                ? const Icon(Icons.store, color: AppColors.white)
+                                : null,
                             backgroundColor: AppColors.primary,
-                            child: Icon(Icons.store, color: AppColors.white),
                           ),
                           const SizedBox(width: 12),
                           Column(
@@ -194,6 +202,7 @@ class DetailProductPage extends ConsumerWidget {
     );
   }
 
+  // >>> KODE _buildBottomNavBar DIKOREKSI UNTUK MENAMBAH TOMBOL CHAT
   Widget _buildBottomNavBar(BuildContext context, Product product, Color primaryColor) {
     return Align(
       alignment: Alignment.bottomCenter,
@@ -212,6 +221,8 @@ class DetailProductPage extends ConsumerWidget {
         ),
         child: Row(
           children: [
+            ChatButtonProduct(product: product, primaryColor: primaryColor),
+            const SizedBox(width: 12),
             AddToCartButtonProduct(product: product, color: primaryColor),
             const SizedBox(width: 12),
             BuyNowButton(color: primaryColor),
@@ -220,6 +231,7 @@ class DetailProductPage extends ConsumerWidget {
       ),
     );
   }
+
 
   Widget _buildReviewsSummarySection(BuildContext context, WidgetRef ref, int productId) {
     final reviewsAsync = ref.watch(reviewsProvider(productId));

@@ -50,6 +50,8 @@ Route::middleware('auth:sanctum')->group(function() {
 
     Route::post('/products/{id}/like', [LikeController::class, 'toggleLike']);
     Route::get('/user/liked-products', [LikeController::class, 'likedProducts']);
+    Route::get('/shops/{id}/products', [ProductController::class, 'shopProducts']);
+    Route::get('/products/{product}/reviews', [ProductController::class, 'productReviews']);
 
 
     Route::get('/cart', [CartController::class, 'showCart']);

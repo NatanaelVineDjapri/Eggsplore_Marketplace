@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:eggsplore/widget/TopNavBar.dart';
 import 'package:eggsplore/widget/eggsplore_pay/Eggsplore_Pay_Card.dart';
-import 'package:eggsplore/widget/eggsplore_pay/banner_card.dart';
 import 'package:eggsplore/pages/eggsplore_pay_page.dart';
 import 'package:eggsplore/pages/chat_page.dart';
 import 'package:eggsplore/bar/bottom_nav.dart';

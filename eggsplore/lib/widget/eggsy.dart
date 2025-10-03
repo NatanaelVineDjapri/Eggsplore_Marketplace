@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:eggsplore/constants/images.dart';
 
 class Eggsy extends StatelessWidget {
   final String imagePath;

@@ -174,7 +174,7 @@ class ProductCard extends ConsumerWidget {
                       );
                     }
                   },
-                  child: Container(
+                  child: SizedBox(
                     width: addContainerDimension,
                     height: addContainerDimension,
                     child: Center(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:eggsplore/model/user.dart';
+import 'package:eggsplore/pages/profile/detail_profile_page.dart';
 
 class ProfileInfoCard extends StatelessWidget {
   final User? user;
@@ -14,7 +15,6 @@ class ProfileInfoCard extends StatelessWidget {
     final displayName = user?.name ?? 'Guest';
     final imagePath = user?.image ?? '';
     const androidEmulatorServer = "http://10.0.2.2:8000";
-    const iosEmulatorServer = "http://localhost:8000";   
 
     final imageUrl = imagePath.isNotEmpty
         ? NetworkImage("$androidEmulatorServer$imagePath")
@@ -23,6 +23,16 @@ class ProfileInfoCard extends StatelessWidget {
     return Expanded(
       child: GestureDetector(
         onTap: () {
+          // Arahkan ke halaman detail jika user tidak null
+          if (user != null) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                // Mengarah ke ProfileDetailPage yang sudah Anda buat
+                builder: (context) => ProfileDetailPage(user: user!),
+              ),
+            );
+          }
         },
         child: Container(
           height: 100,
@@ -62,3 +72,4 @@ class ProfileInfoCard extends StatelessWidget {
     );
   }
 }
+

@@ -111,6 +111,7 @@ class UserService {
         // Mengembalikan objek User lengkap
         return User.fromJson(json); 
     }
+    return null;
     
     // Jika token tidak valid, hapus token
     // if (response.statusCode == 401) {
@@ -180,5 +181,25 @@ class UserService {
 
   return null;
 }
+
+static Future<bool> updateProfile(Map<String, dynamic> data) async {
+    final token = await getToken();
+    if (token == null) return false;
+
+    final url = Uri.parse('$baseUrl/profile'); // endpoint update profile
+    final response = await http.put(
+      url,
+      headers: {
+        "Authorization": "Bearer $token",
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+      body: jsonEncode(data),
+    );
+
+    print('UPDATE PROFILE => ${response.statusCode}: ${response.body}');
+
+    return response.statusCode == 200;
+  }
 
 }

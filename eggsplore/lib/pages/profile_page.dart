@@ -66,7 +66,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
       body: Stack(
         children: [
           // HEADER IMAGE
-          Container(
+          SizedBox(
             height: size.height * 0.41,
             width: double.infinity,
             child: Image.asset(

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../constants/sizes.dart';
-import '../constants/text_string.dart';
 
 class richTextTitle extends StatelessWidget {
   final String mainTitle;

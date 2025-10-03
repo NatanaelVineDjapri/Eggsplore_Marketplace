@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:eggsplore/bar/backBar.dart'; // Pastikan path import ini benar
+import 'package:eggsplore/constants/text_style.dart'; // Pastikan path import ini benar
+import 'package:eggsplore/model/shop.dart'; // Pastikan path import ini benar
+import 'package:eggsplore/service/shop_service.dart';// Pastikan path ini benar (services vs service)
 import 'package:intl/intl.dart';
-import 'package:eggsplore/bar/backBar.dart';
-import 'package:eggsplore/constants/text_style.dart';
-import 'package:eggsplore/model/shop.dart';
-import 'package:eggsplore/service/shop_service.dart';
 
 class ModifyShopInfoPage extends StatefulWidget {
-  // 1. Menerima shopId dari halaman sebelumnya
-  final int shopId;
-
-  const ModifyShopInfoPage({super.key, required this.shopId});
+  // Constructor tidak lagi memerlukan shopId
+  const ModifyShopInfoPage({super.key});
 
   @override
   State<ModifyShopInfoPage> createState() => _ModifyShopInfoPageState();
@@ -23,30 +21,38 @@ class _ModifyShopInfoPageState extends State<ModifyShopInfoPage> {
   final TextEditingController _dateController = TextEditingController();
 
   bool _isLoading = true;
-  String _errorMessage = '';
+  bool _isSaving = false;
+  
+  Shop? _currentShop; 
 
   @override
   void initState() {
     super.initState();
-    // 2. Panggil fungsi untuk mengambil data saat halaman dimuat
-    _fetchShopDetails();
+    _fetchShopData();
   }
 
-  Future<void> _fetchShopDetails() async {
-    Shop? shop = await ShopService.getShopDetails(widget.shopId);
-    if (mounted) {
-      if (shop != null) {
+  // Mengambil data toko berdasarkan user yang login
+  Future<void> _fetchShopData() async {
+    // Memanggil method baru yang tidak butuh ID
+    Shop? shop = await ShopService.getMyShop(); 
+    
+    if (shop != null && mounted) {
+      setState(() {
+        _currentShop = shop; // Simpan seluruh data toko
+        _nameController.text = shop.name;
+        _descriptionController.text = shop.description;
+        _dateController.text = DateFormat('d MMMM yyyy').format(shop.createdAt);
+        _isLoading = false;
+      });
+    } else {
+      if (mounted) {
         setState(() {
-          _nameController.text = shop.name;
-          _descriptionController.text = shop.description;
-          _dateController.text = DateFormat('dd MMMM yyyy').format(shop.createdAt);
           _isLoading = false;
         });
-      } else {
-        setState(() {
-          _errorMessage = "Gagal memuat data toko.";
-          _isLoading = false;
-        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Could not find your shop data.")),
+        );
+        Navigator.of(context).pop(); 
       }
     }
   }
@@ -59,48 +65,39 @@ class _ModifyShopInfoPageState extends State<ModifyShopInfoPage> {
     super.dispose();
   }
 
-  // 3. Perbarui fungsi submit untuk mengirim data ke API
   void _submitForm() async {
-    if (_formKey.currentState!.validate()) {
-      // Tampilkan dialog loading saat proses update
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) => const Center(child: CircularProgressIndicator()),
-      );
+    if (_formKey.currentState!.validate() && !_isSaving && _currentShop != null) {
+      setState(() {
+        _isSaving = true;
+      });
 
       final Map<String, dynamic> shopData = {
-        "name": _nameController.text.trim(), // Gunakan key "name" sesuai backend
+        "name": _nameController.text.trim(),
         "description": _descriptionController.text.trim(),
       };
 
-      bool success = await ShopService.updateShop(widget.shopId, shopData);
+      bool success = await ShopService.updateShop(_currentShop!.id, shopData);
 
       if (mounted) {
-        Navigator.of(context).pop(); // Tutup dialog loading
-
         if (success) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("Info toko berhasil diperbarui!"),
-              backgroundColor: Colors.green,
-            ),
+            const SnackBar(content: Text("Shop info updated successfully!")),
           );
-          Navigator.of(context).pop(); // Kembali ke halaman sebelumnya
+          Navigator.of(context).pop();
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("Gagal memperbarui info toko."),
-              backgroundColor: Colors.red,
-            ),
+            const SnackBar(content: Text("Failed to update shop info.")),
           );
         }
+
+        setState(() {
+          _isSaving = false;
+        });
       }
     }
   }
 
-  InputDecoration _inputDecoration(String label) {
-    // Fungsi ini tidak perlu diubah
+  InputDecoration _inputDecoration(String label, {String? prefix}) {
     return InputDecoration(
       label: Container(
         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
@@ -110,12 +107,20 @@ class _ModifyShopInfoPageState extends State<ModifyShopInfoPage> {
         ),
         child: Text(
           label,
-          style: const TextStyle(color: Colors.black87, fontSize: 14),
+          style: const TextStyle(
+            color: Colors.black87,
+            fontSize: 14,
+          ),
         ),
       ),
-      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
       filled: true,
       fillColor: Colors.white,
+      prefixText: prefix,
+      prefixStyle: const TextStyle(color: Colors.black54),
+      hintStyle: const TextStyle(color: Colors.black54),
     );
   }
 
@@ -124,57 +129,64 @@ class _ModifyShopInfoPageState extends State<ModifyShopInfoPage> {
     return Scaffold(
       backgroundColor: const Color(0xFFffae11),
       appBar: const backBar(title: "Modify Shop Info"),
-      // 4. Tampilkan loading atau error jika ada
       body: _isLoading
           ? const Center(child: CircularProgressIndicator(color: Colors.white))
-          : _errorMessage.isNotEmpty
-              ? Center(child: Text(_errorMessage, style: const TextStyle(color: Colors.white, fontSize: 16)))
-              : SingleChildScrollView(
-                  padding: const EdgeInsets.all(16),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        TextFormField(
-                          controller: _nameController,
-                          style: const TextStyle(color: Colors.black54),
-                          decoration: _inputDecoration("Shop Name"),
-                          validator: (value) => value == null || value.isEmpty ? "Masukkan nama toko" : null,
-                        ),
-                        const SizedBox(height: 16),
-                        TextFormField(
-                          controller: _descriptionController,
-                          style: const TextStyle(color: Colors.black54),
-                          decoration: _inputDecoration("Description"),
-                          maxLines: 3,
-                          validator: (value) => value == null || value.isEmpty ? "Masukkan deskripsi" : null,
-                        ),
-                        const SizedBox(height: 16),
-                        TextFormField(
-                          controller: _dateController,
-                          style: const TextStyle(color: Colors.black54),
-                          decoration: _inputDecoration("Created Date"),
-                          // 5. Jadikan field ini tidak bisa diedit
-                          readOnly: true,
-                        ),
-                        const SizedBox(height: 24),
-                        Center(
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.grey[800],
-                              foregroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 14),
-                              textStyle: AppTextStyle.mainTitle2,
-                            ),
-                            onPressed: _submitForm,
-                            child: const Text("SAVE"),
-                          ),
-                        ),
-                      ],
+          : SingleChildScrollView(
+              padding: const EdgeInsets.all(16),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextFormField(
+                      controller: _nameController,
+                      style: const TextStyle(color: Colors.black87),
+                      decoration: _inputDecoration("Shop Name"),
+                      validator: (value) =>
+                          value == null || value.isEmpty ? "Enter shop name" : null,
                     ),
-                  ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: _descriptionController,
+                      style: const TextStyle(color: Colors.black87),
+                      decoration: _inputDecoration("Description"),
+                      maxLines: 3,
+                      validator: (value) =>
+                          value == null || value.isEmpty ? "Enter description" : null,
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: _dateController,
+                      style: const TextStyle(color: Colors.black54),
+                      decoration: _inputDecoration("Created Date"),
+                      readOnly: true,
+                    ),
+                    const SizedBox(height: 24),
+                    Center(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.grey[800],
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 14),
+                          textStyle: AppTextStyle.mainTitle2,
+                        ),
+                        onPressed: _isSaving ? null : _submitForm,
+                        child: _isSaving
+                            ? const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                  strokeWidth: 2,
+                                ),
+                              )
+                            : const Text("SAVE"),
+                      ),
+                    ),
+                  ],
                 ),
+              ),
+            ),
     );
   }
 }

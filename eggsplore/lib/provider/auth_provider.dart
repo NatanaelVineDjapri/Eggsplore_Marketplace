@@ -1,4 +1,3 @@
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eggsplore/model/user.dart';
 import 'package:eggsplore/service/user_service.dart';

@@ -18,6 +18,12 @@ Route::put('change-password', [AuthController::class, 'changePassword']);
 
 Route::middleware('auth:sanctum')->group(function() {
     Route::post('/update-profile', [AuthController::class, 'updateProfile']);
+    Route::get('/profile', [AuthController::class, 'profile']);
+    Route::put('/profile', [AuthController::class, 'updateProfile']);
+    Route::put('/profile/password', [AuthController::class, 'updatePassword']);
+    Route::post('/profile/avatar', [AuthController::class, 'updateAvatar']);
+
+    Route::middleware('auth:sanctum')->get('/user', [AuthController::class, 'me']);
 
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'getAuthenticatedUser']);

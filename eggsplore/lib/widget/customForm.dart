@@ -1,5 +1,4 @@
 import 'package:eggsplore/constants/sizes.dart';
-import 'package:eggsplore/constants/text_string.dart';
 import 'package:flutter/material.dart';
 
 class CustomForm extends StatelessWidget {

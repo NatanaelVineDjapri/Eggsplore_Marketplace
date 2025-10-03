@@ -13,7 +13,7 @@ class _ShopOrdersPageState extends State<ShopOrdersPage> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      backgroundColor: const Color(0xFFffae11),
+      backgroundColor: Color(0xFFffae11),
       appBar: backBar(title: "Shop Orders"),
       body: Center(
         child: Text(

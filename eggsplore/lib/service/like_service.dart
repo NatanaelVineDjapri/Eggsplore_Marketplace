@@ -17,12 +17,20 @@ class LikeService {
       },
     );
 
+    print("⭐ TOGGLE LIKE STATUS: ${response.statusCode}"); // BARU: Cek status API
+
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       return Like.fromJson(data, productId);
-    } else {
-      throw Exception('Failed to toggle like');
+    } 
+    
+    // FIX PENTING: Jika 401, lempar exception spesifik
+    if (response.statusCode == 401 || response.statusCode == 403) {
+      throw Exception('Authentication Failed (401/403). Please log in again.');
     }
+
+    // Untuk error server lainnya (404, 500, dll.)
+    throw Exception('Server Error (${response.statusCode}): ${response.body}');
   }
 
   Future<List<Product>> fetchLikedProducts() async {
@@ -36,13 +44,9 @@ class LikeService {
     });
 
     if (response.statusCode == 200) {
-      final decoded = json.decode(response.body);
-      print("Response body: $decoded");
-      final List data = decoded is List ? decoded : decoded['data'];
+      final List data = json.decode(response.body);
       return data.map((e) => Product.fromJson(e)).toList();
     } else {
-      print("Status: ${response.statusCode}");
-      print("Body: ${response.body}");
       throw Exception('Failed to fetch liked products');
     }
   }

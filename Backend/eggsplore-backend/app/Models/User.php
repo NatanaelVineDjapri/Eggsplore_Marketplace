@@ -23,6 +23,9 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'phone_number', // Tambahkan ini
+        'address',      // Tambahkan ini
+        'image',
     ];
 
     /**
@@ -68,4 +71,16 @@ class User extends Authenticatable
         return $this->belongsToMany(Product::class, 'likes')->withTimestamps();
     }
 
+    // Di dalam class User
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    // Di dalam class User
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
+    }
+    
 }

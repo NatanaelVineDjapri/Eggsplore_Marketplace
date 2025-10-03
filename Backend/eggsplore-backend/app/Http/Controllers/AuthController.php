@@ -21,7 +21,7 @@ class AuthController extends Controller
             'firstname' => 'required|string|max:255',
             'lastname'  => 'required|string|max:255',
             'email'     => 'required|email|unique:users,email',
-            'password'  => 'required|string|min:6|', 
+            'password'  => 'required|string|min:6|',
         ]);
 
         if ($validator->fails()) {
@@ -33,7 +33,7 @@ class AuthController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => 'user',
-            'image' => url('images/products/eggsplore1.jpg'), 
+            'image' => url('images/products/eggsplore1.jpg'),
 
         ]);
 
@@ -114,7 +114,7 @@ class AuthController extends Controller
         }
 
         $user = User::where('email', $request->email)->first();
-                
+
         if (!$user) {
             return response()->json(['message' => 'User tidak ditemukan'], 404);
         }
@@ -144,41 +144,46 @@ class AuthController extends Controller
 
     public function updateProfile(Request $request)
     {
-    $user = $request->user(); 
+        $user = $request->user();
 
-    $validator = Validator::make($request->all(), [
-        'firstname' => 'sometimes|string|max:255',
-        'lastname'  => 'sometimes|string|max:255',
-        'email'     => 'sometimes|email|unique:users,email,' . $user->id,
-        'image'     => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048',
-    ]);
+        // Validasi sekarang hanya memeriksa 'name'
+        $request->validate([
+            'name'         => 'required|string|max:255',
+            'email'        => 'required|email|unique:users,email,' . $user->id,
+            'phone_number' => 'nullable|string|max:20',
+            'address'      => 'nullable|string',
+            'image'        => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
 
-    if ($validator->fails()) {
-        return response()->json(['message' => $validator->errors()->first()], 422);
+        // Tidak perlu lagi logika untuk memisahkan nama
+        if ($request->has('name')) {
+            $user->name = $request->name;
+        }
+
+        if ($request->has('email')) {
+            $user->email = $request->email;
+        }
+
+        if ($request->has('phone_number')) {
+            $user->phone_number = $request->phone_number;
+        }
+
+        if ($request->has('address')) {
+            $user->address = $request->address;
+        }
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $filename = 'user_' . $user->id . '_' . time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('images/users'), $filename);
+            $user->image = url('images/users/' . $filename);
+        }
+
+        $user->save();
+
+        return response()->json([
+            'message' => 'Profile berhasil diperbarui',
+            'user'    => $user->refresh(),
+        ], 200);
     }
-
-    if ($request->has('firstname') || $request->has('lastname')) {
-        $user->name = trim(($request->firstname ?? explode(' ', $user->name)[0]) . ' ' . ($request->lastname ?? explode(' ', $user->name)[1] ?? ''));
-    }
-
-    if ($request->has('email')) {
-        $user->email = $request->email;
-    }
-
-    if ($request->hasFile('image')) {
-        $file = $request->file('image');
-        $filename = 'user_' . $user->id . '_' . time() . '.' . $file->getClientOriginalExtension();
-        $file->move(public_path('images/users'), $filename);
-        $user->image = url('images/users/' . $filename);
-    }
-
-    $user->save();
-
-    return response()->json([
-        'message' => 'Profile berhasil diperbarui',
-        'user' => $user,
-    ], 200);
-}
-
-
 }

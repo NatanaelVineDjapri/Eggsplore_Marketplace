@@ -224,7 +224,7 @@ class DetailProductPage extends ConsumerWidget {
             const SizedBox(width: 12),
             AddToCartButtonProduct(product: product, color: primaryColor),
             const SizedBox(width: 12),
-            BuyNowButton(color: primaryColor),
+            BuyNowButton(color: primaryColor,product: product,),
           ],
         ),
       ),

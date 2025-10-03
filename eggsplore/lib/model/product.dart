@@ -61,8 +61,7 @@ class Product {
       "price": price,
       "stock": stock,
       "image": image,
-      // `shopId` biasanya tidak perlu dikirim saat membuat produk baru,
-      // karena akan diambil dari user yang sedang login di backend.
+  
     };
   }
 }

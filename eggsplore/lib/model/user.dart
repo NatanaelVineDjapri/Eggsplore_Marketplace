@@ -4,9 +4,9 @@ class User {
   final String email;
   final String role;
   final double balance;
-  final String? image; // Menjadi nullable
-  final String? phoneNumber; // Properti baru
-  final String? address; // Properti baru
+  final String? image; 
+  final String? phoneNumber; 
+  final String? address; 
   final String createdAt;
   final String updatedAt;
 
@@ -16,7 +16,7 @@ class User {
     required this.email,
     required this.role,
     required this.balance,
-    this.image, // Tidak lagi required
+    this.image, 
     this.phoneNumber,
     this.address,
     required this.createdAt,
@@ -40,9 +40,9 @@ class User {
       email: json['email'] as String,
       role: json['role'] as String,
       balance: balanceValue,
-      image: json['image'] as String?, // Mengambil nilai image, bisa null
-      phoneNumber: json['phone_number'] as String?, // Mengambil nilai phone_number
-      address: json['address'] as String?, // Mengambil nilai address
+      image: json['image'] as String?, 
+      phoneNumber: json['phone_number'] as String?, 
+      address: json['address'] as String?, 
       createdAt: json['created_at'] as String,
       updatedAt: json['updated_at'] as String,
     );

@@ -59,4 +59,8 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::delete('/cart/{itemId}', [CartController::class, 'removeCart']);
 
     Route::get('/user', [AuthController::class, 'getAuthenticatedUser']);
+    Route::post('/order/create', [CheckoutController::class, 'store'])->middleware('auth:sanctum');
+    Route::get('/checkout/{user}', [CheckoutController::class, 'show'])->middleware('auth:sanctum');
+    // Route::post('/checkout/direct-buy', [CheckoutController::class, 'handleDirectBuy'])->middleware('auth:sanctum');
+
 });

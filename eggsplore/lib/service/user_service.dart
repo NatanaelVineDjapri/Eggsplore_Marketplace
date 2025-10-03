@@ -103,10 +103,47 @@ class UserService {
 
     if (response.statusCode == 200) {
       var json = jsonDecode(response.body);
-      // Mengembalikan objek User lengkap
       return User.fromJson(json);
     }
+
+    if (response.statusCode == 401) {
+      await logout();
+    }
+    return null;
   }
+
+
+
+  static Future<bool> updateUserProfile(Map<String, dynamic> userData, {String? imagePath}) async {
+    final token = await _getToken();
+    if (token == null) return false;
+
+    final url = Uri.parse('$baseUrl/user/profile');
+    
+    var request = http.MultipartRequest('POST', url);
+    request.headers['Authorization'] = 'Bearer $token';
+    request.headers['Accept'] = 'application/json';
+
+    request.fields['_method'] = 'PUT';
+
+    userData.forEach((key, value) {
+      request.fields[key] = value.toString();
+    });
+
+    // Add the image file if it exists
+    if (imagePath != null) {
+      request.files.add(await http.MultipartFile.fromPath('image', imagePath));
+    }
+
+    var response = await request.send();
+    var responseBody = await response.stream.bytesToString();
+
+    print("UPDATE PROFILE => ${response.statusCode} : $responseBody");
+
+    return response.statusCode == 200;
+  }
+
+// ... the rest of the UserService class remains the same
 
   static Future<bool> verifyUser(
     String firstname,

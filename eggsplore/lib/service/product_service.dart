@@ -202,12 +202,13 @@ class ProductService {
     }
     final response = await http.get(
       Uri.parse('$baseUrl/products/$productId/reviews'),
-      headers: {"Authorization": "Bearer $token", "Accept": "application/json"}, // Asumsi pakai helper otentikasi
+      headers: {
+        "Authorization": "Bearer $token",
+        "Accept": "application/json",
+      }, // Asumsi pakai helper otentikasi
     );
 
-     print("===== JSON DARI LARAVEL =====");
-  print(response.body);
-  print("=============================");
+    print(response.body);
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       final List<dynamic> reviewList = data['data'];

@@ -17,7 +17,7 @@ class UserService {
     return prefs.getString('auth_token');
   }
 
-   static Future<String?> getToken() async {
+  static Future<String?> getToken() async {
     return _getToken();
   }
 
@@ -95,29 +95,63 @@ class UserService {
     var token = await _getToken();
 
     if (token == null) {
-        return null;
+      return null;
     }
 
-    // Endpoint: Pastikan ini adalah rute yang dilindungi 'auth:sanctum' di Laravel
-    var url = Uri.parse('$baseUrl/user'); 
+    var url = Uri.parse('$baseUrl/user');
 
     var response = await http.get(
-        url,
-        headers: {"Authorization": "Bearer $token", "Accept": "application/json"},
+      url,
+      headers: {"Authorization": "Bearer $token", "Accept": "application/json"},
     );
 
     if (response.statusCode == 200) {
-        var json = jsonDecode(response.body);
-        // Mengembalikan objek User lengkap
-        return User.fromJson(json); 
+      var json = jsonDecode(response.body);
+      return User.fromJson(json);
     }
+
+    if (response.statusCode == 401) {
+      await logout();
+    }
+    return null;
+  }
+
+  // ---------- UPDATE USER PROFILE ----------
+ // ... di dalam class UserService
+
+  static Future<bool> updateUserProfile(Map<String, dynamic> userData, {String? imagePath}) async {
+    final token = await _getToken();
+    if (token == null) return false;
+
+    final url = Uri.parse('$baseUrl/user/profile');
     
-    // Jika token tidak valid, hapus token
-    // if (response.statusCode == 401) {
-    //     await logout();
-    // }
-    // return null;
-}
+    // Use POST method and specify _method as PUT
+    var request = http.MultipartRequest('POST', url);
+    request.headers['Authorization'] = 'Bearer $token';
+    request.headers['Accept'] = 'application/json';
+
+    // Add a field to tell Laravel to treat this as a PUT request
+    request.fields['_method'] = 'PUT';
+
+    // Add the user data fields
+    userData.forEach((key, value) {
+      request.fields[key] = value.toString();
+    });
+
+    // Add the image file if it exists
+    if (imagePath != null) {
+      request.files.add(await http.MultipartFile.fromPath('image', imagePath));
+    }
+
+    var response = await request.send();
+    var responseBody = await response.stream.bytesToString();
+
+    print("UPDATE PROFILE => ${response.statusCode} : $responseBody");
+
+    return response.statusCode == 200;
+  }
+
+// ... the rest of the UserService class remains the same
 
   // ---------- VERIFY USER ----------
   static Future<bool> verifyUser(String firstname, String lastname, String email) async {
@@ -155,30 +189,29 @@ class UserService {
     return false;
   }
 
- static Future<double?> topUp(double amount) async {
-  final token = await getToken();
-  if (token == null) return null;
+  static Future<double?> topUp(double amount) async {
+    final token = await getToken();
+    if (token == null) return null;
 
-  final url = Uri.parse('$baseUrl/topup');
-  final response = await http.post(
-    url,
-    headers: {
-      "Authorization": "Bearer $token",
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-    },
-    body: jsonEncode({"amount": amount}),
-  );
+    final url = Uri.parse('$baseUrl/topup');
+    final response = await http.post(
+      url,
+      headers: {
+        "Authorization": "Bearer $token",
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+      body: jsonEncode({"amount": amount}),
+    );
 
-  print('Status code: ${response.statusCode}');
-  print('Body: ${response.body}');
+    print('Status code: ${response.statusCode}');
+    print('Body: ${response.body}');
 
-  if (response.statusCode == 200) {
-    final json = jsonDecode(response.body);
-    return double.tryParse(json['balance'].toString()) ?? 0.0;
+    if (response.statusCode == 200) {
+      final json = jsonDecode(response.body);
+      return double.tryParse(json['balance'].toString()) ?? 0.0;
+    }
+
+    return null;
   }
-
-  return null;
-}
-
 }

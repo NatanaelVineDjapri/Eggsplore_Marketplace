@@ -202,7 +202,6 @@ class DetailProductPage extends ConsumerWidget {
     );
   }
 
-  // >>> KODE _buildBottomNavBar DIKOREKSI UNTUK MENAMBAH TOMBOL CHAT
   Widget _buildBottomNavBar(BuildContext context, Product product, Color primaryColor) {
     return Align(
       alignment: Alignment.bottomCenter,

@@ -51,7 +51,7 @@ class _MyShopPageState extends State<MyShopPage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const ModifyShopInfoPage(),
+                      builder: (context) => MyShopPage(),
                     ),
                   );
                 },

@@ -17,7 +17,7 @@ Route::post('verify-user', [AuthController::class, 'verifyUser']);
 Route::put('change-password', [AuthController::class, 'changePassword']);
 
 Route::middleware('auth:sanctum')->group(function() {
-    Route::post('/update-profile', [AuthController::class, 'updateProfile']);
+    Route::put('/user/profile', [AuthController::class, 'updateProfile']);
 
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'getAuthenticatedUser']);
@@ -37,7 +37,7 @@ Route::middleware('auth:sanctum')->group(function() {
 
     Route::post('/products/{id}/rate', [ProductController::class,'rateProduct']);
 
-    Route::get('/search', [SearchController::class, 'search']); //blm
+    Route::get('/search', [SearchController::class, 'search']);
 
     Route::get('/messages/inbox', [MessageController::class, 'inbox']);
     Route::get('/messages/{user}', [MessageController::class, 'index']);
@@ -50,7 +50,8 @@ Route::middleware('auth:sanctum')->group(function() {
 
     Route::post('/products/{id}/like', [LikeController::class, 'toggleLike']);
     Route::get('/user/liked-products', [LikeController::class, 'likedProducts']);
-
+    Route::get('/shops/{id}/products', [ProductController::class, 'shopProducts']);
+    Route::get('/products/{product}/reviews', [ProductController::class, 'productReviews']);
 
     Route::get('/cart', [CartController::class, 'showCart']);
     Route::post('/cart', [CartController::class, 'addCart']);
@@ -58,4 +59,5 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::delete('/cart/{itemId}', [CartController::class, 'removeCart']);
 
     Route::get('/user/shop', [ShopController::class, 'getUserShop']);
+    Route::get('/user', [AuthController::class, 'getAuthenticatedUser']);
 });

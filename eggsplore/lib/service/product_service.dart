@@ -48,7 +48,7 @@ class ProductService {
   }
 
   // --- Helper: ambil produk random untuk user saat ini tanpa repot urus token ---
-  static Future<List<Product>> fetchRandomProductsForCurrentUser({int count = 6}) async {
+  static Future<List<Product>> fetchRandomProductsForCurrentUser({int count = 50}) async {
     final token = await UserService.getToken(); 
     if (token != null) {
       return fetchRandomProducts(token, count: count);

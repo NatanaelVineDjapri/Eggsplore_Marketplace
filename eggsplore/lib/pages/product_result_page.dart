@@ -1,40 +1,59 @@
 import 'package:flutter/material.dart';
-import 'package:eggsplore/widget/trending_product_card.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:eggsplore/widget/product.dart';
+import 'package:eggsplore/provider/product_provider.dart'; // pastiin import provider lu
 
-class ProductResultPage extends StatelessWidget {
+class ProductResultPage extends ConsumerWidget {
   final String query;
 
   const ProductResultPage({super.key, required this.query});
 
   @override
-  Widget build(BuildContext context) {
-    final products = [
-      {"name": "Telur 1kg", "price": "Rp. 25.000"},
-      {"name": "Ayam Potong 1 Ekor", "price": "Rp. 40.000"},
-      {"name": "Cabai 500gr", "price": "Rp. 30.000"},
-      {"name": "ZGMF-X10A Freedom Gundam", "price": "Rp. 1.500.000"},
-    ];
+  Widget build(BuildContext context, WidgetRef ref) {
+    final asyncProducts = ref.watch(randomProductsProvider);
 
-    final filtered = query.isEmpty
-        ? products
-        : products.where((p) => p["name"]!.toLowerCase().contains(query.toLowerCase())).toList();
+    return asyncProducts.when(
+      data: (products) {
+        // filter produk berdasarkan query
+        final filtered = query.isEmpty
+            ? products
+            : products
+                .where((p) =>
+                    p.name.toLowerCase().contains(query.toLowerCase()) ||
+                    p.description.toLowerCase().contains(query.toLowerCase()))
+                .toList();
 
-    return GridView.builder(
-      padding: const EdgeInsets.all(12),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 0.75,
-        crossAxisSpacing: 12,
-        mainAxisSpacing: 12,
-      ),
-      itemCount: filtered.length,
-      itemBuilder: (context, index) {
-        final p = filtered[index];
-        return TrendingProductCard(
-          name: p["name"]!,
-          price: p["price"]!,
+        if (filtered.isEmpty) {
+          return const Center(
+            child: Text("Produk tidak ditemukan"),
+          );
+        }
+
+        return GridView.builder(
+          padding: const EdgeInsets.all(12),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 0.75,
+            crossAxisSpacing: 12,
+            mainAxisSpacing: 12,
+          ),
+          itemCount: filtered.length,
+          itemBuilder: (context, index) {
+            final p = filtered[index];
+            return ProductCard(
+              productId: p.id,
+              name: p.name,
+              price: p.price,
+              image: p.image,
+              // kalau user udah like dari DB, bisa tambahin field isLiked ke model
+              // untuk sekarang false aja biar ga error
+              isLiked: false,
+            );
+          },
         );
       },
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (e, st) => Center(child: Text("Error: $e")),
     );
   }
 }

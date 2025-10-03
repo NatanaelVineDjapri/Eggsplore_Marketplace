@@ -17,7 +17,7 @@ class UserService {
     return prefs.getString('auth_token');
   }
 
-   static Future<String?> getToken() async {
+  static Future<String?> getToken() async {
     return _getToken();
   }
 
@@ -26,7 +26,6 @@ class UserService {
     await prefs.remove('auth_token');
   }
 
-  // ---------- REGISTER ----------
   static Future<bool> register(
     String firstname,
     String lastname,
@@ -49,7 +48,6 @@ class UserService {
     return response.statusCode == 200 || response.statusCode == 201;
   }
 
-  // ---------- LOGIN ----------
   static Future<User?> login(String email, String password) async {
     var url = Uri.parse('$baseUrl/login');
     var response = await http.post(
@@ -71,7 +69,6 @@ class UserService {
     return null;
   }
 
-  // ---------- GET USER BY ID ----------
   static Future<User?> getUser(int id) async {
     var token = await _getToken();
     var url = Uri.parse('$baseUrl/user/$id');
@@ -90,44 +87,38 @@ class UserService {
     return null;
   }
 
-  // ---------- GET CURRENT AUTHENTICATED USER (VIA TOKEN) ----------
   static Future<User?> getCurrentUser() async {
     var token = await _getToken();
 
     if (token == null) {
-        return null;
+      return null;
     }
 
-    // Endpoint: Pastikan ini adalah rute yang dilindungi 'auth:sanctum' di Laravel
-    var url = Uri.parse('$baseUrl/user'); 
+    var url = Uri.parse('$baseUrl/user');
 
     var response = await http.get(
-        url,
-        headers: {"Authorization": "Bearer $token", "Accept": "application/json"},
+      url,
+      headers: {"Authorization": "Bearer $token", "Accept": "application/json"},
     );
 
     if (response.statusCode == 200) {
-        var json = jsonDecode(response.body);
-        // Mengembalikan objek User lengkap
-        return User.fromJson(json); 
+      var json = jsonDecode(response.body);
+      // Mengembalikan objek User lengkap
+      return User.fromJson(json);
     }
-    
-    // Jika token tidak valid, hapus token
-    // if (response.statusCode == 401) {
-    //     await logout();
-    // }
-    // return null;
-}
+  }
 
-  // ---------- VERIFY USER ----------
-  static Future<bool> verifyUser(String firstname, String lastname, String email) async {
+  static Future<bool> verifyUser(
+    String firstname,
+    String lastname,
+    String email,
+  ) async {
     final url = Uri.parse('$baseUrl/verify-user');
 
-    final response = await http.post(url, body: {
-      'firstname': firstname,
-      'lastname': lastname,
-      'email': email,
-    });
+    final response = await http.post(
+      url,
+      body: {'firstname': firstname, 'lastname': lastname, 'email': email},
+    );
 
     print("VERIFY USER => ${response.statusCode} : ${response.body}");
 
@@ -137,15 +128,21 @@ class UserService {
     return false;
   }
 
-  // ---------- CHANGE PASSWORD ----------
-  static Future<bool> changePassword(String email, String newPassword, String confirmPassword) async {
+  static Future<bool> changePassword(
+    String email,
+    String newPassword,
+    String confirmPassword,
+  ) async {
     final url = Uri.parse('$baseUrl/change-password');
 
-    final response = await http.put(url, body: {
-      'email': email,
-      'newpassword': newPassword,
-      'confirmpassword': confirmPassword,
-    });
+    final response = await http.put(
+      url,
+      body: {
+        'email': email,
+        'newpassword': newPassword,
+        'confirmpassword': confirmPassword,
+      },
+    );
 
     print("CHANGE PASSWORD => ${response.statusCode} : ${response.body}");
 
@@ -155,30 +152,29 @@ class UserService {
     return false;
   }
 
- static Future<double?> topUp(double amount) async {
-  final token = await getToken();
-  if (token == null) return null;
+  static Future<double?> topUp(double amount) async {
+    final token = await getToken();
+    if (token == null) return null;
 
-  final url = Uri.parse('$baseUrl/topup');
-  final response = await http.post(
-    url,
-    headers: {
-      "Authorization": "Bearer $token",
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-    },
-    body: jsonEncode({"amount": amount}),
-  );
+    final url = Uri.parse('$baseUrl/topup');
+    final response = await http.post(
+      url,
+      headers: {
+        "Authorization": "Bearer $token",
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+      body: jsonEncode({"amount": amount}),
+    );
 
-  print('Status code: ${response.statusCode}');
-  print('Body: ${response.body}');
+    print('Status code: ${response.statusCode}');
+    print('Body: ${response.body}');
 
-  if (response.statusCode == 200) {
-    final json = jsonDecode(response.body);
-    return double.tryParse(json['balance'].toString()) ?? 0.0;
+    if (response.statusCode == 200) {
+      final json = jsonDecode(response.body);
+      return double.tryParse(json['balance'].toString()) ?? 0.0;
+    }
+
+    return null;
   }
-
-  return null;
-}
-
 }

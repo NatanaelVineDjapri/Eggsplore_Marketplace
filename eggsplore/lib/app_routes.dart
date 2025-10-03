@@ -64,7 +64,7 @@ class AppRoutes {
     search: (context) => const SearchPage(query: ""),
     product: (context) => const ProductPage(),
     shopProfile: (context) => const ShopProfilePage(),
-    detailProduct: (context) => const DetailProductPage(),
+    // detailProduct: (context) =>  const DetailProductPage(),
     chat: (context) => const ChatPage(),
 
   };

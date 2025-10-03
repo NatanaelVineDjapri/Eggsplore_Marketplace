@@ -26,7 +26,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   double balance = 0;
 
-  // Scroll controller & offset untuk menggerakkan background
   final ScrollController _scrollController = ScrollController();
   double _scrollOffset = 0.0;
 
@@ -44,7 +43,6 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _loadUser();
 
-    // Listener scroll: update offset untuk background
     _scrollController.addListener(() {
       if (!mounted) return;
       setState(() {
@@ -72,15 +70,12 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final size = Appsized(context);
     final formatter = NumberFormat('#,###');
-
     final bgHeight = size.height * 0.36;
-    // pastikan top hanya antara -bgHeight .. 0
     final bgTop = -_scrollOffset.clamp(0.0, bgHeight).toDouble();
 
     return Scaffold(
       body: Stack(
         children: [
-          // 🔹 Background image (mentok atas, full lebar)
           Positioned(
             top: -_scrollOffset.clamp(0.0, bgHeight).toDouble(),
             left: 0,
@@ -93,7 +88,6 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
 
-          // 🔹 Konten di atas background, pake SafeArea biar gak ketiban status bar
           SafeArea(
             child: Column(
               children: [
@@ -122,7 +116,6 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
 
-                // Scrollable content
                 Expanded(
                   child: ListView(
                     controller: _scrollController,

@@ -1,9 +1,11 @@
 import 'package:eggsplore/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:eggsplore/bar/bottom_nav.dart';
-import 'package:eggsplore/widget/trending_product_card.dart';
 import 'package:eggsplore/widget/TopNavBar.dart';
 import 'package:eggsplore/pages/search_page.dart';
+import 'package:eggsplore/service/product_service.dart';
+import 'package:eggsplore/model/product.dart'; // buat model data
+import 'package:eggsplore/widget/product.dart'; // buat ProductCard widget
 
 class TrendingPage extends StatefulWidget {
   const TrendingPage({super.key});
@@ -13,28 +15,29 @@ class TrendingPage extends StatefulWidget {
 }
 
 class _TrendingPageState extends State<TrendingPage> {
-  final List<Map<String, String>> products = [
-    {
-      "name": "Telur 1kg",
-      "price": "Rp. 25.000",
-      "image": "assets/images/eggs.jpg",
-    },
-    {
-      "name": "Ayam Potong 1 Ekor",
-      "price": "Rp. 40.000",
-      "image": "assets/images/chicken.jpg",
-    },
-    {
-      "name": "Cabai 500gr",
-      "price": "Rp. 30.000",
-      "image": "assets/images/chili.jpg",
-    },
-    {
-      "name": "ZGMF-X10A Freedom Gundam",
-      "price": "Rp. 1.500.000",
-      "image": "assets/images/gundam.jpg",
-    },
-  ];
+  List<Product> trendingProducts = [];
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    loadTrendingProducts();
+  }
+
+  Future<void> loadTrendingProducts() async {
+    try {
+      final products = await ProductService.fetchTrendingProducts();
+      setState(() {
+        trendingProducts = products;
+        isLoading = false;
+      });
+    } catch (e) {
+      print("Error fetch trending: $e");
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +67,6 @@ class _TrendingPageState extends State<TrendingPage> {
                       );
                     },
                   ),
-
                   const SizedBox(height: 16),
                   Center(
                     child: Image.asset(
@@ -74,24 +76,40 @@ class _TrendingPageState extends State<TrendingPage> {
                     ),
                   ),
                   const SizedBox(height: 16),
+
+                  /// 🔹 Bagian produk
                   Expanded(
-                    child: GridView.builder(
-                      itemCount: products.length,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        childAspectRatio: 0.75,
-                        crossAxisSpacing: 8,
-                        mainAxisSpacing: 8,
-                      ),
-                      itemBuilder: (context, index) {
-                        final product = products[index];
-                        return TrendingProductCard(
-                          name: product["name"]!,
-                          price: product["price"]!,
-                        );
-                      },
-                    ),
+                    child: isLoading
+                        ? const Center(child: CircularProgressIndicator())
+                        : trendingProducts.isEmpty
+                            ? const Center(
+                                child: Text(
+                                  "Belum ada produk trending",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              )
+                            : GridView.builder(
+                                itemCount: trendingProducts.length,
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  childAspectRatio: 0.75,
+                                  crossAxisSpacing: 8,
+                                  mainAxisSpacing: 8,
+                                ),
+                                itemBuilder: (context, index) {
+                                  final product = trendingProducts[index];
+                                  return ProductCard(
+                                    productId: product.id!,
+                                    name: product.name,
+                                    price: double.parse(product.price.toString()),
+                                    image: product.image,
+                                  );
+                                },
+                              ),
                   ),
                 ],
               ),

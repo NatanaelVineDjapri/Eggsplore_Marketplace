@@ -63,12 +63,12 @@ class ProductService {
     final url = Uri.parse('$baseUrl/products/trending');
     final response = await http.get(
       url,
-      headers: {"Authorization": "Bearer $token"},
+      headers: {"Authorization": "Bearer $token","Content-Type": "application/json",},
     );
-
+    print("test => ${response.statusCode} : ${response.body}");
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
-      final List products = data['data'] ?? data;
+      final List products = data; // ga perlu data['data']
       return products.map((e) => Product.fromJson(e)).toList();
     } else {
       throw Exception("Gagal ambil produk trending");

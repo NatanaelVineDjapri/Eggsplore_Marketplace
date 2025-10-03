@@ -1,3 +1,4 @@
+import 'package:eggsplore/model/review.dart';
 import 'package:eggsplore/service/user_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eggsplore/model/product.dart';
@@ -35,4 +36,8 @@ final allProductsProvider = FutureProvider<List<Product>>((ref) async {
     throw Exception("Token tidak ditemukan");
   }
   return ProductService.fetchProducts(token);
+});
+
+final reviewsProvider = FutureProvider.autoDispose.family<List<Review>, int>((ref, productId) async {
+  return ProductService.fetchReviews(productId);
 });

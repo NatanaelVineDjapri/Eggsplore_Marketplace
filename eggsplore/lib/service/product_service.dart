@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:eggsplore/model/product.dart';
+import 'package:eggsplore/model/review.dart';
 import 'package:eggsplore/service/user_service.dart';
 import 'package:http/http.dart' as http;
 
@@ -191,6 +192,28 @@ class ProductService {
       return productList.map((json) => Product.fromJson(json)).toList();
     } else {
       throw Exception("Gagal memuat produk toko: ${response.statusCode}");
+    }
+  }
+
+  static Future<List<Review>> fetchReviews(int productId) async {
+    final token = await UserService.getToken();
+    if (token == null) {
+      throw Exception("User belum login / token kosong");
+    }
+    final response = await http.get(
+      Uri.parse('$baseUrl/products/$productId/reviews'),
+      headers: {"Authorization": "Bearer $token", "Accept": "application/json"}, // Asumsi pakai helper otentikasi
+    );
+
+     print("===== JSON DARI LARAVEL =====");
+  print(response.body);
+  print("=============================");
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      final List<dynamic> reviewList = data['data'];
+      return reviewList.map((json) => Review.fromJson(json)).toList();
+    } else {
+      throw Exception("Gagal memuat ulasan produk");
     }
   }
 }

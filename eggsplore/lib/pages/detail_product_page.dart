@@ -1,3 +1,4 @@
+import 'package:eggsplore/pages/review_page.dart';
 import 'package:eggsplore/widget/detail_product/add_to_cart_button2.dart';
 import 'package:eggsplore/widget/detail_product/buy_now_button.dart';
 import 'package:eggsplore/widget/product.dart';
@@ -13,6 +14,7 @@ import '../widget/detail_product/follow_button.dart';
 import '../widget/detail_product/product_rating.dart';
 import '../widget/detail_product/product_stock.dart';
 import '../widget/expandable_description.dart';
+import '../widget/review_tile.dart';
 
 
 class DetailProductPage extends ConsumerWidget {
@@ -124,6 +126,8 @@ class DetailProductPage extends ConsumerWidget {
                           ProductStock(stock: product.stock),
                         ],
                       ),
+                      const Divider(color: AppColors.primary, thickness: 1, height: 24),
+                      _buildReviewsSummarySection(context, ref, product.id),
                       const SizedBox(height: 40),
                       Consumer(
                         builder: (context, ref, child) {
@@ -178,7 +182,6 @@ class DetailProductPage extends ConsumerWidget {
                       ),
                       const SizedBox(height: 40),
                       const RandomProductsGrid(),
-                      const SizedBox(height: 20),
                     ],
                   ),
                 ),
@@ -215,6 +218,42 @@ class DetailProductPage extends ConsumerWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildReviewsSummarySection(BuildContext context, WidgetRef ref, int productId) {
+    final reviewsAsync = ref.watch(reviewsProvider(productId));
+    return reviewsAsync.when(
+      loading: () => const SizedBox.shrink(),
+      error: (err, stack) => const SizedBox.shrink(),
+      data: (reviews) {
+        if (reviews.isEmpty) {
+          return const Center(child: Text("Belum ada ulasan."));
+        }
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text("Ulasan Pembeli", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 8),
+            ...reviews.take(3).map((review) => ReviewTile(review: review)).toList(),
+            if (reviews.length > 3)
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Center(
+                  child: OutlinedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => AllReviewsPage(productId: productId)),
+                      );
+                    },
+                    child: const Text("Lihat Semua Ulasan"),
+                  ),
+                ),
+              ),
+          ],
+        );
+      },
     );
   }
 }

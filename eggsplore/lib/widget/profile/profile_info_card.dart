@@ -14,7 +14,6 @@ class ProfileInfoCard extends StatelessWidget {
     final displayName = user?.name ?? 'Guest';
     final imagePath = user?.image ?? '';
     const androidEmulatorServer = "http://10.0.2.2:8000";
-    const iosEmulatorServer = "http://localhost:8000";   
 
     final imageUrl = imagePath.isNotEmpty
         ? NetworkImage("$androidEmulatorServer$imagePath")

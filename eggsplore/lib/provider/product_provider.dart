@@ -1,3 +1,4 @@
+import 'package:eggsplore/service/user_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eggsplore/model/product.dart';
 import 'package:eggsplore/service/product_service.dart';
@@ -27,3 +28,11 @@ final productsFromShopProvider = FutureProvider.autoDispose.family<List<Product>
     );
   }
 );
+
+final allProductsProvider = FutureProvider<List<Product>>((ref) async {
+  final token = await UserService.getToken();
+  if (token == null || token.isEmpty) {
+    throw Exception("Token tidak ditemukan");
+  }
+  return ProductService.fetchProducts(token);
+});

@@ -23,6 +23,9 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'phone_number', // Tambahkan ini
+        'address',      // Tambahkan ini
+        'image',
     ];
 
     /**
@@ -67,5 +70,4 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Product::class, 'likes')->withTimestamps();
     }
-
 }

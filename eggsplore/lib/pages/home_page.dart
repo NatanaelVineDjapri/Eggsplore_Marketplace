@@ -13,7 +13,7 @@ import 'package:eggsplore/model/product.dart';
 import 'package:eggsplore/service/product_service.dart';
 import 'package:eggsplore/widget/product.dart';
 import 'package:intl/intl.dart';
-import 'package:eggsplore/pages/search_page.dart';
+import 'package:eggsplore/pages/search/search_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

@@ -23,7 +23,6 @@ class _CartPageState extends ConsumerState<CartPage> {
     final cartItems = ref.watch(cartProvider);
     final cartNotifier = ref.read(cartProvider.notifier);
 
-    // Group per toko
     final Map<String, List<CartItem>> groupedItems = {};
     for (var item in cartItems) {
       final store = item.shopName ?? "Toko Tidak Diketahui";

@@ -6,7 +6,6 @@ import 'package:http/http.dart' as http;
 class ProductService {
   static const String baseUrl = "http://10.0.2.2:8000/api";
 
-  // --- Ambil semua produk ---
   static Future<List<Product>> fetchProducts(String token) async {
     final response = await http.get(
       Uri.parse("$baseUrl/products"),

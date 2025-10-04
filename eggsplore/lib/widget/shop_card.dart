@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:eggsplore/constants/colors.dart';
+import 'package:eggsplore/model/shop.dart';
 
 class ShopCard extends StatelessWidget {
-  final String name;
-  final String location;
+  final Shop shop;
 
-  const ShopCard({
-    super.key,
-    required this.name,
-    required this.location,
-  });
+  const ShopCard({super.key, required this.shop});
 
   @override
   Widget build(BuildContext context) {
@@ -29,9 +25,15 @@ class ShopCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          const CircleAvatar(
+          CircleAvatar(
             radius: 24,
-            backgroundColor: AppColors.redd, 
+            backgroundColor: AppColors.redd,
+            backgroundImage: shop.profilePicture != null
+                ? NetworkImage(shop.profilePicture!)
+                : null,
+            child: shop.profilePicture == null
+                ? Icon(Icons.store, color: Colors.white)
+                : null,
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -39,13 +41,13 @@ class ShopCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  name,
+                  shop.name,
                   style: const TextStyle(fontWeight: FontWeight.bold),
-                  maxLines: 1, 
+                  maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
                 Text(
-                  location,
+                  shop.address ?? "-",
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),

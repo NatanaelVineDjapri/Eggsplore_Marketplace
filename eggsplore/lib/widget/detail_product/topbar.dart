@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:eggsplore/app_routes.dart';
-import 'package:eggsplore/pages/search_page.dart';
+import 'package:eggsplore/pages/search/search_page.dart';
 import 'package:eggsplore/pages/chat_page.dart';
 import 'package:eggsplore/pages/cart_page.dart';
 import 'package:eggsplore/constants/colors.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eggsplore/widget/product.dart';
-import 'package:eggsplore/provider/product_provider.dart'; // pastiin import provider lu
+import 'package:eggsplore/provider/product_provider.dart'; 
 
 class ProductResultPage extends ConsumerWidget {
   final String query;
@@ -14,7 +14,6 @@ class ProductResultPage extends ConsumerWidget {
 
     return asyncProducts.when(
       data: (products) {
-        // filter produk berdasarkan query
         final filtered = query.isEmpty
             ? products
             : products
@@ -45,8 +44,6 @@ class ProductResultPage extends ConsumerWidget {
               name: p.name,
               price: p.price,
               image: p.image,
-              // kalau user udah like dari DB, bisa tambahin field isLiked ke model
-              // untuk sekarang false aja biar ga error
               isLiked: false,
             );
           },

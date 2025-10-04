@@ -2,7 +2,7 @@ import 'package:eggsplore/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:eggsplore/bar/bottom_nav.dart';
 import 'package:eggsplore/widget/TopNavBar.dart';
-import 'package:eggsplore/pages/search_page.dart';
+import 'package:eggsplore/pages/search/search_page.dart';
 import 'package:eggsplore/service/product_service.dart';
 import 'package:eggsplore/model/product.dart'; // buat model data
 import 'package:eggsplore/widget/product.dart'; // buat ProductCard widget

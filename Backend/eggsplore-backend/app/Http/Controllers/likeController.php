@@ -38,7 +38,6 @@ class LikeController extends Controller
     {
         $user = auth()->user();
 
-        // Ambil semua produk yang user like
         $products = $user->likedProducts()->get();
 
         return response()->json($products);

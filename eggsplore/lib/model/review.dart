@@ -1,22 +1,22 @@
-class ReviewModel {
-  final int id;
+class Review {
   final int rating;
-  final String? ulasan;
+  final String? comment;
   final String userName;
+  final String? userAvatar;
 
-  ReviewModel({
-    required this.id,
+  Review({
     required this.rating,
-    this.ulasan,
+    this.comment,
     required this.userName,
+    this.userAvatar,
   });
 
-  factory ReviewModel.fromJson(Map<String, dynamic> json) {
-    return ReviewModel(
-      id: json['id'] as int,
-      rating: json['rating'] as int,
-      ulasan: json['ulasan'] as String?,
-      userName: json['user']?['name'] ?? "Anonim",
+  factory Review.fromJson(Map<String, dynamic> json) {
+    return Review(
+      rating: json['rating'],
+      comment: json['ulasan'], 
+      userName: json['user']?['name'] ?? 'Anonim',
+      userAvatar: json['user']?['image'],
     );
   }
 }

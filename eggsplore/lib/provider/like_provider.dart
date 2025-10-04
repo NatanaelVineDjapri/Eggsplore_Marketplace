@@ -33,7 +33,9 @@ class LikeNotifier extends StateNotifier<Map<int, Like>> {
         ref.invalidate(likedProductsProvider);
       }
     } catch (e) {
-      print('Toggle like error: $e');
+      // FIX PENTING: Logging yang lebih informatif
+      print('🔥 Toggle Like FAILED: $e'); 
+      // Anda bisa menambahkan SnackBar di sini untuk memberitahu user
     }
   }
 }

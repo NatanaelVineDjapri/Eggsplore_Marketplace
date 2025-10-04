@@ -5,7 +5,7 @@ import 'package:eggsplore/widget/chart/cart_top_bar.dart';
 import 'package:eggsplore/widget/chart/cart_bottom_bar.dart';
 import 'package:eggsplore/widget/chart/cart_select_all_header.dart';
 import 'package:eggsplore/widget/chart/cart_top_header.dart';
-import 'package:eggsplore/widget/chart/remove_item_dialog';
+import 'package:eggsplore/widget/chart/remove_item_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eggsplore/model/cart_item.dart';

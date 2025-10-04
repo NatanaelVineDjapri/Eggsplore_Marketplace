@@ -10,7 +10,7 @@ class ModifyProfileInfoPage extends StatefulWidget {
   final User currentUser;
   const ModifyProfileInfoPage({super.key, required this.currentUser});
 
-  @override 
+  @override
   State<ModifyProfileInfoPage> createState() => _ModifyProfileInfoPageState();
 }
 

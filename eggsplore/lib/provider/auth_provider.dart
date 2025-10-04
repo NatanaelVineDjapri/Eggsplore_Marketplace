@@ -3,18 +3,12 @@ import 'package:eggsplore/model/user.dart';
 import 'package:eggsplore/service/user_service.dart';
 
 class AuthNotifier extends AsyncNotifier<User?> {
-  
-  /// Method `build` ini akan berjalan OTOMATIS:
-  /// 1. Saat aplikasi pertama kali dijalankan.
-  /// 2. Setiap kali `ref.invalidate(authProvider)` dipanggil (misalnya setelah checkout).
+  bool get isLoading => state.isLoading;
   @override
   Future<User?> build() async {
-    // Ia akan mencoba mengambil sesi user yang tersimpan secara otomatis.
     try {
-      // Jika UserService berhasil dapat user, state akan berisi data User.
       return await UserService.getCurrentUser();
     } catch (e) {
-      // Jika gagal (token tidak ada/tidak valid), state akan berisi null.
       print("Auth build error: ${e.toString()}");
       return null;
     }
@@ -26,24 +20,19 @@ class AuthNotifier extends AsyncNotifier<User?> {
     state = await AsyncValue.guard(() async {
       return await UserService.login(email, password);
     });
-    return state.hasError == false; // return true jika tidak ada error
+    return state.hasError == false; 
   }
 
-  /// Memproses logout dan memperbarui state.
   Future<void> logout() async {
     await UserService.logout();
-    state = const AsyncData(null); // Set state menjadi berhasil tapi datanya null
+    state = const AsyncData(null); 
   }
 
-  /// Fungsi untuk me-refresh data user secara manual.
   Future<void> loadUser() async {
-    // invalidateSelf akan memicu method 'build()' untuk berjalan lagi.
     ref.invalidateSelf();
-    // 'await future' akan menunggu sampai proses 'build()' selesai.
     await future;
   }
 
-  /// Fungsi registrasi, tidak mengubah state login. Mengembalikan true/false.
   Future<bool> register(String firstName, String lastName, String email, String password) async {
     try {
       await UserService.register(firstName, lastName, email, password);
@@ -54,26 +43,18 @@ class AuthNotifier extends AsyncNotifier<User?> {
     }
   }
 
-  /// Fungsi verifikasi user, tidak mengubah state login. Mengembalikan true/false.
   Future<bool> verifyUser(String firstName, String lastName, String email) async {
-    try {
-      // Asumsi UserService punya fungsi ini
-      // await UserService.verifyUser(firstName, lastName, email);
-      print("verifyUser dipanggil, tapi belum diimplementasikan di service.");
-      return true;
-    } catch (e) {
-      print("Verify user failed: ${e.toString()}");
-      return false;
-    }
+    // Mengganti _isLoading dengan AsyncLoading/await
+    final success = await UserService.verifyUser(firstName, lastName, email);
+    return success;
   }
 
-  /// Fungsi ganti password, tidak mengubah state login. Mengembalikan true/false.
-  Future<bool> changePassword(String email, String newPassword, String confirmPassword) async {
+  Future<bool> changePassword(
+      String email, String newPassword, String confirmPassword) async {
     try {
-      // Asumsi UserService punya fungsi ini
-      // await UserService.changePassword(email, newPassword, confirmPassword);
-      print("changePassword dipanggil, tapi belum diimplementasikan di service.");
-      return true;
+      final success = await UserService.changePassword(
+          email, newPassword, confirmPassword);
+      return success;
     } catch (e) {
       print("Change password failed: ${e.toString()}");
       return false;
@@ -82,7 +63,6 @@ class AuthNotifier extends AsyncNotifier<User?> {
 
 }
 
-/// Provider global yang akan diakses oleh seluruh aplikasi.
 final authProvider = AsyncNotifierProvider<AuthNotifier, User?>(() {
   return AuthNotifier();
 });

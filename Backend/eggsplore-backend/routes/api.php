@@ -62,4 +62,6 @@ Route::middleware('auth:sanctum')->group(function() {
 
     Route::get('/user/shop', [ShopController::class, 'getUserShop']);
     Route::get('/user', [AuthController::class, 'getAuthenticatedUser']);
+
+    Route::get('/my-products', [ProductController::class, 'myProducts']);
 });

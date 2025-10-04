@@ -220,4 +220,19 @@ class ProductController extends Controller
 
         return response()->json($reviews);
     }
+
+    public function myProducts()
+    {
+        $userId = auth()->id();
+
+        $products = Product::where('user_id', $userId)
+            ->with('user')
+            ->get()
+            ->map(function($product) {
+                $product->image = asset($product->image);
+                return $product;
+            });
+
+        return response()->json($products);
+    }
 }

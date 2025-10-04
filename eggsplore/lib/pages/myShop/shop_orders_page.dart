@@ -45,7 +45,7 @@ class _ShopOrdersPageState extends State<ShopOrdersPage> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          "${sentOrder['productName']} sent to Completed Orders ✅",
+          "${sentOrder['username']}'s order is completed!",
         ),
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.green.shade600,
@@ -63,7 +63,7 @@ class _ShopOrdersPageState extends State<ShopOrdersPage> {
         child: orders.isEmpty
             ? const Center(
                 child: Text(
-                  "No pending orders 🎉",
+                  "No pending orders!",
                   style: TextStyle(color: Colors.white, fontSize: 18),
                 ),
               )
@@ -104,7 +104,7 @@ class _ShopOrdersPageState extends State<ShopOrdersPage> {
                                   ),
                                 ),
                                 Text(
-                                  "${order["productName"]} × ${order["quantity"]}",
+                                  "${order["productName"]} x ${order["quantity"]}",
                                   style: const TextStyle(fontSize: 14),
                                 ),
                                 const SizedBox(height: 4),
@@ -126,7 +126,13 @@ class _ShopOrdersPageState extends State<ShopOrdersPage> {
                                 borderRadius: BorderRadius.circular(12),
                               ),
                             ),
-                            child: const Text("Send"),
+                            child: const Text(
+                              "Send",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
                         ],
                       ),

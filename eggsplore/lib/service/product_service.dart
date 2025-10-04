@@ -292,4 +292,22 @@ class ProductService {
       throw Exception("Gagal memuat ulasan produk");
     }
   }
+
+  static Future<List<Product>> fetchMyProducts(String token) async {
+    final url = Uri.parse('$baseUrl/my-products');
+    final response = await http.get(
+      url,
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Accept': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> jsonList = jsonDecode(response.body);
+      return jsonList.map((json) => Product.fromJson(json)).toList();
+    } else {
+      throw Exception('Gagal memuat produk: ${response.statusCode}');
+    }
+  }
 }

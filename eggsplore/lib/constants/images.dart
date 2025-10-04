@@ -20,4 +20,11 @@ class AppImages {
   static const String voucher2 = 'assets/images/Voucher2.png';
   static const String voucher3 = 'assets/images/Voucher3.png';
   static const String notif_bg = 'assets/images/notif_bg.png';
+  static const String charger = 'assets/images/charger.png';
+  static const String ironman = 'assets/images/ironman.png';
+  static const String makaroni = 'assets/images/makaroni.png';
+  static const String kacamata = 'assets/images/kacamata.png';
+  static const String poni = 'assets/images/poni.png';
+  static const String mouse = 'assets/images/mouse.png';
+  static const String monitor = 'assets/images/monitor.png';
 }

@@ -10,7 +10,7 @@ class OrderService {
 
   // Endpoint: GET /api/orders
   // Mengambil SEMUA riwayat pesanan milik pengguna yang sedang login
-  static Future<List<Order>> getOrderHistory() async {
+  Future<List<Order>> getOrderHistory() async {
     final token = await UserService.getToken();
     if (token == null) throw Exception("Token otorisasi tidak ditemukan.");
     
@@ -32,7 +32,7 @@ class OrderService {
 
   // Endpoint: GET /api/orders/{orderId}
   // Mengambil detail spesifik satu pesanan
-  static Future<Order> getOrderDetail(int orderId) async {
+  Future<Order> getOrderDetail(int orderId) async {
     final token = await UserService.getToken();
     if (token == null) throw Exception("Token otorisasi tidak ditemukan.");
     
@@ -51,7 +51,7 @@ class OrderService {
 
   // Endpoint: POST /api/review/submit
   // Mengirim rating/review untuk order item tertentu
-  static Future<bool> submitRating({
+ Future<bool> submitRating({
     required int orderItemId,
     required int productId,
     required int ratingValue,

@@ -68,6 +68,6 @@ class AppRoutes {
     shopProfile: (context) => const ShopProfilePage(),
     // detailProduct: (context) =>  const DetailProductPage(),
     chat: (context) => const ChatPage(),
-    checkout: (context) => const CheckoutPage(),
+    // checkout: (context) => const CheckoutPage(),
   };
 }

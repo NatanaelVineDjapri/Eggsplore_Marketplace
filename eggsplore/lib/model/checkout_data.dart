@@ -1,7 +1,13 @@
-// lib/model/checkout_data.dart
-
 import 'user.dart';
 import 'cart_item.dart';
+
+// Helper function untuk mengatasi masalah 'String' is not a subtype of 'num'
+double _parseDouble(dynamic value) {
+  if (value == null) return 0.0;
+  if (value is num) return value.toDouble();
+  if (value is String) return double.tryParse(value) ?? 0.0;
+  return 0.0;
+}
 
 class CheckoutData {
   final User user;
@@ -29,11 +35,11 @@ class CheckoutData {
       user: User.fromJson(userJson),
       cartItems: cartListJson.map((item) => CartItem.fromJson(item as Map<String, dynamic>)).toList(),
       
-      // Ambil dari key 'summary' (sesuai asumsi kita)
-      itemsSubtotal: (summaryJson['items_subtotal'] as num?)?.toDouble() ?? 0.0,
-      shippingFee: (summaryJson['shipping_fee'] as num?)?.toDouble() ?? 0.0,
-      serviceFee: (summaryJson['service_fee'] as num?)?.toDouble() ?? 1000.0, 
-      grandTotal: (summaryJson['total_amount'] as num?)?.toDouble() ?? 0.0,
+      // Ambil dari key 'summary' dan gunakan helper parsing
+      itemsSubtotal: _parseDouble(summaryJson['items_subtotal']),
+      shippingFee: _parseDouble(summaryJson['shipping_fee']),
+      serviceFee: _parseDouble(summaryJson['service_fee']), 
+      grandTotal: _parseDouble(summaryJson['total_amount']),
     );
   }
 }

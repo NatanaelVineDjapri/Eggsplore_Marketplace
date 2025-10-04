@@ -1,35 +1,36 @@
-// lib/model/order.dart
-
-import 'order_item.dart'; // Relasi ke item yang dibeli
+import 'package:eggsplore/model/order_item.dart';
 
 class Order {
   final int id;
   final int userId;
-  final String status;
   final double totalAmount;
-  final String shippingAddress;
-  final List<OrderItem> items; // Item-item dalam pesanan ini
+  final String status;
+  final String receiverName;
+  final List<OrderItem> items;
+  final DateTime createdAt;
 
   Order({
     required this.id,
     required this.userId,
-    required this.status,
     required this.totalAmount,
-    required this.shippingAddress,
+    required this.status,
+    required this.receiverName,
     required this.items,
+    required this.createdAt,
   });
 
   factory Order.fromJson(Map<String, dynamic> json) {
-    final List<dynamic> itemsJson = json['items'] ?? [];
-    
+    var itemList = json['items'] as List;
+    List<OrderItem> items = itemList.map((i) => OrderItem.fromJson(i)).toList();
+
     return Order(
-      id: json['id'] as int,
-      userId: json['user_id'] as int,
-      status: json['status'] as String,
-      totalAmount: (json['total_amount'] as num).toDouble(),
-      shippingAddress: json['shipping_address'] as String,
-      // Memparsing order_items
-      items: itemsJson.map((i) => OrderItem.fromJson(i)).toList(),
+      id: json['id'],
+      userId: json['user_id'],
+      totalAmount: double.parse(json['total_amount'].toString()),
+      status: json['status'],
+      receiverName: json['receiver_name'],
+      items: items,
+      createdAt: DateTime.parse(json['created_at']),
     );
   }
 }

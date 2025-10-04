@@ -7,6 +7,7 @@ class Product {
   final int stock;
   final String image;
   final String userName;
+  final String shopName;
   
   final bool hasPurchased;
   final bool hasReviewed;
@@ -22,6 +23,7 @@ class Product {
     required this.stock,
     required this.image,
     required this.userName,
+    required this.shopName,
     this.hasPurchased = false,
     this.hasReviewed = false,
     this.averageRating = 0.0,
@@ -48,6 +50,7 @@ class Product {
       image: json['image'] ?? '',
       userName: json['user']?['name'] ?? '', 
       shopImage: json['user']?['image'],
+      shopName: json['user']?['shop_name'] ?? json['user']?['name'] ?? '', 
       hasPurchased: json['has_purchased'] ?? false,
       hasReviewed: json['has_reviewed'] ?? false,
       averageRating: parsedAverageRating,
@@ -61,7 +64,7 @@ class Product {
       "price": price,
       "stock": stock,
       "image": image,
-  
+      "shop_name": shopName,
     };
   }
 }

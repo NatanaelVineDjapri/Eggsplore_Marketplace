@@ -11,13 +11,20 @@ class Order extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'user_id', 
-        'status', 
-        'total',
+   protected $fillable = [
+        'user_id', 'items_subtotal', 'shipping_fee', 'service_fee', 
+        'total_amount', 'shipping_address', 'receiver_name', 
+        'receiver_phone', 'payment_method', 'status'
     ];
+
+    const STATUS_PENDING = 'pending';
+    const STATUS_PAID = 'paid';
+    const STATUS_ON_PROCESS = 'on_process';
+    const STATUS_SENT = 'sent';
+    const STATUS_DELIVERED = 'delivered';
+    const STATUS_COMPLETED = 'completed';
+    const STATUS_CANCELLED = 'cancelled';
     
-    // Relasi untuk mengetahui siapa yang membuat pesanan ini
     public function user()
     {
         return $this->belongsTo(User::class);

@@ -26,7 +26,7 @@ class ProductCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final sizes = Appsized(context);
-    final formatter = NumberFormat('#,###');
+    final formatter = NumberFormat('#,###', 'id_ID');
     final cardWidth = MediaQuery.of(context).size.width * 0.45;
     
     final likeState = ref.watch(likeStateProvider);

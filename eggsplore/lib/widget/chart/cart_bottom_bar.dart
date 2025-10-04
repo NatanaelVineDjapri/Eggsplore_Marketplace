@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:eggsplore/model/cart_item.dart';
 import 'package:eggsplore/constants/colors.dart';
+import 'package:eggsplore/pages/checkout_page.dart'; // Import halaman checkout
 
 class CartBottomBar extends StatelessWidget {
   final double totalPrice;
@@ -27,7 +28,7 @@ class CartBottomBar extends StatelessWidget {
       height: 80,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: AppColors.primary, 
+        color: AppColors.primary,
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.3),
@@ -62,13 +63,11 @@ class CartBottomBar extends StatelessWidget {
             height: 45,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: selectedItems.isEmpty
-                    ? Colors.grey
-                    : primaryColor,
+                backgroundColor:
+                    selectedItems.isEmpty ? Colors.grey : primaryColor,
                 elevation: 0,
                 shadowColor: Colors.transparent,
                 overlayColor: primaryColor.withOpacity(0.1),
-
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0),
                 ),
@@ -77,15 +76,15 @@ class CartBottomBar extends StatelessWidget {
               onPressed: selectedItems.isEmpty
                   ? null
                   : () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text(
-                            "Checkout (Lanjutkan ke Pembayaran) belum dibuat",
+                      // Navigasi ke CheckoutPage sambil mengirim data barang
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => CheckoutPage(
+                            itemsToCheckout: selectedItems,
                           ),
                         ),
                       );
                     },
-              // CHILD: KOTAK PUTIH DI DALAM TOMBOL MERAH
               child: Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 10,

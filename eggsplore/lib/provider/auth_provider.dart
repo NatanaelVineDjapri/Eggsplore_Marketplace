@@ -1,7 +1,6 @@
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:eggsplore/model/user.dart';
-import 'package:eggsplore/service/user_service.dart';
+import 'package:eggsplore/model/user.dart'; // Pastikan User Model diimpor
+import 'package:eggsplore/service/user_service.dart'; // Pastikan UserService diimpor
 
 class AuthNotifier extends StateNotifier<User?> {
   AuthNotifier() : super(null);
@@ -17,6 +16,13 @@ class AuthNotifier extends StateNotifier<User?> {
     return user != null;
   }
 
+  Future<void> loadUser() async {
+    _isLoading = true;
+    final user = await UserService.getCurrentUser(); // ambil dari token kalau ada
+    state = user;
+    _isLoading = false;
+  }
+
   Future<bool> register(
       String firstName, String lastName, String email, String password) async {
     _isLoading = true;
@@ -26,7 +32,8 @@ class AuthNotifier extends StateNotifier<User?> {
     return success;
   }
 
-  Future<bool> verifyUser(String firstName, String lastName, String email) async {
+  Future<bool> verifyUser(
+      String firstName, String lastName, String email) async {
     _isLoading = true;
     final success = await UserService.verifyUser(firstName, lastName, email);
     _isLoading = false;
@@ -45,6 +52,14 @@ class AuthNotifier extends StateNotifier<User?> {
   Future<void> logout() async {
     await UserService.logout();
     state = null;
+  }
+
+  /// 🚨 FUNGSI INI DIGUNAKAN CHECKOUT UNTUK MEMPERBARUI SALDO TANPA PANGGIL API
+  void updateBalance(double newBalance) {
+    if (state != null) {
+      // Menggunakan copyWith dari model User
+      state = state!.copyWith(balance: newBalance); 
+    }
   }
 }
 

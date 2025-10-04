@@ -186,4 +186,19 @@ class AuthController extends Controller
             'user'    => $user->refresh(),
         ], 200);
     }
+
+    public function updateBalance(Request $request, User $user)
+    {
+        $request->validate([
+            'balance' => 'required|numeric|min:0'
+        ]);
+
+        $user->balance = $request->balance;
+        $user->save();
+
+        return response()->json([
+            'message' => 'Balance berhasil diupdate',
+            'balance' => $user->balance
+        ]);
+    }
 }

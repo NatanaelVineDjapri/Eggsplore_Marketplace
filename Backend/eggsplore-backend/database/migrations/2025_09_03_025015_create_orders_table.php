@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('receiver_phone');
             
             $table->string('payment_method')->default('EggsplorePay');
-            $table->enum('status', ['pending', 'paid', 'on_process', 'sent', 'delivered', 'completed'])
+            $table->enum('status', ['pending', 'paid', 'on_process', 'sent', 'delivered', 'completed','canceled'])
                  ->default('pending');
             
             $table->timestamps();

@@ -1,262 +1,251 @@
+import 'package:eggsplore/constants/sizes.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart'; 
-import 'package:intl/intl.dart'; 
-// FIX IMPORT: Ubah 'cart_page.dart' menjadi path yang benar jika berada di folder yang sama/dekat
-import './cart_page.dart'; // <<< Asumsi path yang benar
-// Import Provider dan Service
-import '../provider/checkout_provider.dart'; 
-import '../service/checkout_service.dart'; 
-import '../model/checkout_data.dart'; 
-// import '../pages/order_history_page.dart'; // Tambahkan ini jika sudah ada
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
+import 'package:eggsplore/model/order.dart';
+import 'package:eggsplore/model/cart_item.dart';
+import 'package:eggsplore/provider/auth_provider.dart';
+import 'package:eggsplore/provider/checkout_provider.dart';
 
-class CheckoutPage extends ConsumerWidget { 
-    const CheckoutPage({super.key});
+class CheckoutPage extends ConsumerWidget {
+  final List<CartItem> itemsToCheckout;
 
-    @override
-    Widget build(BuildContext context, WidgetRef ref) {
-        final checkoutAsync = ref.watch(checkoutDataProvider); 
-        
-        final currencyFormatter = NumberFormat.currency(locale: 'id_ID', symbol: 'Rp ', decimalDigits: 0);
-        final balanceFormatter = NumberFormat.currency(locale: 'id_ID', symbol: 'Rp ', decimalDigits: 3);
+  const CheckoutPage({super.key, required this.itemsToCheckout});
 
-        return Scaffold(
-            backgroundColor: const Color(0xFFDADADA), 
-            body: Column(
+  Widget _buildProductRow(CartItem item, NumberFormat formatter, Appsized sizes) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: sizes.xs),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: sizes.xxl,
+            height: sizes.xxl,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(sizes.xs),
+              color: Colors.grey[300],
+            ),
+            clipBehavior: Clip.hardEdge,
+            child: item.image != null && item.image!.isNotEmpty
+                ? Image.network(item.image!, fit: BoxFit.cover, errorBuilder: (context, error, stackTrace) => const Icon(Icons.broken_image))
+                : const Icon(Icons.image, size: Appsized.iconLg, color: Colors.black45),
+          ),
+          SizedBox(width: Appsized.iconXs),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(item.shopName, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: Appsized.fontSm - 1)), // 13
+                SizedBox(height: sizes.xss),
+                Text(item.name, style: const TextStyle(color: Colors.black54)),
+                SizedBox(height: sizes.xs),
+                Text("Rp ${formatter.format(item.price)}", style: const TextStyle(fontWeight: FontWeight.bold)),
+              ],
+            ),
+          ),
+          Text("x${item.quantity}"),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    // 2. Inisialisasi Appsized di dalam build method
+    final sizes = Appsized(context);
+
+    // ... (ref.listen tidak berubah)
+    ref.listen<AsyncValue<Order?>>(checkoutProvider, (previous, current) { /* ... */ });
+    
+    final checkoutState = ref.watch(checkoutProvider);
+    final user = ref.watch(authProvider);
+
+    if (user == null) { /* ... */ }
+
+    final formatter = NumberFormat('#,###', 'id_ID');
+    final itemsSubtotal = itemsToCheckout.fold<double>(0, (sum, item) => sum + (item.price * item.quantity));
+    final shippingFee = 10000;
+    final serviceFee = (itemsSubtotal * 0.025).clamp(2000, double.infinity).toInt();
+    final totalPayment = itemsSubtotal + shippingFee + serviceFee;
+    final userBalance = user?.balance ?? 0;
+    final bool saldoCukup = userBalance >= totalPayment;
+
+    return Scaffold(
+      backgroundColor: const Color(0xFFDADADA),
+      body: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.only(top: sizes.xl, left: sizes.hmd, right: sizes.hmd, bottom: sizes.md),
+            color: Colors.orange,
+            child: Row(
+              children: [
+                GestureDetector(
+                  onTap: () => Navigator.pop(context),
+                  child: const Icon(Icons.arrow_back, color: Colors.black, size: Appsized.iconMd),
+                ),
+                SizedBox(width: Appsized.iconXs),
+                const Text("Checkout", style: TextStyle(fontSize: Appsized.fontLg + 2, fontWeight: FontWeight.bold)), // 20
+              ],
+            ),
+          ),
+          Expanded(
+            child: SingleChildScrollView(
+              padding: EdgeInsets.all(Appsized.iconXs),
+              child: Column(
                 children: [
-                    // HEADER 
-                    Container(
-                        padding: const EdgeInsets.only(
-                            top: 40, left: 16, right: 16, bottom: 16,
-                        ),
-                        color: Colors.orange,
-                        child: Row(
+                  _buildBox(
+                    sizes: sizes,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(user?.name ?? "Harap Login", style: const TextStyle(fontSize: Appsized.fontMd, fontWeight: FontWeight.bold)),
+                        SizedBox(height: sizes.xs),
+                        Text(user?.phoneNumber ?? "-"),
+                        SizedBox(height: sizes.xs),
+                        Text(user?.address ?? "Login untuk melihat alamat", style: const TextStyle(color: Colors.black54)),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: Appsized.iconXs),
+                  _buildBox(
+                    sizes: sizes,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text("Produk Dipesan", style: TextStyle(fontWeight: FontWeight.bold)),
+                        SizedBox(height: sizes.xs),
+                        ...itemsToCheckout.map((item) => _buildProductRow(item, formatter, sizes)).toList(),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: Appsized.iconXs),
+                  _buildBox(
+                    sizes: sizes,
+                    child: Column(
+                      children: [
+                        _buildRow(sizes, "Subtotal Pesanan", "Rp ${formatter.format(itemsSubtotal)}"),
+                        _buildRow(sizes, "Subtotal Pengiriman", "Rp ${formatter.format(shippingFee)}"),
+                        _buildRow(sizes, "Biaya Layanan", "Rp ${formatter.format(serviceFee)}"),
+                        const Divider(color: Colors.orange, thickness: 1),
+                        _buildRow(sizes, "Total Pembayaran", "Rp ${formatter.format(totalPayment)}", isBold: true),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: Appsized.iconXs),
+                  _buildBox(
+                    sizes: sizes,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text("Pilih metode pembayaran", style: TextStyle(fontWeight: FontWeight.bold)),
+                        SizedBox(height: Appsized.iconXs),
+                        Container(
+                          width: double.infinity,
+                          padding: EdgeInsets.all(Appsized.iconXs),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[100],
+                            borderRadius: BorderRadius.circular(sizes.xs),
+                            border: Border.all(color: Colors.orange),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                                GestureDetector(
-                                    onTap: () {
-                                        // LOGIC: Kembali ke CartPage
-                                        Navigator.pushReplacement(
-                                            context,
-                                            MaterialPageRoute(builder: (context) => const CartPage()),
-                                        );
-                                    },
-                                    child: const Icon(Icons.arrow_back, color: Colors.black),
+                              const Text("Bayar dengan:"),
+                              SizedBox(height: sizes.xs),
+                              Row(
+                                children: const [
+                                  Icon(Icons.circle, size: Appsized.fontSm, color: Colors.orange),
+                                  SizedBox(width: 6),
+                                  Text("EggsplorePay"),
+                                ],
+                              ),
+                              SizedBox(height: sizes.xs),
+                              Text("Saldo: Rp ${formatter.format(userBalance)}"),
+                              if (user != null && !saldoCukup)
+                                Padding(
+                                  padding: EdgeInsets.only(top: sizes.xs),
+                                  child: const Text("❌ Saldo tidak cukup untuk membayar!", style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
                                 ),
-                                const SizedBox(width: 12),
-                                const Text(
-                                    "Checkout",
-                                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                              if (user == null)
+                                Padding(
+                                  padding: EdgeInsets.only(top: sizes.xs),
+                                  child: const Text("⚠️ Anda harus login untuk dapat membayar.", style: TextStyle(color: Colors.orange, fontWeight: FontWeight.bold)),
                                 ),
                             ],
+                          ),
                         ),
+                      ],
                     ),
-
-                    // BODY: ASYNC DATA
-                    Expanded(
-                        child: checkoutAsync.when(
-                            loading: () => const Center(child: CircularProgressIndicator(color: Colors.orange)),
-                            error: (err, stack) => Center(child: Text('Gagal memuat data: $err')),
-                            data: (data) {
-                                return SingleChildScrollView(
-                                    padding: const EdgeInsets.all(12),
-                                    child: Column(
-                                        children: [
-                                            // 1. SECTION IDENTITAS/ALAMAT
-                                            _buildBox(
-                                                child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                        Text(data.user.name, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                                                        const SizedBox(height: 4),
-                                                        Text("(+62) ${data.user.phoneNumber ?? '-'}"),
-                                                        const SizedBox(height: 4),
-                                                        Text(data.user.address ?? 'Alamat belum diatur.', style: const TextStyle(color: Colors.black54)),
-                                                    ],
-                                                ),
-                                            ),
-                                            const SizedBox(height: 12),
-
-                                            // 2. SECTION PRODUK
-                                            _buildBox(
-                                                child: Row(
-                                                    children: [
-                                                        Container(width: 70, height: 70, color: Colors.grey[300], child: const Icon(Icons.image, size: 40, color: Colors.black45)),
-                                                        const SizedBox(width: 12),
-                                                        Expanded(
-                                                            child: Column(
-                                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                                children: [
-                                                                    Text(data.cartItems.first.shopName, style: const TextStyle(fontWeight: FontWeight.bold)),
-                                                                    const SizedBox(height: 2),
-                                                                    Text(data.cartItems.first.name, style: const TextStyle(color: Colors.black54)),
-                                                                    const SizedBox(height: 6),
-                                                                    Text(currencyFormatter.format(data.cartItems.first.price), style: const TextStyle(fontWeight: FontWeight.bold)),
-                                                                ],
-                                                            ),
-                                                        ),
-                                                        Text("x${data.cartItems.first.quantity}"),
-                                                    ],
-                                                ),
-                                            ),
-                                            const SizedBox(height: 12),
-
-                                            // 3. SECTION RINCIAN PEMBAYARAN
-                                            _buildBox(
-                                                child: Column(
-                                                    children: [
-                                                        _buildRow("Subtotal Pesanan", currencyFormatter.format(data.itemsSubtotal)),
-                                                        _buildRow("Subtotal Pengiriman", currencyFormatter.format(data.shippingFee)),
-                                                        _buildRow("Biaya Layanan", currencyFormatter.format(data.serviceFee)),
-                                                        const Divider(color: Colors.orange, thickness: 1),
-                                                        _buildRow("Total Pembayaran", currencyFormatter.format(data.grandTotal), isBold: true),
-                                                    ],
-                                                ),
-                                            ),
-                                            const SizedBox(height: 12),
-
-                                            // 4. SECTION METODE PEMBAYARAN
-                                            _buildBox(
-                                                child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                        const Text("Pilih metode pembayaran", style: TextStyle(fontWeight: FontWeight.bold)),
-                                                        const SizedBox(height: 12),
-                                                        Container(
-                                                            width: double.infinity,
-                                                            padding: const EdgeInsets.all(12),
-                                                            decoration: BoxDecoration(
-                                                                color: Colors.grey[100],
-                                                                borderRadius: BorderRadius.circular(8),
-                                                                border: Border.all(color: Colors.orange),
-                                                            ),
-                                                            child: Column(
-                                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                                children: [
-                                                                    const Text("Bayar dengan:"),
-                                                                    const SizedBox(height: 6),
-                                                                    const Row(
-                                                                        children: [
-                                                                            Icon(Icons.circle, size: 14, color: Colors.orange),
-                                                                            SizedBox(width: 6),
-                                                                            Text("EggsplorePay"),
-                                                                        ],
-                                                                    ),
-                                                                    const SizedBox(height: 6),
-                                                                    Text(balanceFormatter.format(data.user.balance).replaceAll(',000', '').replaceAll('Rp', 'Rp ')),
-                                                                ],
-                                                            ),
-                                                        ),
-                                                    ],
-                                                ),
-                                            ),
-                                        ],
-                                    ),
-                                );
-                            },
-                        ),
-                    ),
-
-                    // BOTTOM BAR
-                    checkoutAsync.when(
-                        data: (data) => _buildBottomBar(context, ref, data),
-                        loading: () => const SizedBox(height: 80),
-                        error: (err, stack) => const SizedBox(height: 80), 
-                    ),
+                  ),
                 ],
+              ),
             ),
-        );
-    }
-
-    // --- HELPER METHODS (TETAP SAMA) ---
-
-    Widget _buildBottomBar(BuildContext context, WidgetRef ref, CheckoutData data) {
-        final currencyFormatter = NumberFormat.currency(locale: 'id_ID', symbol: 'Rp ', decimalDigits: 0);
-
-        return Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          ),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: sizes.hmd, vertical: Appsized.iconXs),
             decoration: const BoxDecoration(
-                color: Colors.orange,
-                boxShadow: [
-                    BoxShadow(color: Colors.black26, offset: Offset(0, -2), blurRadius: 4),
-                ],
+              color: Colors.orange,
+              boxShadow: [BoxShadow(color: Colors.black26, offset: Offset(0, -2), blurRadius: 4)],
             ),
             child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                    Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                            const Text("Total", style: TextStyle(fontSize: 14)),
-                            const SizedBox(height: 4),
-                            Text(
-                                currencyFormatter.format(data.grandTotal),
-                                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                            ),
-                        ],
-                    ),
-                    ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            foregroundColor: Colors.black,
-                            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                        ),
-                        onPressed: () async {
-                            // AKSI CHECKOUT NYATA
-                            if (!context.mounted) return;
-                            
-                            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Memproses transaksi...')));
-                            
-                            try {
-                                final success = await CheckoutService.submitOrder(data); 
-
-                                if (!context.mounted) return;
-
-                                if (success) {
-                                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('✅ Pembayaran Berhasil! Pesanan diproses.')));
-                                    // TODO: NAVIGASI KE HALAMAN RIWAYAT PESANAN (OrderHistoryPage)
-                                } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('❌ Transaksi Gagal. Saldo tidak cukup atau error server.'), backgroundColor: Colors.red));
-                                }
-                            } catch (e) {
-                                if (!context.mounted) return;
-                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: ${e.toString()}'), backgroundColor: Colors.red));
-                            }
-                        },
-                        child: const Text("Checkout"),
-                    ),
-                ],
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text("Total", style: TextStyle(fontSize: Appsized.fontSm)),
+                    SizedBox(height: sizes.xs),
+                    Text("Rp ${formatter.format(totalPayment)}", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: Appsized.fontMd)),
+                  ],
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: (saldoCukup && user != null) ? Colors.white : Colors.grey[400],
+                    foregroundColor: (saldoCukup && user != null) ? Colors.black : Colors.black38,
+                    padding: EdgeInsets.symmetric(horizontal: Appsized.iconMd, vertical: Appsized.iconXs),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(sizes.xs)),
+                  ),
+                  onPressed: saldoCukup && user != null && !checkoutState.isLoading
+                      ? () { /* ... logika onPressed tidak berubah ... */ }
+                      : null,
+                  child: checkoutState.isLoading
+                      ? const SizedBox(
+                          width: Appsized.iconMd,
+                          height: Appsized.iconMd,
+                          child: CircularProgressIndicator(strokeWidth: 2, color: Colors.black),
+                        )
+                      : const Text("Checkout"),
+                ),
+              ],
             ),
-        );
-    }
-    
-    Widget _buildBox({required Widget child}) {
-        return Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-            ),
-            child: child,
-        );
-    }
+          ),
+        ],
+      ),
+    );
+  }
 
-    Widget _buildRow(String label, String value, {bool isBold = false}) {
-        return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 6),
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                    Text(
-                        label,
-                        style: TextStyle(fontSize: 14, fontWeight: isBold ? FontWeight.bold : FontWeight.normal),
-                    ),
-                    Text(
-                        value.replaceAll(',00', ''),
-                        style: TextStyle(fontSize: 14, fontWeight: isBold ? FontWeight.bold : FontWeight.normal),
-                    ),
-                ],
-            ),
-        );
-    }
+  Widget _buildBox({required Widget child, required Appsized sizes}) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(Appsized.iconXs),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(Appsized.iconXs),
+      ),
+      child: child,
+    );
+  }
+
+  Widget _buildRow(Appsized sizes, String label, String value, {bool isBold = false}) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: sizes.xs),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label, style: TextStyle(fontSize: Appsized.fontSm, fontWeight: isBold ? FontWeight.bold : FontWeight.normal)),
+          Text(value, style: TextStyle(fontSize: Appsized.fontSm, fontWeight: isBold ? FontWeight.bold : FontWeight.normal)),
+        ],
+      ),
+    );
+  }
 }

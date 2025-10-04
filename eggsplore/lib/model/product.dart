@@ -12,6 +12,7 @@ class Product {
   final bool hasReviewed;
   final double averageRating;
   final String? shopImage; 
+  final String? imageUrl;
 
   Product({
     required this.id,
@@ -26,7 +27,7 @@ class Product {
     this.hasReviewed = false,
     this.averageRating = 0.0,
     this.shopImage, 
-
+    this.imageUrl,
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
@@ -50,6 +51,7 @@ class Product {
       shopImage: json['user']?['image'],
       hasPurchased: json['has_purchased'] ?? false,
       hasReviewed: json['has_reviewed'] ?? false,
+      imageUrl: json['image_url'],
       averageRating: parsedAverageRating,
     );
   }
@@ -61,8 +63,6 @@ class Product {
       "price": price,
       "stock": stock,
       "image": image,
-      // `shopId` biasanya tidak perlu dikirim saat membuat produk baru,
-      // karena akan diambil dari user yang sedang login di backend.
     };
   }
 }

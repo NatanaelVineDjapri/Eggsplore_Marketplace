@@ -29,36 +29,46 @@ class CustomBottomNavBar extends StatelessWidget {
   }
 
   @override
-  @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      type: BottomNavigationBarType.fixed, // biar semua icon keliatan
-      currentIndex: currentIndex,
-      selectedItemColor: Colors.orange, // <- ini untuk item aktif
-      unselectedItemColor: Colors.grey, // optional: warna item yang tidak aktif
-      onTap: (index) => _onItemTapped(context, index),
-      items: const [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home, size: 28),
-          label: "Home",
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.shopping_cart, size: 28),
-          label: "Cart",
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.trending_up, size: 28),
-          label: "Trending",
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.notifications, size: 28),
-          label: "Notifications",
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.person, size: 28),
-          label: "Profile",
-        ),
-      ],
+    return Container(
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            offset: const Offset(0, -6),
+            blurRadius: 10,
+          ),
+        ],
+      ),
+      child: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        currentIndex: currentIndex,
+        selectedItemColor: Colors.orange,
+        unselectedItemColor: Colors.grey,
+        onTap: (index) => _onItemTapped(context, index),
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home, size: 28),
+            label: "Home",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_cart, size: 28),
+            label: "Cart",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.trending_up, size: 28),
+            label: "Trending",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.notifications, size: 28),
+            label: "Notifications",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person, size: 28),
+            label: "Profile",
+          ),
+        ],
+      ),
     );
   }
 }

@@ -42,7 +42,11 @@ class AppStrings{
   static const String completedOrders = "Completed Orders";
   static const String addProduct = "Add Product";
   static const String myProducts = "My Products";
-  static const String maybe = "Kamu Mungkin Juga Suka";
+  static const String maybe = "You May Also Like";
+  static const String confirmShopTitle = "Store Confirmation";
+  static const String confirmShopQuestion = "Do you want to open the store page?";
+  static const String confirmShopYes = "Yes, proceed";
+  static const String confirmShopNo = "No";
 
   //notif page
   static const String notificationHeader = "NOTIFICATION";

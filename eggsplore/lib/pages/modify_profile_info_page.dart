@@ -16,7 +16,7 @@ class ModifyProfileInfoPage extends StatefulWidget {
 
 class _ModifyProfileInfoPageState extends State<ModifyProfileInfoPage> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _nameController = TextEditingController(); // Diubah menjadi _nameController
+  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
@@ -26,7 +26,7 @@ class _ModifyProfileInfoPageState extends State<ModifyProfileInfoPage> {
   @override
   void initState() {
     super.initState();
-    _nameController.text = widget.currentUser.name; // Menggunakan nama lengkap
+    _nameController.text = widget.currentUser.name;
     _emailController.text = widget.currentUser.email;
     _phoneController.text = widget.currentUser.phoneNumber ?? '';
     _addressController.text = widget.currentUser.address ?? '';
@@ -34,7 +34,7 @@ class _ModifyProfileInfoPageState extends State<ModifyProfileInfoPage> {
 
   @override
   void dispose() {
-    _nameController.dispose(); // Diubah
+    _nameController.dispose();
     _emailController.dispose();
     _phoneController.dispose();
     _addressController.dispose();
@@ -54,7 +54,7 @@ class _ModifyProfileInfoPageState extends State<ModifyProfileInfoPage> {
   void _submitForm() async {
     if (_formKey.currentState!.validate()) {
       final updatedData = {
-        "name": _nameController.text.trim(), // Mengirim 'name' saja
+        "name": _nameController.text.trim(),
         "email": _emailController.text.trim(),
         "phone_number": _phoneController.text.trim(),
         "address": _addressController.text.trim(),
@@ -119,9 +119,40 @@ class _ModifyProfileInfoPageState extends State<ModifyProfileInfoPage> {
         child: Form(
           key: _formKey,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // Menggunakan satu field untuk nama lengkap
+              // 🌟 Implementasi tampilan foto profil bulat dengan tombol tambah
+              Stack(
+                alignment: Alignment.bottomRight,
+                children: [
+                  CircleAvatar(
+                    radius: 60,
+                    backgroundColor: Colors.grey[200],
+                    backgroundImage: _selectedImage != null
+                        ? FileImage(_selectedImage!)
+                        : (widget.currentUser.image != null && widget.currentUser.image!.isNotEmpty
+                            ? NetworkImage(widget.currentUser.image!) as ImageProvider
+                            : null),
+                    child: widget.currentUser.image == null && _selectedImage == null
+                        ? const Icon(Icons.person, size: 60, color: Colors.grey)
+                        : null,
+                  ),
+                  GestureDetector(
+                    onTap: _pickImage,
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[800],
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(Icons.add, color: Colors.white),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 24), // Spasi di bawah foto
+
+              // Form fields
               TextFormField(
                 controller: _nameController,
                 style: const TextStyle(color: Colors.black54),
@@ -130,8 +161,6 @@ class _ModifyProfileInfoPageState extends State<ModifyProfileInfoPage> {
                     value == null || value.isEmpty ? "Masukkan nama lengkap" : null,
               ),
               const SizedBox(height: 16),
-
-              // Email
               TextFormField(
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
@@ -141,8 +170,6 @@ class _ModifyProfileInfoPageState extends State<ModifyProfileInfoPage> {
                     value == null || value.isEmpty ? "Masukkan email" : null,
               ),
               const SizedBox(height: 16),
-              
-              // Phone Number
               TextFormField(
                 controller: _phoneController,
                 keyboardType: TextInputType.phone,
@@ -150,50 +177,24 @@ class _ModifyProfileInfoPageState extends State<ModifyProfileInfoPage> {
                 decoration: _inputDecoration("Nomor Telepon"),
               ),
               const SizedBox(height: 16),
-
-              // Address
               TextFormField(
                 controller: _addressController,
                 style: const TextStyle(color: Colors.black54),
                 decoration: _inputDecoration("Alamat"),
                 maxLines: 3,
               ),
-              const SizedBox(height: 16),
-
-              // Profile Picture Picker
-              Row(
-                children: [
-                  _selectedImage != null
-                      ? CircleAvatar(
-                          radius: 40,
-                          backgroundImage: FileImage(_selectedImage!),
-                        )
-                      : const CircleAvatar(
-                          radius: 40,
-                          child: Icon(Icons.person, size: 40),
-                        ),
-                  const SizedBox(width: 16),
-                  ElevatedButton.icon(
-                    onPressed: _pickImage,
-                    icon: const Icon(Icons.image),
-                    label: const Text("Pilih Foto"),
-                  ),
-                ],
-              ),
               const SizedBox(height: 24),
               
               // Save Button
-              Center(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.grey[800],
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 14),
-                    textStyle: AppTextStyle.mainTitle2,
-                  ),
-                  onPressed: _submitForm,
-                  child: const Text("SAVE"),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.grey[800],
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 14),
+                  textStyle: AppTextStyle.mainTitle2,
                 ),
+                onPressed: _submitForm,
+                child: const Text("SAVE"),
               ),
             ],
           ),

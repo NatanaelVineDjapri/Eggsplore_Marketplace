@@ -4,14 +4,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eggsplore/model/product.dart';
 import 'package:eggsplore/service/product_service.dart';
 
-
 final randomProductsProvider = FutureProvider<List<Product>>((ref) async {
   return ProductService.fetchRandomProductsForCurrentUser();
 });
 
 final productDetailProvider = FutureProvider.family<Product, int>((ref, productId) async {
   return ProductService.fetchProductDetail(productId);
-
 });
 
 final productsFromShopProvider = FutureProvider.autoDispose.family<List<Product>, Map<String, int>>(
@@ -20,7 +18,7 @@ final productsFromShopProvider = FutureProvider.autoDispose.family<List<Product>
     final excludeProductId = params['productId'];
 
     if (shopId == null || excludeProductId == null) {
-      return []; 
+      return [];
     }
 
     return ProductService.fetchProductsFromShop(
@@ -38,6 +36,15 @@ final allProductsProvider = FutureProvider<List<Product>>((ref) async {
   return ProductService.fetchProducts(token);
 });
 
+final myProductsProvider = FutureProvider<List<Product>>((ref) async {
+  final token = await UserService.getToken();
+  if (token == null) {
+    throw Exception("Pengguna tidak terautentikasi.");
+  }
+  return ProductService.fetchMyProducts(token);
+});
+
 final reviewsProvider = FutureProvider.autoDispose.family<List<Review>, int>((ref, productId) async {
   return ProductService.fetchReviews(productId);
 });
+

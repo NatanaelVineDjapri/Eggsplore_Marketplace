@@ -90,7 +90,6 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // HEADER TEXT & CARDS
                     Padding(
                       padding: EdgeInsets.fromLTRB(size.hmd, size.md, size.hmd, size.md),
                       child: Column(

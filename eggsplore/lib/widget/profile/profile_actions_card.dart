@@ -43,13 +43,34 @@ class _ActionItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, size: 28, color: Colors.orange),
-        const SizedBox(height: 6),
-        Text(label, style: const TextStyle(fontSize: 12)),
-      ],
+    void navigate() {
+      switch (label) {
+        case "Transaction":
+          Navigator.pushNamed(context, '/transaction');
+          break;
+        case "On Process":
+          Navigator.pushNamed(context, '/on-process');
+          break;
+        case "Sent":
+          Navigator.pushNamed(context, '/sent');
+          break;
+        case "Reviews":
+          Navigator.pushNamed(context, '/reviews');
+          break;
+      }
+    }
+
+    return InkWell(
+      onTap: navigate,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 28, color: Colors.orange),
+          const SizedBox(height: 6),
+          Text(label, style: const TextStyle(fontSize: 12)),
+        ],
+      ),
     );
   }
 }
+

@@ -16,8 +16,15 @@ class AppImages {
   static const String voucher30 = 'assets/images/voucher30.png';
   static const String voucher50 = 'assets/images/voucher50.png';
   static const String voucher20 = 'assets/images/voucher20.png';
-  static const String voucher1 = 'assets/images/voucher1.png';
-  static const String voucher2 = 'assets/images/voucher2.png';
-  static const String voucher3 = 'assets/images/voucher3.png';
+  static const String voucher1 = 'assets/images/Voucher1.png';
+  static const String voucher2 = 'assets/images/Voucher2.png';
+  static const String voucher3 = 'assets/images/Voucher3.png';
   static const String notif_bg = 'assets/images/notif_bg.png';
+  static const String charger = 'assets/images/charger.png';
+  static const String ironman = 'assets/images/ironman.png';
+  static const String makaroni = 'assets/images/makaroni.png';
+  static const String kacamata = 'assets/images/kacamata.png';
+  static const String poni = 'assets/images/poni.png';
+  static const String mouse = 'assets/images/mouse.png';
+  static const String monitor = 'assets/images/monitor.png';
 }

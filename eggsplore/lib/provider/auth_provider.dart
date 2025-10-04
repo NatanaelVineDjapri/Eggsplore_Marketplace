@@ -80,18 +80,6 @@ class AuthNotifier extends AsyncNotifier<User?> {
     }
   }
 
-  /// 🚨 FUNGSI INI HANYA UNTUK UPDATE TAMPILAN SEMENTARA.
-  /// Data saldo asli tetap di-update oleh `ref.invalidate(authProvider)`.
-  void updateBalance(double newBalance) {
-    // Hanya update jika state saat ini adalah data (bukan loading/error)
-    if (state.hasValue) {
-      final currentUser = state.value;
-      if (currentUser != null) {
-        // Menggunakan copyWith dari model User
-        state = AsyncData(currentUser.copyWith(balance: newBalance)); 
-      }
-    }
-  }
 }
 
 /// Provider global yang akan diakses oleh seluruh aplikasi.

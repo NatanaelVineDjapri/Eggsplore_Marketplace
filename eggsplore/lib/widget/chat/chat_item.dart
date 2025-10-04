@@ -1,25 +1,31 @@
+import 'package:eggsplore/helper/image_helper.dart';
 import 'package:eggsplore/pages/chat_account_page.dart';
 import 'package:flutter/material.dart';
 
+import 'package:eggsplore/constants/colors.dart';
+
 class ChatItem extends StatelessWidget {
-  final int userId;     // tambahin id user lawan chat
+  final int userId;
   final String name;
-  final String username; // bisa ditampilin juga
-  final String date;
+  final String username;
+  final String? imagePath;
 
   const ChatItem({
     super.key,
     required this.userId,
     required this.name,
     required this.username,
-    required this.date,
+    this.imagePath, 
   });
 
   @override
   Widget build(BuildContext context) {
+    // Dapatkan URL absolut
+    final String imageUrl = ImageHelper.getImageUrl(imagePath);
+    final bool hasImage = imageUrl.isNotEmpty;
+
     return GestureDetector(
       onTap: () {
-        // bener2 buka ChatDetailPage, bukan snackbar
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -33,13 +39,22 @@ class ChatItem extends StatelessWidget {
       child: Column(
         children: [
           Container(
-            color: Colors.white,
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
             child: Row(
               children: [
-                const CircleAvatar(
+                CircleAvatar(
                   radius: 24,
-                  backgroundColor: Colors.grey,
+                  backgroundColor: Colors.grey.shade300,
+                  backgroundImage: hasImage
+                      ? NetworkImage(imageUrl) as ImageProvider
+                      : null,
+                  child: !hasImage
+                      ? Text(
+                          name[0].toUpperCase(),
+                          style: const TextStyle(
+                              color: AppColors.primary, fontWeight: FontWeight.bold),
+                        )
+                      : null,
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -60,16 +75,13 @@ class ChatItem extends StatelessWidget {
                     ],
                   ),
                 ),
-                Text(
-                  date,
-                  style: const TextStyle(color: Colors.grey),
-                ),
+                
               ],
             ),
           ),
           Container(
             height: 1,
-            color: Colors.orange,
+            color: Colors.grey,
           ),
         ],
       ),

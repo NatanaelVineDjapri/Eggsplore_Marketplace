@@ -1,11 +1,14 @@
-import 'package:eggsplore/constants/sizes.dart';
+import 'package:eggsplore/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:eggsplore/model/order.dart';
 import 'package:eggsplore/model/cart_item.dart';
+import 'package:eggsplore/model/order.dart';
 import 'package:eggsplore/provider/auth_provider.dart';
+import 'package:eggsplore/provider/cart_provider.dart';
 import 'package:eggsplore/provider/checkout_provider.dart';
+import 'package:eggsplore/service/checkout_service.dart';
+import 'package:eggsplore/constants/sizes.dart';
 
 class CheckoutPage extends ConsumerWidget {
   final List<CartItem> itemsToCheckout;
@@ -27,19 +30,27 @@ class CheckoutPage extends ConsumerWidget {
             ),
             clipBehavior: Clip.hardEdge,
             child: item.image != null && item.image!.isNotEmpty
-                ? Image.network(item.image!, fit: BoxFit.cover, errorBuilder: (context, error, stackTrace) => const Icon(Icons.broken_image))
-                : const Icon(Icons.image, size: Appsized.iconLg, color: Colors.black45),
+                ? Image.network(item.image!,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) =>
+                        const Icon(Icons.broken_image))
+                : const Icon(Icons.image,
+                    size: Appsized.iconLg, color: Colors.black45),
           ),
           SizedBox(width: Appsized.iconXs),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(item.shopName, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: Appsized.fontSm - 1)), // 13
+                Text(item.shopName,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: Appsized.fontSm - 1)), 
                 SizedBox(height: sizes.xss),
                 Text(item.name, style: const TextStyle(color: Colors.black54)),
                 SizedBox(height: sizes.xs),
-                Text("Rp ${formatter.format(item.price)}", style: const TextStyle(fontWeight: FontWeight.bold)),
+                Text("Rp ${formatter.format(item.price)}",
+                    style: const TextStyle(fontWeight: FontWeight.bold)),
               ],
             ),
           ),
@@ -51,21 +62,52 @@ class CheckoutPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // 2. Inisialisasi Appsized di dalam build method
     final sizes = Appsized(context);
 
-    // ... (ref.listen tidak berubah)
-    ref.listen<AsyncValue<Order?>>(checkoutProvider, (previous, current) { /* ... */ });
-    
-    final checkoutState = ref.watch(checkoutProvider);
-    final user = ref.watch(authProvider);
+    ref.listen<AsyncValue<Order?>>(checkoutProvider, (previous, current) {
+      ScaffoldMessenger.of(context).removeCurrentSnackBar();
+      if (current.isLoading) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text('Memproses pesanan...')));
+      }
+      if (current.hasError) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Gagal: ${current.error.toString()}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+      if (current.hasValue && current.value != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Pembayaran Berhasil!'),
+            backgroundColor: Colors.green,
+          ),
+        );
+        ref.invalidate(authProvider);
+        ref.invalidate(cartProvider);
+        Future.delayed(const Duration(milliseconds: 1500), () {
+          if (context.mounted) {
+            Navigator.of(context).pushNamedAndRemoveUntil(
+              AppRoutes.homepage,
+              (Route<dynamic> route) => false,
+            );
+          }
+        });
+      }
+    });
 
-    if (user == null) { /* ... */ }
+    final checkoutState = ref.watch(checkoutProvider);
+    
+    final user = ref.watch(authProvider).value;
 
     final formatter = NumberFormat('#,###', 'id_ID');
-    final itemsSubtotal = itemsToCheckout.fold<double>(0, (sum, item) => sum + (item.price * item.quantity));
+    final itemsSubtotal = itemsToCheckout.fold<double>(
+        0, (sum, item) => sum + (item.price * item.quantity));
     final shippingFee = 10000;
-    final serviceFee = (itemsSubtotal * 0.025).clamp(2000, double.infinity).toInt();
+    final serviceFee =
+        (itemsSubtotal * 0.025).clamp(2000, double.infinity).toInt();
     final totalPayment = itemsSubtotal + shippingFee + serviceFee;
     final userBalance = user?.balance ?? 0;
     final bool saldoCukup = userBalance >= totalPayment;
@@ -75,16 +117,24 @@ class CheckoutPage extends ConsumerWidget {
       body: Column(
         children: [
           Container(
-            padding: EdgeInsets.only(top: sizes.xl, left: sizes.hmd, right: sizes.hmd, bottom: sizes.md),
+            padding: EdgeInsets.only(
+                top: sizes.xl,
+                left: sizes.hmd,
+                right: sizes.hmd,
+                bottom: sizes.md),
             color: Colors.orange,
             child: Row(
               children: [
                 GestureDetector(
                   onTap: () => Navigator.pop(context),
-                  child: const Icon(Icons.arrow_back, color: Colors.black, size: Appsized.iconMd),
+                  child: const Icon(Icons.arrow_back,
+                      color: Colors.black, size: Appsized.iconMd),
                 ),
                 SizedBox(width: Appsized.iconXs),
-                const Text("Checkout", style: TextStyle(fontSize: Appsized.fontLg + 2, fontWeight: FontWeight.bold)), // 20
+                const Text("Checkout",
+                    style: TextStyle(
+                        fontSize: Appsized.fontLg + 2, // 20
+                        fontWeight: FontWeight.bold)),
               ],
             ),
           ),
@@ -98,11 +148,16 @@ class CheckoutPage extends ConsumerWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(user?.name ?? "Harap Login", style: const TextStyle(fontSize: Appsized.fontMd, fontWeight: FontWeight.bold)),
+                        Text(user?.name ?? "Harap Login",
+                            style: const TextStyle(
+                                fontSize: Appsized.fontMd,
+                                fontWeight: FontWeight.bold)),
                         SizedBox(height: sizes.xs),
+                        // DIUBAH: Menambahkan null-aware '?'
                         Text(user?.phoneNumber ?? "-"),
                         SizedBox(height: sizes.xs),
-                        Text(user?.address ?? "Login untuk melihat alamat", style: const TextStyle(color: Colors.black54)),
+                        Text(user?.address ?? "Login untuk melihat alamat",
+                            style: const TextStyle(color: Colors.black54)),
                       ],
                     ),
                   ),
@@ -112,9 +167,12 @@ class CheckoutPage extends ConsumerWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text("Produk Dipesan", style: TextStyle(fontWeight: FontWeight.bold)),
+                        const Text("Produk Dipesan",
+                            style: TextStyle(fontWeight: FontWeight.bold)),
                         SizedBox(height: sizes.xs),
-                        ...itemsToCheckout.map((item) => _buildProductRow(item, formatter, sizes)).toList(),
+                        ...itemsToCheckout
+                            .map((item) => _buildProductRow(item, formatter, sizes))
+                            .toList(),
                       ],
                     ),
                   ),
@@ -205,8 +263,22 @@ class CheckoutPage extends ConsumerWidget {
                     padding: EdgeInsets.symmetric(horizontal: Appsized.iconMd, vertical: Appsized.iconXs),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(sizes.xs)),
                   ),
+                  // DIUBAH: Mengisi kembali logika onPressed
                   onPressed: saldoCukup && user != null && !checkoutState.isLoading
-                      ? () { /* ... logika onPressed tidak berubah ... */ }
+                      ? () {
+                          final params = CheckoutParams(
+                            shippingAddress: user.address ?? 'Alamat belum diatur',
+                            receiverName: user.name ?? 'Tanpa Nama',
+                            receiverPhone: user.phoneNumber ?? '-',
+                            items: itemsToCheckout
+                                .map((item) => CartItemToSend(
+                                      productId: item.productId,
+                                      quantity: item.quantity,
+                                    ))
+                                .toList(),
+                          );
+                          ref.read(checkoutProvider.notifier).checkout(params);
+                        }
                       : null,
                   child: checkoutState.isLoading
                       ? const SizedBox(

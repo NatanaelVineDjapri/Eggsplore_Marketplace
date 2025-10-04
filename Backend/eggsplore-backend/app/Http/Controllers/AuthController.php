@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Shop;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -15,17 +16,18 @@ class AuthController extends Controller
         $users = User::all();
         return response()->json($users);
     }
+
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'firstname' => 'required|string|max:255',
             'lastname'  => 'required|string|max:255',
             'email'     => 'required|email|unique:users,email',
-            'password'  => 'required|string|min:6|', 
+            'password'  => 'required|string|min:6|',
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['message' => 'Validasi Gagal'], 422);
+            return response()->json(['message' => 'Error Validation'], 422);
         }
 
         $user = User::create([
@@ -33,17 +35,25 @@ class AuthController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => 'user',
-            'image' => url('images/products/eggsplore1.jpg'), 
-
+            'image' => url('images/products/eggsplore1.jpg'),
         ]);
 
+        $shop = Shop::create([
+            'user_id' => $user->id,
+            'name' => $user->name . "'s Shop",
+            'description' => 'Owned by ' . $user->name,
+        ]);
+
+        $token = $user->createToken('Token for user ' . $user->email)->plainTextToken;
+
         return response()->json([
-            'message' => 'Register Berhasil',
+            'message' => 'Registration Success, Please Continue to Login!',
             'user' => $user,
+            'shop' => $shop,
+            'token' => $token,
         ], 201);
     }
 
-    // Login user
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -58,13 +68,13 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json(['message' => 'Email atau password salah'], 401);
+            return response()->json(['message' => 'Wrong Email or Password'], 401);
         }
 
         $token = $user->createToken('Token for user ' . $user->email)->plainTextToken;
 
         return response()->json([
-            'message' => 'Login berhasil',
+            'message' => 'Login Success',
             'user' => $user,
             'token' => $token
         ]);
@@ -88,11 +98,11 @@ class AuthController extends Controller
                     ->first();
 
         if (!$user) {
-            return response()->json(['message' => 'User tidak ditemukan'], 404);
+            return response()->json(['message' => 'User not found'], 404);
         }
 
         return response()->json([
-            'message' => 'User ditemukan',
+            'message' => 'User found',
             'data' => [
                 'email' => $request->email,
             ]
@@ -106,7 +116,7 @@ class AuthController extends Controller
             'newpassword'     => 'required|min:6',
             'confirmpassword' => 'required|same:newpassword',
         ],[
-            'confirmpassword.same' => 'Konfirmasi password tidak sesuai.',
+            'confirmpassword.same' => 'Wrong password.',
         ]);
 
         if ($validator->fails()) {
@@ -114,15 +124,15 @@ class AuthController extends Controller
         }
 
         $user = User::where('email', $request->email)->first();
-                
+
         if (!$user) {
-            return response()->json(['message' => 'User tidak ditemukan'], 404);
+            return response()->json(['message' => 'User not found'], 404);
         }
 
         $user->password = Hash::make($request->newpassword);
         $user->save();
 
-        return response()->json(['message' => 'Password berhasil diubah'],200);
+        return response()->json(['message' => 'Password changed successfully'],200);
     }
 
     public function logout(Request $request)
@@ -130,7 +140,7 @@ class AuthController extends Controller
         $request->user()->currentAccessToken()->delete();
 
         return response()->json([
-            'message' => 'Berhasil logout'
+            'message' => 'Logout successfull'
         ]);
     }
 
@@ -144,45 +154,44 @@ class AuthController extends Controller
 
     public function updateProfile(Request $request)
     {
-    $user = $request->user(); 
+        $user = $request->user();
 
-    $validator = Validator::make($request->all(), [
-        'firstname' => 'sometimes|string|max:255',
-        'lastname'  => 'sometimes|string|max:255',
-        'email'     => 'sometimes|email|unique:users,email,' . $user->id,
-        'image'     => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048',
-    ]);
+        $request->validate([
+            'name'         => 'required|string|max:255',
+            'email'        => 'required|email|unique:users,email,' . $user->id,
+            'phone_number' => 'nullable|string|max:20',
+            'address'      => 'nullable|string',
+            'image'        => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
 
-    if ($validator->fails()) {
-        return response()->json(['message' => $validator->errors()->first()], 422);
+        if ($request->has('name')) {
+            $user->name = $request->name;
+        }
+
+        if ($request->has('email')) {
+            $user->email = $request->email;
+        }
+
+        if ($request->has('phone_number')) {
+            $user->phone_number = $request->phone_number;
+        }
+
+        if ($request->has('address')) {
+            $user->address = $request->address;
+        }
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $filename = 'user_' . $user->id . '_' . time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('images/users'), $filename);
+            $user->image = url('images/users/' . $filename);
+        }
+
+        $user->save();
+
+        return response()->json([
+            'message' => 'Profile changed succesfully',
+            'user'    => $user->refresh(),
+        ], 200);
     }
-
-    if ($request->has('firstname') || $request->has('lastname')) {
-        $user->name = trim(($request->firstname ?? explode(' ', $user->name)[0]) . ' ' . ($request->lastname ?? explode(' ', $user->name)[1] ?? ''));
-    }
-
-    if ($request->has('email')) {
-        $user->email = $request->email;
-    }
-
-    if ($request->hasFile('image')) {
-        $file = $request->file('image');
-        $filename = 'user_' . $user->id . '_' . time() . '.' . $file->getClientOriginalExtension();
-        $file->move(public_path('images/users'), $filename);
-        $user->image = url('images/users/' . $filename);
-    }
-
-    $user->save();
-
-    return response()->json([
-        'message' => 'Profile berhasil diperbarui',
-        'user' => $user,
-    ], 200);
-}
-
-    public function me(Request $request)
-    {
-        return response()->json($request->user());
-    }
-
 }

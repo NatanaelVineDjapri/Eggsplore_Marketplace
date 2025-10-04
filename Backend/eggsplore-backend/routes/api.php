@@ -19,6 +19,8 @@ Route::put('change-password', [AuthController::class, 'changePassword']);
 Route::middleware('auth:sanctum')->group(function() {
     Route::put('/user/profile', [AuthController::class, 'updateProfile']);
 
+    Route::get('/user/shop', [ShopController::class, 'getUserShop']);
+
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'getAuthenticatedUser']);
 

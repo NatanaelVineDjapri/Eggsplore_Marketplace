@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
-use App\Models\Rating; // Wajib
+use App\Models\Rating;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Facades\Auth; // Wajib
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
 
 class ProductController extends Controller
@@ -19,7 +19,6 @@ class ProductController extends Controller
 
     public function showProduct($id)
     {
-        // KODE ASLI KAMU (Hanya ditambah pengecekan hasPurchased/hasReviewed)
         $product = Product::with(['user','likes','ratings'])->find($id);
 
         if(!$product){
@@ -27,15 +26,12 @@ class ProductController extends Controller
         }
 
         $averageRating = $product->ratings->avg('rating');
-        
-        // FIX: Penambahan Logika Status User (Wajib ada di Model Product)
+
         $hasPurchased = $product->hasBeenPurchasedByCurrentUser();
         $hasReviewed = $product->hasBeenReviewedByCurrentUser();
-        
-        // Ambil data produk sebagai array
+
         $productData = $product->toArray();
 
-        // GABUNGKAN data produk dengan status pembelian/ulasan
         $productData = array_merge($productData, [
             'has_purchased' => $hasPurchased,
             'has_reviewed' => $hasReviewed,
@@ -43,36 +39,55 @@ class ProductController extends Controller
 
 
         return response()->json([
-            // Mengembalikan productData yang sudah diperkaya
-            'product' => $productData, 
+            'product' => $productData,
             'average_rating' => $averageRating
         ]);
     }
 
     public function addProduct(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string',
-            'description' => 'nullable|string',
-            'price' => 'required|numeric',
-            'stock' => 'required|integer',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
-        ]);
+        $user = auth()->user();
+        $shop = $user->shop;
 
-        $data = $request->all();
-        $data['user_id'] = auth()->id();
+        if (!$shop) {
+            return response()->json(['message' => 'Anda harus membuat toko terlebih dahulu.'], 403);
+        }
+
+        try {
+            $validatedData = $request->validate([
+                'name' => 'required|string',
+                'description' => 'nullable|string',
+                'price' => 'required|numeric',
+                'stock' => 'required|integer',
+                'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+            ]);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'message' => 'Validasi gagal',
+                'errors' => $e->errors()
+            ], 422);
+        }
+
+        $productData = [
+            'name' => $validatedData['name'],
+            'description' => $validatedData['description'],
+            'price' => $validatedData['price'],
+            'stock' => $validatedData['stock'],
+            'user_id' => $user->id,
+            'shop_id' => $shop->id,
+        ];
 
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('products', 'public');
-            $data['image'] = 'storage/' . $path;
+            $productData['image'] = 'storage/' . $path;
         }
 
-        $product = Product::create($data);
+        $product = Product::create($productData);
 
         return response()->json([
-            'message' => 'Product berhasil ditambahkan',
+            'message' => 'Produk berhasil ditambahkan',
             'detailProduct' => $product
-        ]);
+        ], 201);
     }
 
     public function updateProduct(Request $request, $id)
@@ -139,7 +154,7 @@ class ProductController extends Controller
         $products = Product::inRandomOrder()->take($count)->get();
         return response()->json($products);
     }
-    
+
     public function rateProduct(Request $request, $productId): JsonResponse
     {
         if (!Auth::check()) {
@@ -154,7 +169,7 @@ class ProductController extends Controller
         } catch (ValidationException $e) {
             return response()->json(['message' => $e->getMessage()], 422);
         }
-        
+
         $product = Product::find($productId);
         if (!$product) {
             return response()->json(['message' => 'Produk tidak ditemukan.'], 404);
@@ -199,9 +214,9 @@ class ProductController extends Controller
     public function productReviews(Product $product)
     {
         $reviews = Rating::where('product_id', $product->id)
-                         ->with('user:id,name,image')
-                         ->latest()
-                         ->paginate(10); 
+                            ->with('user:id,name,image')
+                            ->latest()
+                            ->paginate(10);
 
         return response()->json($reviews);
     }

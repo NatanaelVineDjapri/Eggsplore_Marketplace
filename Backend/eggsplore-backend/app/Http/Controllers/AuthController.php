@@ -156,7 +156,6 @@ class AuthController extends Controller
     public function updateProfile(Request $request)
     {
         $user = $request->user();
-        
         $request->validate([
             'name'         => 'required|string|max:255',
             'email'        => 'required|email|unique:users,email,' . $user->id,
@@ -164,7 +163,6 @@ class AuthController extends Controller
             'address'      => 'nullable|string',
             'image'        => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-        
         if ($request->has('name')) {
             $user->name = $request->name;
         }
@@ -194,5 +192,20 @@ class AuthController extends Controller
             'message' => 'Profile changed succesfully',
             'user'    => $user->refresh(),
         ], 200);
+    }
+
+    public function updateBalance(Request $request, User $user)
+    {
+        $request->validate([
+            'balance' => 'required|numeric|min:0'
+        ]);
+
+        $user->balance = $request->balance;
+        $user->save();
+
+        return response()->json([
+            'message' => 'Balance berhasil diupdate',
+            'balance' => $user->balance
+        ]);
     }
 }

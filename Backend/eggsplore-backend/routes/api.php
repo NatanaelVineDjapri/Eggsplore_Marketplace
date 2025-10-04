@@ -9,6 +9,7 @@ use App\Http\Controllers\ShopController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\BalanceController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckoutController; // FIX 1: Import CheckoutController
 
 Route::post('register', [AuthController::class, 'register']);
 Route::get('users', [AuthController::class, 'allUsers']);
@@ -62,4 +63,10 @@ Route::middleware('auth:sanctum')->group(function() {
 
     Route::get('/user/shop', [ShopController::class, 'getUserShop']);
     Route::get('/user', [AuthController::class, 'getAuthenticatedUser']);
+    Route::post('/orders', [CheckoutController::class, 'store']); // checkout
+    
+    // Route::post('/checkout', [CheckoutController::class, 'show']);      
+    // Route::post('/order/pay/{id}', [CheckoutController::class, 'pay']);
+    // Route::put('/user/{user}/update-balance', [AuthController::class, 'updateBalance']);
+
 });

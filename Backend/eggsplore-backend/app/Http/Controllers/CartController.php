@@ -11,7 +11,7 @@ class CartController extends Controller
 {
     public function showCart() {
         $user = auth()->user();
-        $cart = $user->cart()->with('items.product.shop')->first(); // eager load shop
+        $cart = $user->cart()->with('items.product.shop')->first(); 
 
         if (!$cart) {
             return response()->json([
@@ -62,7 +62,7 @@ class CartController extends Controller
             ['quantity' => $request->quantity]
         );
 
-        $item->load('product.shop'); // load shop info
+        $item->load('product.shop'); 
 
         return response()->json([
             'message' => 'Produk ditambahkan ke keranjang',

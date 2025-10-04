@@ -1,4 +1,4 @@
-import 'package:eggsplore/helper/image_helper.dart'; // Pastikan path ini benar
+import 'package:eggsplore/helper/image_helper.dart';
 
 class Shop {
   final int id;

@@ -4,7 +4,9 @@ class User {
   final String email;
   final String role;
   final double balance;
-  final String image; // Diambil dari versi pertama
+  final String? image; // Menjadi nullable
+  final String? phoneNumber; // Properti baru
+  final String? address; // Properti baru
   final String createdAt;
   final String updatedAt;
 
@@ -14,35 +16,13 @@ class User {
     required this.email,
     required this.role,
     required this.balance,
-    required this.image, // Ditambahkan di sini
+    this.image, // Tidak lagi required
+    this.phoneNumber,
+    this.address,
     required this.createdAt,
     required this.updatedAt,
   });
 
-  // Method copyWith dari versi kedua, disesuaikan dengan properti 'image'
-  User copyWith({
-    int? id,
-    String? name,
-    String? email,
-    String? role,
-    double? balance,
-    String? image, // Ditambahkan di sini
-    String? createdAt,
-    String? updatedAt,
-  }) {
-    return User(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      email: email ?? this.email,
-      role: role ?? this.role,
-      balance: balance ?? this.balance,
-      image: image ?? this.image, // Ditambahkan di sini
-      createdAt: createdAt ?? this.createdAt,
-      updatedAt: updatedAt ?? this.updatedAt,
-    );
-  }
-
-  // Factory fromJson dari versi pertama yang sudah menangani 'image'
   factory User.fromJson(Map<String, dynamic> json) {
     double balanceValue = 0.0;
 
@@ -55,28 +35,16 @@ class User {
     }
 
     return User(
-      id: json['id'],
-      name: json['name'],
-      email: json['email'],
-      role: json['role'],
+      id: json['id'] as int,
+      name: json['name'] as String,
+      email: json['email'] as String,
+      role: json['role'] as String,
       balance: balanceValue,
-      image: json['image'] ?? '', // Logika dari versi pertama
-      createdAt: json['created_at'],
-      updatedAt: json['updated_at'],
+      image: json['image'] as String?, // Mengambil nilai image, bisa null
+      phoneNumber: json['phone_number'] as String?, // Mengambil nilai phone_number
+      address: json['address'] as String?, // Mengambil nilai address
+      createdAt: json['created_at'] as String,
+      updatedAt: json['updated_at'] as String,
     );
-  }
-
-  // Method toJson dari versi kedua, disesuaikan dengan properti 'image'
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'email': email,
-      'role': role,
-      'balance': balance,
-      'image': image, // Ditambahkan di sini
-      'created_at': createdAt,
-      'updated_at': updatedAt,
-    };
   }
 }

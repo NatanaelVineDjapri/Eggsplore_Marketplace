@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:eggsplore/model/user.dart';
-import 'package:eggsplore/pages/profile/detail_profile_page.dart';
+import 'package:flutter/material.dart';
+import 'package:eggsplore/pages/modify_profile_info_page.dart'; // Pastikan Anda mengimpor halaman baru
 
 class ProfileInfoCard extends StatelessWidget {
   final User? user;
@@ -15,21 +15,25 @@ class ProfileInfoCard extends StatelessWidget {
     final displayName = user?.name ?? 'Guest';
     final imagePath = user?.image ?? '';
     const androidEmulatorServer = "http://10.0.2.2:8000";
+    const iosEmulatorServer = "http://localhost:8000";
+
+    final baseServerUrl = Theme.of(context).platform == TargetPlatform.iOS
+        ? iosEmulatorServer
+        : androidEmulatorServer;
 
     final imageUrl = imagePath.isNotEmpty
-        ? NetworkImage("$androidEmulatorServer$imagePath")
+        ? NetworkImage("$baseServerUrl$imagePath")
         : const AssetImage("assets/images/default_pfp.png") as ImageProvider;
 
     return Expanded(
       child: GestureDetector(
         onTap: () {
-          // Arahkan ke halaman detail jika user tidak null
+          // Navigasi ke halaman edit profil
           if (user != null) {
             Navigator.push(
               context,
               MaterialPageRoute(
-                // Mengarah ke ProfileDetailPage yang sudah Anda buat
-                builder: (context) => ProfileDetailPage(user: user!),
+                builder: (context) => ModifyProfileInfoPage(currentUser: user!),
               ),
             );
           }
@@ -65,6 +69,8 @@ class ProfileInfoCard extends StatelessWidget {
                   ),
                 ),
               ),
+              const Spacer(), // Dorong ikon edit ke kanan
+              const Icon(Icons.edit_rounded, color: Colors.grey),
             ],
           ),
         ),
@@ -72,4 +78,3 @@ class ProfileInfoCard extends StatelessWidget {
     );
   }
 }
-

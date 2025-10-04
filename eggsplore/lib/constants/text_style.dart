@@ -8,7 +8,7 @@ static const TextStyle bottomBannerTextStyle = TextStyle(
   );
 
 static const TextStyle mainTitle = TextStyle(
-    fontSize: Appsized.fontxxl,
+    fontSize: Appsized.fontxl,
     fontWeight: FontWeight.bold,
     color: Colors.black,
   );

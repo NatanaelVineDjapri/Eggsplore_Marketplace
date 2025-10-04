@@ -16,8 +16,8 @@ class AppImages {
   static const String voucher30 = 'assets/images/voucher30.png';
   static const String voucher50 = 'assets/images/voucher50.png';
   static const String voucher20 = 'assets/images/voucher20.png';
-  static const String voucher1 = 'assets/images/voucher1.png';
-  static const String voucher2 = 'assets/images/voucher2.png';
-  static const String voucher3 = 'assets/images/voucher3.png';
+  static const String voucher1 = 'assets/images/Voucher1.png';
+  static const String voucher2 = 'assets/images/Voucher2.png';
+  static const String voucher3 = 'assets/images/Voucher3.png';
   static const String notif_bg = 'assets/images/notif_bg.png';
 }

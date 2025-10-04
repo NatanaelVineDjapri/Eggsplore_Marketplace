@@ -1,7 +1,7 @@
 import 'package:eggsplore/bar/bottom_nav.dart';
+import 'package:eggsplore/bar/titleBar.dart';
 import 'package:eggsplore/constants/colors.dart';
 import 'package:eggsplore/widget/chart/cart_item.dart';
-import 'package:eggsplore/widget/chart/cart_top_bar.dart';
 import 'package:eggsplore/widget/chart/cart_bottom_bar.dart';
 import 'package:eggsplore/widget/chart/cart_select_all_header.dart';
 import 'package:eggsplore/widget/chart/cart_top_header.dart';
@@ -25,15 +25,11 @@ class _CartPageState extends ConsumerState<CartPage> {
     Future.microtask(() => ref.read(cartProvider.notifier).loadCart());
   }
 
-  final Color appPrimaryColor = Colors.red.shade700;
-
   @override
   Widget build(BuildContext context) {
-    final Color primaryColor = AppColors.primary;
-
+    final primaryColor = AppColors.primary;
     final cartItems = ref.watch(cartProvider);
     final cartNotifier = ref.read(cartProvider.notifier);
-
     final selectedItems = cartNotifier.selectedItems;
     final totalPrice = cartNotifier.selectedTotalPrice;
     final allSelected = cartNotifier.allSelected;
@@ -45,8 +41,8 @@ class _CartPageState extends ConsumerState<CartPage> {
     }
 
     return Scaffold(
-      // FIX FINAL: Panggil CartTopBar sebagai AppBar
-      appBar: CartTopBar(primaryColor: primaryColor),
+      appBar: const titleBar(title: "Cart"),
+
       body: cartItems.isEmpty
           ? const Center(child: Text("Keranjang masih kosong 🛒"))
           : ListView(
@@ -63,7 +59,6 @@ class _CartPageState extends ConsumerState<CartPage> {
                   thickness: 1,
                   color: Color(0xFFE0E0E0),
                 ),
-
                 ...groupedItems.entries.map((entry) {
                   final shopName = entry.key;
                   final items = entry.value;
@@ -83,7 +78,6 @@ class _CartPageState extends ConsumerState<CartPage> {
                         thickness: 0.5,
                         color: Color(0xFFE0E0E0),
                       ),
-
                       ...items.map((item) {
                         return Column(
                           children: [
@@ -109,24 +103,22 @@ class _CartPageState extends ConsumerState<CartPage> {
                           ],
                         );
                       }).toList(),
-
                       Container(height: 10, color: const Color(0xFFF0F0F0)),
                     ],
                   );
                 }).toList(),
               ],
             ),
+
       bottomNavigationBar: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // 1. Bar Checkout (Total Harga / Beli)
           CartBottomBar(
             totalPrice: totalPrice,
             selectedItems: selectedItems,
             primaryColor: primaryColor,
           ),
-          // 2. Bar Navigasi Utama (Home/Cart/Profile)
-          const CustomBottomNavBar(currentIndex: 1), // Index 1 = Cart
+          const CustomBottomNavBar(currentIndex: 1),
         ],
       ),
     );

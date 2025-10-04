@@ -1,3 +1,4 @@
+import 'package:eggsplore/bar/backBar2.dart';
 import 'package:eggsplore/constants/colors.dart';
 import 'package:eggsplore/provider/message_provider.dart';
 import 'package:eggsplore/provider/product_provider.dart';
@@ -5,7 +6,6 @@ import 'package:eggsplore/widget/random_product_grid.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eggsplore/pages/chat_account_page.dart';
-
 
 class ChatPage extends ConsumerWidget {
   const ChatPage({super.key});
@@ -18,10 +18,9 @@ class ChatPage extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: Colors.grey[100],
-      appBar: AppBar(
-        title: const Text("Chat"),
-        backgroundColor: AppColors.primary,
-      ),
+
+      appBar: const backBar2(title: "Chat"), 
+
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),

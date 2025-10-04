@@ -43,7 +43,6 @@ class AuthController extends Controller
         ], 201);
     }
 
-    // Login user
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -146,7 +145,6 @@ class AuthController extends Controller
     {
         $user = $request->user();
 
-        // Validasi sekarang hanya memeriksa 'name'
         $request->validate([
             'name'         => 'required|string|max:255',
             'email'        => 'required|email|unique:users,email,' . $user->id,
@@ -155,7 +153,6 @@ class AuthController extends Controller
             'image'        => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        // Tidak perlu lagi logika untuk memisahkan nama
         if ($request->has('name')) {
             $user->name = $request->name;
         }

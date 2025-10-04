@@ -24,14 +24,13 @@ class RatingSeeder extends Seeder
         
         for ($i = 0; $i < $totalRatingsToCreate; $i++) {
             
-            // 1. Ambil User dan Product secara acak
             $user = $users->random();
             $product = $products->random();
             
             
             $shippingFee = 15000.00; 
             $itemsSubtotal = $product->price * rand(1, 2);
-            $randomServiceFee = rand(100000, 1000000) / 100; // 1000.00 - 10000.00
+            $randomServiceFee = rand(100000, 1000000) / 100; 
             $totalAmount = $itemsSubtotal + $shippingFee + $randomServiceFee;
 
             $order = Order::create([
@@ -48,7 +47,6 @@ class RatingSeeder extends Seeder
                 'payment_method' => 'EggsplorePay',
             ]);
 
-            // Membuat Order Item (Juga Unik)
             $orderItem = OrderItem::create([
                 'order_id' => $order->id,
                 'product_id' => $product->id,
@@ -58,7 +56,6 @@ class RatingSeeder extends Seeder
                 'quantity' => 1,
             ]);
 
-            // 3. BUAT RATING
             Rating::create([
                 'product_id' => $product->id,
                 'user_id' => $user->id,

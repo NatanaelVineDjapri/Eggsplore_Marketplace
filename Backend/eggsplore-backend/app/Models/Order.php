@@ -30,7 +30,6 @@ class Order extends Model
         return $this->belongsTo(User::class);
     }
     
-    // Relasi untuk mengetahui item apa saja yang ada di pesanan ini
     public function items()
     {
         return $this->hasMany(OrderItem::class);

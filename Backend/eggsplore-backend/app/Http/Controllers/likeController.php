@@ -20,10 +20,10 @@ class LikeController extends Controller
         $liked = $user->likedProducts()->where('product_id', $product->id)->exists();
 
         if ($liked) {
-            $user->likedProducts()->detach($product->id); // unlike
+            $user->likedProducts()->detach($product->id); 
             $status = 'unliked';
         } else {
-            $user->likedProducts()->attach($product->id); // like
+            $user->likedProducts()->attach($product->id); 
             $status = 'liked';
         }
 

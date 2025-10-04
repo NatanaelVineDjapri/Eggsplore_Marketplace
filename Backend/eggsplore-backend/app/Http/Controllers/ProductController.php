@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
-use App\Models\Rating; // Wajib
+use App\Models\Rating;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Facades\Auth; // Wajib
+use Illuminate\Support\Facades\Auth; 
 use Illuminate\Http\JsonResponse;
 
 class ProductController extends Controller
@@ -19,7 +19,6 @@ class ProductController extends Controller
 
     public function showProduct($id)
     {
-        // KODE ASLI KAMU (Hanya ditambah pengecekan hasPurchased/hasReviewed)
         $product = Product::with(['user','likes','ratings'])->find($id);
 
         if(!$product){
@@ -28,14 +27,11 @@ class ProductController extends Controller
 
         $averageRating = $product->ratings->avg('rating');
         
-        // FIX: Penambahan Logika Status User (Wajib ada di Model Product)
         $hasPurchased = $product->hasBeenPurchasedByCurrentUser();
         $hasReviewed = $product->hasBeenReviewedByCurrentUser();
         
-        // Ambil data produk sebagai array
         $productData = $product->toArray();
 
-        // GABUNGKAN data produk dengan status pembelian/ulasan
         $productData = array_merge($productData, [
             'has_purchased' => $hasPurchased,
             'has_reviewed' => $hasReviewed,
@@ -43,7 +39,6 @@ class ProductController extends Controller
 
 
         return response()->json([
-            // Mengembalikan productData yang sudah diperkaya
             'product' => $productData, 
             'average_rating' => $averageRating
         ]);

@@ -104,10 +104,17 @@ class ProductController extends Controller
         return response()->json(['message' => "Produk berhasil dihapus"]);
     }
 
-    public function trendingProduct(){
-        $products = Product::trending();
-        return response()->json($products);
-    }
+    public function trendingProduct()
+{
+    $products = Product::with(['user', 'ratings'])->get();
+
+    $filtered = $products->filter(function ($product) {
+        return $product->averageRating() >= 4;
+    });
+
+    return response()->json($filtered->values());
+}
+
 
     public function rateProduct(Request $request, $id){
         $request->validate([

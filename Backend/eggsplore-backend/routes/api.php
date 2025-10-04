@@ -16,6 +16,9 @@ Route::post('login', [AuthController::class, 'login']);
 Route::post('verify-user', [AuthController::class, 'verifyUser']);
 Route::put('change-password', [AuthController::class, 'changePassword']);
 
+Route::get('/shops', [ShopController::class, 'index']);
+Route::get('/shops/{id}', [ShopController::class, 'showShop']);
+
 Route::middleware('auth:sanctum')->group(function() {
     Route::post('/update-profile', [AuthController::class, 'updateProfile']);
 
@@ -27,13 +30,15 @@ Route::middleware('auth:sanctum')->group(function() {
 
     Route::post('/topup', [BalanceController::class, 'topUp']);
     Route::post('/reduce', [BalanceController::class, 'reduce']);
+    
+    Route::get('/products/trending', [ProductController::class,'trendingProduct']);
 
     Route::get('/products/{id}', [ProductController::class,'showProduct']);
     Route::post('/products', [ProductController::class,'addProduct']);
     Route::put('/products/{id}', [ProductController::class,'updateProduct']);
     Route::delete('/products/{id}', [ProductController::class,'deleteProduct']);
 
-    Route::get('/products/trending', [ProductController::class,'trendingProduct']);
+    
 
     Route::post('/products/{id}/rate', [ProductController::class,'rateProduct']);
 
@@ -43,8 +48,6 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('/messages/{user}', [MessageController::class, 'index']);
     Route::post('/messages/{user}', [MessageController::class, 'store']);
     Route::delete('/messages/{user}/{message}', [MessageController::class, 'destroy']);
-    Route::get('/shops', [ShopController::class, 'index']);
-    Route::get('/shops/{id}', [ShopController::class, 'showShop']);
     Route::post('/shops', [ShopController::class, 'makeShop']);
     Route::put('/shops/{id}', [ShopController::class, 'updateShop']);
     

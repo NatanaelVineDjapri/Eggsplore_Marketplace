@@ -43,9 +43,20 @@ class Product extends Model
     // public function payments(){
     //     return $this->hasMany(Payment::class);
     // }
+    public function averageRating()
+{
+    return $this->ratings()->avg('rating') ?? 0;
+}
 
-    public static function trending(){
-        return self::with('user')->withCount('payments')->orderBy('payment_counts','desc')->get();
+    public static function trending()
+    {
+        return self::with(['user', 'ratings'])
+            ->withAvg('ratings', 'rating')
+            ->select('products.*')
+            ->groupBy('products.id')
+            ->having('ratings_avg_rating', '>=', 4)
+            ->orderByDesc('ratings_avg_rating')
+            ->get();
     }
 
     public function ratings(){

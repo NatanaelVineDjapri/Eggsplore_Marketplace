@@ -28,7 +28,7 @@ class _MyAppState extends ConsumerState<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: AppRoutes.profile,
+      initialRoute: AppRoutes.myshop,
       routes: AppRoutes.routes,
     );
   }

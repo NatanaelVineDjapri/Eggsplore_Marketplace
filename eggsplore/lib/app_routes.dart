@@ -26,6 +26,7 @@ import 'package:eggsplore/pages/profile/on_process_page.dart';
 import 'package:eggsplore/pages/profile/sent_page.dart';
 import 'package:eggsplore/pages/profile/reviews_page.dart';
 import 'package:eggsplore/pages/profile/delivery_tracking_page.dart';
+import 'package:eggsplore/pages/profile/transaction_page.dart';
 
 class AppRoutes {
   static const String welcome = '/';

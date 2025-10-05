@@ -111,7 +111,6 @@ class UserService {
     if (response.statusCode == 200) {
       return User.fromJson(jsonDecode(response.body));
     } else {
-      // Jika token tidak valid (401), hapus token agar tidak dicoba lagi.
       if (response.statusCode == 401) {
         await removeToken();
       }

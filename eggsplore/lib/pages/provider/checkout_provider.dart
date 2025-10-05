@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eggsplore/model/order.dart';
 import 'package:eggsplore/service/checkout_service.dart';
-import 'package:eggsplore/service/user_service.dart'; // Asumsi service untuk ambil token
+import 'package:eggsplore/service/user_service.dart';
 
 // Provider sederhana untuk menyediakan instance CheckoutService
 final checkoutServiceProvider = Provider((ref) => CheckoutService());

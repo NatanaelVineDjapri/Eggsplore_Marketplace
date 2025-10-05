@@ -27,4 +27,5 @@ class AppImages {
   static const String poni = 'assets/images/poni.png';
   static const String mouse = 'assets/images/mouse.png';
   static const String monitor = 'assets/images/monitor.png';
+  static const String map = 'assets/images/map.png';
 }

@@ -26,7 +26,7 @@ class DeliveryTrackingPage extends StatelessWidget {
                 const SizedBox(height: 16),
                 ClipRRect(
                   borderRadius: BorderRadius.circular(12),
-                  child: Image.asset(AppImages.voucher2, height: 180, fit: BoxFit.cover),
+                  child: Image.asset(AppImages.map, height: 180, fit: BoxFit.cover),
                 ),
                 const SizedBox(height: 16),
                 const ListTile(

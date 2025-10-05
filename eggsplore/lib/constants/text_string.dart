@@ -8,7 +8,7 @@ class AppStrings{
   static const String welcomeBack = "Welcome Back!";
   static const String introTitle_1 = "Ready to ";
   static const String introTitle_2 = "Eggsplore? ";
-  static const String introSub = "Lorem Ipsum dolor sit amet, consectur adipsicing elit, sed do eiusmod tempor";
+  static const String introSub = "Discover millions of unique and high-quality products from trusted sellers. Your shopping adventure starts here!";
   static const String login = "Login ";
   static const String register = "Register";
   static const String loading = "Loading...";

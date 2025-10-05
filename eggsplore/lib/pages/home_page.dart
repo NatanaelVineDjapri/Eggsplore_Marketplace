@@ -87,18 +87,26 @@ class _HomePageState extends ConsumerState<HomePage> {
                     vertical: size.sm,
                   ),
                   child: TopNavBar(
-                    onChatTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const ChatPage()),
-                    ),
-                    onSearch: (value) {
-                      final query = value.trim();
+                    onChatTap: () {
+                      // Logika navigasi ke halaman Chat
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => SearchPage(query: query),
+                          builder: (context) => const ChatPage(),
                         ),
                       );
+                    },
+                    onSearch: (value) {
+                      // Logika navigasi ke halaman Search
+                      final query = value.trim();
+                      if (query.isNotEmpty) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => SearchPage(query: query),
+                          ),
+                        );
+                      }
                     },
                   ),
                 ),
@@ -117,8 +125,9 @@ class _HomePageState extends ConsumerState<HomePage> {
                       userAsyncValue.when(
                         loading: () =>
                             const Center(child: CircularProgressIndicator()),
-                        error: (err, stack) =>
-                            Center(child: Text('${AppStrings.failloaduser} $err')),
+                        error: (err, stack) => Center(
+                          child: Text('${AppStrings.failloaduser} $err'),
+                        ),
                         data: (user) => EggsplorePayCard(
                           balance: user.balance,
                           onTap: _navigateToEggsplorePay,

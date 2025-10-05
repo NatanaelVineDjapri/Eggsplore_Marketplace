@@ -6,6 +6,7 @@ class Shop {
   final String name;
   final String description;
   final String image;
+  final String address;
   final DateTime createdAt;
 
   Shop({
@@ -14,6 +15,7 @@ class Shop {
     required this.name,
     required this.description,
     required this.image,
+    required this.address,
     required this.createdAt,
   });
 
@@ -23,6 +25,7 @@ class Shop {
       userId: json['user_id'],
       name: json['name'],
       description: json['description'],
+      address:  json['address'],
       image: ImageHelper.getImageUrl(json['image']),
       createdAt: DateTime.parse(json['created_at']),
     );

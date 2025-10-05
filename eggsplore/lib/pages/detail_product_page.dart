@@ -20,6 +20,11 @@ import '../widget/detail_product/product_stock.dart';
 import '../widget/expandable_description.dart';
 import '../widget/review_tile.dart';
 
+// --- MODIFIKASI ---
+// Tambahkan import untuk halaman profil toko
+// Sesuaikan path-nya jika perlu
+import 'shop_profile_page.dart';
+
 class DetailProductPage extends ConsumerWidget {
   final int productId;
   const DetailProductPage({super.key, required this.productId});
@@ -38,9 +43,9 @@ class DetailProductPage extends ConsumerWidget {
         ),
         error: (err, stack) => Center(child: Text('${AppStrings.failproductload} $err')),
         data: (product) {
-          final String shopImageUrl = ImageHelper.getImageUrl(
-            product.shopImage,
-          );
+          // Asumsi object 'product' memiliki properti 'shopImage'
+          // Jika tidak, sesuaikan dengan nama properti yang benar
+          final String shopImageUrl = ImageHelper.getImageUrl(product.shopImage ?? '');
 
           return Stack(
             children: [
@@ -106,48 +111,70 @@ class DetailProductPage extends ConsumerWidget {
                         thickness: 1,
                         height: 24,
                       ),
-                      Row(
-                        children: [
-                          CircleAvatar(
-                            backgroundImage: shopImageUrl.isNotEmpty
-                                ? NetworkImage(shopImageUrl)
-                                : null,
-                            child: shopImageUrl.isEmpty
-                                ? const Icon(
-                                    Icons.store,
-                                    color: AppColors.white,
-                                  )
-                                : null,
-                            backgroundColor: AppColors.primary,
-                          ),
-                          const SizedBox(width: 12),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+
+                      // --- MODIFIKASI DIMULAI DI SINI ---
+                      // Area info toko sekarang dibungkus dengan GestureDetector
+                      GestureDetector(
+                        onTap: () {
+                          // Aksi ini akan dijalankan saat area info toko diklik
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              // Asumsi object 'product' punya properti 'shopId'
+                              builder: (context) => ShopProfilePage(shopId: product.shopId),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          // Container ini memastikan seluruh area baris bisa diklik
+                          color: Colors.transparent,
+                          child: Row(
                             children: [
-                              Text(
-                                product.userName,
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                              CircleAvatar(
+                                backgroundImage: shopImageUrl.isNotEmpty
+                                    ? NetworkImage(shopImageUrl)
+                                    : null,
+                                child: shopImageUrl.isEmpty
+                                    ? const Icon(
+                                        Icons.store,
+                                        color: AppColors.white,
+                                      )
+                                    : null,
+                                backgroundColor: AppColors.primary,
                               ),
-                              const Text(
-                                AppStrings.dmdesc,
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  color: AppColors.grey,
-                                ),
+                              const SizedBox(width: 12),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  // Asumsi object 'product' punya 'userName' sebagai nama toko
+                                  Text(
+                                    product.userName,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const Text(
+                                    AppStrings.dmdesc,
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      color: AppColors.grey,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const Spacer(),
+                              FollowButton(
+                                isInitiallyFollowing: false,
+                                onFollow: () => debugPrint("Followed toko"),
+                                onUnfollow: () => debugPrint("Unfollowed toko"),
                               ),
                             ],
                           ),
-                          const Spacer(),
-                          FollowButton(
-                            isInitiallyFollowing: false,
-                            onFollow: () => debugPrint("Followed toko"),
-                            onUnfollow: () => debugPrint("Unfollowed toko"),
-                          ),
-                        ],
+                        ),
                       ),
+                      // --- MODIFIKASI SELESAI DI SINI ---
+                      
                       const Divider(
                         color: AppColors.primary,
                         thickness: 1,
@@ -225,6 +252,7 @@ class DetailProductPage extends ConsumerWidget {
     WidgetRef ref,
     int productId,
   ) {
+    // Asumsi ada 'reviewsProvider'
     final reviewsAsync = ref.watch(reviewsProvider(productId));
     return reviewsAsync.when(
       loading: () => const SizedBox.shrink(),

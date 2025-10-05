@@ -72,7 +72,7 @@ class AppRoutes {
     notifications: (context) => const NotificationsPage(),
     search: (context) => const SearchPage(query: ""),
     product: (context) => const ProductPage(),
-    shopProfile: (context) => const ShopProfilePage(),
+    // shopProfile: (context) => const ShopProfilePage(query:""),
     chat: (context) => const ChatPage(),
     transaction: (context) => const TransactionPage(),
     onProcess: (context) => const OnProcessPage(),

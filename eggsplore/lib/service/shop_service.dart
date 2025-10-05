@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'package:eggsplore/model/product.dart';
 import 'package:eggsplore/model/shop.dart';
+import 'package:eggsplore/model/shop_with_products.dart';
 import 'package:eggsplore/service/user_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
@@ -62,6 +64,33 @@ class ShopService {
     } catch (e) {
       debugPrint("Error updating shop: $e");
       return false;
+    }
+  }
+
+   Future<ShopWithProducts> getShopById(int shopId) async {
+    final token = await UserService.getToken();
+    final url = Uri.parse('$baseUrl/shops/$shopId');
+    try {
+      final response = await http.get(
+        url,
+        headers: {
+           "Authorization": "Bearer $token",
+          "Accept": "application/json",
+          "Accept": "application/json",
+        },
+      );
+
+      debugPrint("GET SHOP BY ID => ${response.statusCode} : ${response.body}");
+
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+        return ShopWithProducts.fromJson(responseData['data']);
+      } else {
+        throw Exception('Gagal memuat data toko: Status code ${response.statusCode}');
+      }
+    } catch (e) {
+      debugPrint("Error fetching shop by id: $e");
+      throw Exception('Terjadi kesalahan saat mengambil data toko.');
     }
   }
 }

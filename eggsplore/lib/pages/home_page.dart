@@ -11,6 +11,7 @@ import 'package:eggsplore/provider/product_provider.dart';
 import 'package:eggsplore/widget/product.dart';
 import 'package:eggsplore/pages/search_page.dart';
 import 'package:eggsplore/widget/bannerSlider.dart';
+import 'package:eggsplore/pages/eggsplore_pay_page.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
@@ -111,10 +112,19 @@ class _HomePageState extends ConsumerState<HomePage> {
                       ),
                       EggsplorePayCard(
                         balance: balance,
-                        onTap: () {
-                          // Logika onTap untuk EggsplorePayPage tidak disertakan
-                          // karena membutuhkan penanganan state `balance` yang lebih kompleks
-                          // jika halaman tersebut mengembalikan nilai.
+                        onTap: () async {
+                          // buka halaman Eggsplore Pay
+                          final updatedBalance = await Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => const EggsplorePayPage()),
+                          );
+
+                          // kalau halaman itu return balance baru, update
+                          if (updatedBalance != null && updatedBalance is double) {
+                            setState(() {
+                              balance = updatedBalance;
+                            });
+                          }
                         },
                       ),
                       Padding(

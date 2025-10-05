@@ -226,34 +226,46 @@ class ProductService {
   }
 
   static Future<List<Product>> fetchProductsFromShop({
-    required int shopId,
-    int? excludeProductId,
-  }) async {
-    final token = await UserService.getToken();
-    if (token == null) {
-      throw Exception("User belum login / token kosong");
-    }
+  required int shopId,
+  int? excludeProductId,
+}) async {
+  final token = await UserService.getToken();
+  if (token == null) {
+    throw Exception("User belum login / token kosong");
+  }
 
-    var uri = Uri.parse('$baseUrl/shops/$shopId/products');
-    if (excludeProductId != null) {
-      uri = uri.replace(
-        queryParameters: {'exclude': excludeProductId.toString()},
-      );
-    }
+  var uri = Uri.parse('$baseUrl/shops/$shopId/products');
+  if (excludeProductId != null) {
+    uri = uri.replace(
+      queryParameters: {'exclude': excludeProductId.toString()},
+    );
+  }
 
+  print("🕵️‍♂️ MEMULAI PANGGILAN API ke: $uri");
+
+  try {
     final response = await http.get(
       uri,
       headers: {"Authorization": "Bearer $token", "Accept": "application/json"},
-    );
+    ).timeout(const Duration(seconds: 15)); // Tambahkan timeout 15 detik
+
+    print("✅ API MERESPON dengan status: ${response.statusCode}");
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       final List<dynamic> productList = data['data'];
+      print("✅ BERHASIL PARSING DATA");
       return productList.map((json) => Product.fromJson(json)).toList();
     } else {
+      print("❌ GAGAL: ${response.body}");
       throw Exception("Gagal memuat produk toko: ${response.statusCode}");
     }
+  } catch (e) {
+    print("❌ TERJADI ERROR: ${e.toString()}");
+    // Jika errornya 'TimeoutException', berarti server benar-benar tidak menjawab.
+    throw Exception("Gagal menghubungi server: ${e.toString()}");
   }
+}
 
   static Future<String?> getShopId(String token) async {
     final response = await http.get(

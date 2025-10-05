@@ -15,13 +15,11 @@ class Message extends Model
         'message',
     ];
 
-    // Relasi ke User (pengirim)
     public function sender()
     {
         return $this->belongsTo(User::class, 'sender_id');
     }
 
-    // Relasi ke User (penerima)
     public function receiver()
     {
         return $this->belongsTo(User::class, 'receiver_id');

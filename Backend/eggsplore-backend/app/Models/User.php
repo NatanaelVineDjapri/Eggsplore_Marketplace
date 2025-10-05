@@ -10,7 +10,6 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasApiTokens;
 
     /**
@@ -23,8 +22,8 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
-        'phone_number', // Tambahkan ini
-        'address',      // Tambahkan ini
+        'phone_number', 
+        'address',      
         'image',
     ];
 
@@ -65,19 +64,16 @@ class User extends Authenticatable
         return $this->hasMany(Message::class, 'receiver_id');
     }
 
-    // app/Models/User.php
     public function likedProducts()
     {
         return $this->belongsToMany(Product::class, 'likes')->withTimestamps();
     }
 
-    // Di dalam class User
     public function orders()
     {
         return $this->hasMany(Order::class);
     }
 
-    // Di dalam class User
     public function ratings()
     {
         return $this->hasMany(Rating::class);

@@ -8,7 +8,6 @@ use App\Models\User;
 
 class BalanceController extends Controller
 {
-    // Middleware auth:sanctum
     public function topUp(Request $request)
     {
         $request->validate([
@@ -20,7 +19,6 @@ class BalanceController extends Controller
             return response()->json(['message' => 'Unauthenticated'], 401);
         }
 
-        // Tambah saldo
         $user->balance += $request->amount;
         $user->save();
 
@@ -30,7 +28,6 @@ class BalanceController extends Controller
         ]);
     }
 
-    // Opsional: bisa buat reduceBalance
     public function reduce(Request $request)
     {
         $request->validate([

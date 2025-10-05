@@ -1,4 +1,5 @@
 <?php
+// database/migrations/YYYY_MM_DD_HHMMSS_create_order_items_table.php
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -10,14 +11,17 @@ return new class extends Migration
     {
         Schema::create('order_items', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('order_id')->constrained()->onDelete('cascade'); 
-            $table->foreignId('product_id')->constrained()->onDelete('cascade');
-            $table->integer('quantity');
-            $table->decimal('price', 10, 2); 
-            $table->timestamps();
             
-            // Index unik
-            $table->unique(['order_id', 'product_id']); 
+            $table->foreignId('order_id')->constrained('orders')->onDelete('cascade');
+
+            $table->foreignId('product_id')->nullable()->constrained('products')->onDelete('set null'); 
+            
+            $table->string('product_name');
+            $table->string('shop_name'); 
+            $table->decimal('price_at_purchase', 10, 2);
+            $table->integer('quantity');
+
+            $table->timestamps();
         });
     }
 

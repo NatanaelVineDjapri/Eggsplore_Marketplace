@@ -1,9 +1,11 @@
-import 'package:eggsplore/constants/sizes.dart';
-import 'package:eggsplore/service/user_service.dart';
+import 'package:eggsplore/model/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:eggsplore/constants/sizes.dart';
+import 'package:eggsplore/service/user_service.dart';
 import 'package:eggsplore/widget/TopNavBar.dart';
 import 'package:eggsplore/widget/eggsplore_pay/Eggsplore_Pay_Card.dart';
+import 'package:eggsplore/pages/eggsplore_pay_page.dart';
 import 'package:eggsplore/pages/chat_page.dart';
 import 'package:eggsplore/bar/bottom_nav.dart';
 import 'package:eggsplore/constants/images.dart';
@@ -11,7 +13,11 @@ import 'package:eggsplore/provider/product_provider.dart';
 import 'package:eggsplore/widget/product.dart';
 import 'package:eggsplore/pages/search_page.dart';
 import 'package:eggsplore/widget/bannerSlider.dart';
-import 'package:eggsplore/pages/eggsplore_pay_page.dart';
+
+// Provider untuk mengambil data user
+final userProvider = FutureProvider<User>((ref) async {
+  return UserService.getCurrentUser();
+});
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
@@ -21,15 +27,12 @@ class HomePage extends ConsumerStatefulWidget {
 }
 
 class _HomePageState extends ConsumerState<HomePage> {
-  double balance = 0;
   final ScrollController _scrollController = ScrollController();
   double _scrollOffset = 0.0;
 
   @override
   void initState() {
     super.initState();
-    _loadUser();
-
     _scrollController.addListener(() {
       if (!mounted) return;
       setState(() {
@@ -44,12 +47,16 @@ class _HomePageState extends ConsumerState<HomePage> {
     super.dispose();
   }
 
-  void _loadUser() async {
-    final user = await UserService.getCurrentUser();
-    if (user != null) {
-      setState(() {
-        balance = user.balance;
-      });
+  // Fungsi untuk navigasi ke halaman Eggsplore Pay dan refresh user data
+  void _navigateToEggsplorePay() async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const EggsplorePayPage()),
+    );
+
+    // Setelah kembali, refresh user data
+    if (mounted) {
+      ref.invalidate(userProvider);
     }
   }
 
@@ -57,6 +64,8 @@ class _HomePageState extends ConsumerState<HomePage> {
   Widget build(BuildContext context) {
     final size = Appsized(context);
     final bgHeight = size.height * 0.36;
+
+    final userAsyncValue = ref.watch(userProvider);
 
     return Scaffold(
       body: Stack(
@@ -81,12 +90,12 @@ class _HomePageState extends ConsumerState<HomePage> {
                     vertical: size.sm,
                   ),
                   child: TopNavBar(
-                    onChatTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const ChatPage()),
-                      );
-                    },
+                    onChatTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ChatPage(),
+                      ),
+                    ),
                     onSearch: (value) {
                       final query = value.trim();
                       Navigator.push(
@@ -110,34 +119,38 @@ class _HomePageState extends ConsumerState<HomePage> {
                           "assets/images/banner.jpg",
                         ],
                       ),
-                      EggsplorePayCard(
-                        balance: balance,
-                        onTap: () async {
-                          // buka halaman Eggsplore Pay
-                          final updatedBalance = await Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (_) => const EggsplorePayPage()),
-                          );
 
-                          // kalau halaman itu return balance baru, update
-                          if (updatedBalance != null && updatedBalance is double) {
-                            setState(() {
-                              balance = updatedBalance;
-                            });
-                          }
-                        },
+                      // Tampilkan saldo dari user provider
+                      userAsyncValue.when(
+                        loading: () => const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                        error: (err, stack) => Center(
+                          child: Text("Gagal memuat user: $err"),
+                        ),
+                        data: (user) => EggsplorePayCard(
+                          balance: user.balance,
+                          onTap: _navigateToEggsplorePay,
+                        ),
                       ),
+
                       Padding(
                         padding: EdgeInsets.all(size.md),
                         child: Consumer(
                           builder: (context, ref, child) {
                             final productsAsync = ref.watch(allProductsProvider);
                             return productsAsync.when(
-                              loading: () => const Center(child: CircularProgressIndicator()),
-                              error: (err, stack) => Center(child: Text("Gagal load produk: $err")),
+                              loading: () => const Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                              error: (err, stack) => Center(
+                                child: Text("Gagal load produk: $err"),
+                              ),
                               data: (products) {
                                 if (products.isEmpty) {
-                                  return const Center(child: Text("Belum ada produk"));
+                                  return const Center(
+                                    child: Text("Belum ada produk"),
+                                  );
                                 }
                                 return GridView.builder(
                                   shrinkWrap: true,

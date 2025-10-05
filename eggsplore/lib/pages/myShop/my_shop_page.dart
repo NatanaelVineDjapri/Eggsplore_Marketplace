@@ -1,13 +1,14 @@
-// File: my_shop_page.dart
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eggsplore/bar/backBar.dart';
-import 'package:eggsplore/widget/shop_info_card.dart';
+import 'package:eggsplore/model/shop.dart';
+import 'package:eggsplore/service/shop_service.dart';
+import 'package:eggsplore/pages/myShop/modify_shop_info.dart';
 import 'package:eggsplore/widget/shop_actions_card.dart';
 import 'package:eggsplore/constants/text_style.dart';
 import 'package:eggsplore/constants/text_string.dart';
 import 'package:eggsplore/constants/images.dart';
+import 'package:eggsplore/widget/shop_info_card.dart';
 import 'package:eggsplore/constants/sizes.dart';
 import 'package:eggsplore/provider/product_provider.dart';
 import 'package:eggsplore/widget/my_product_card.dart';
@@ -20,11 +21,24 @@ class MyShopPage extends ConsumerStatefulWidget {
 }
 
 class _MyShopPageState extends ConsumerState<MyShopPage> {
-  String shopName = AppStrings.shopName;
-  String followers = "120";
-  String buyers = "85";
-  String rating = "4.8";
-  String imagePath = AppImages.firstLogo;
+  Shop? _myShop;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchMyShopData();
+  }
+
+  Future<void> _fetchMyShopData() async {
+    Shop? shop = await ShopService.getMyShop();
+    if (mounted) {
+      setState(() {
+        _myShop = shop;
+        _isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,76 +57,111 @@ class _MyShopPageState extends ConsumerState<MyShopPage> {
             alignment: Alignment.topCenter,
           ),
         ),
-        // 🌟 Ubah SingleChildScrollView menjadi Column dengan Expanded
+        child: _buildShopContent(myProductsAsync, size),
+      ),
+    );
+  }
+
+  Widget _buildShopContent(AsyncValue myProductsAsync, Appsized size) {
+    if (_isLoading) {
+      return const Center(child: CircularProgressIndicator(color: Colors.white));
+    }
+
+    if (_myShop == null) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text("Anda belum memiliki toko.", style: AppTextStyle.mainTitle2),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () {
+                // TODO: Arahkan ke halaman pembuatan toko
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+                foregroundColor: Colors.orange,
+              ),
+              child: const Text("Buat Toko Sekarang"),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return RefreshIndicator(
+      onRefresh: _fetchMyShopData,
+      child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ShopInfoCard(
-                    shopName: shopName,
-                    followers: followers,
-                    buyers: buyers,
-                    rating: rating,
-                    imagePath: imagePath,
-                    onModify: () {},
+            ShopInfoCard(
+              shopName: _myShop!.name,
+              description: _myShop!.description,
+              imagePath: _myShop!.image,
+              followers: "120",
+              buyers: "85",
+              rating: "4.8",
+              onModify: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ModifyShopInfoPage(),
                   ),
-                  const SizedBox(height: 20),
-                  const ShopActionsCard(),
-                  const SizedBox(height: 20),
-                  Center(
-                    child: Text(
-                      AppStrings.myProducts,
-                      style: AppTextStyle.mainTitle2,
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                ],
+                ).then((_) => _fetchMyShopData());
+              },
+            ),
+            const SizedBox(height: 20),
+            const ShopActionsCard(),
+            const SizedBox(height: 20),
+            Center(
+              child: Text(
+                AppStrings.myProducts,
+                style: AppTextStyle.mainTitle2,
+                textAlign: TextAlign.center,
               ),
             ),
-            Expanded( // 🌟 Tambahkan Expanded di sini
-              child: myProductsAsync.when(
-                data: (products) {
-                  if (products.isEmpty) {
-                    // 🌟 Menggunakan Center tanpa SizedBox agar pas di dalam Expanded
-                    return const Center(
-                      child: Text(
-                        "Belum ada produk.",
-                        style: TextStyle(fontSize: 16, color: Colors.black54), // Ubah ukuran font di sini
+            const SizedBox(height: 20),
+
+            // 🔹 Daftar produk (pakai myProductsAsync)
+            myProductsAsync.when(
+              data: (products) {
+                if (products.isEmpty) {
+                  return const Center(
+                    child: Text(
+                      "Belum ada produk.",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.black54,
                       ),
-                    );
-                  }
-                  return SingleChildScrollView(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: GridView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: products.length,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: size.sm,
-                        mainAxisSpacing: size.sm,
-                        childAspectRatio: 0.7,
-                      ),
-                      itemBuilder: (context, index) {
-                        final product = products[index];
-                        return MyProductCard(
-                          productId: product.id,
-                          name: product.name,
-                          price: product.price,
-                          image: product.image,
-                        );
-                      },
                     ),
                   );
-                },
-                loading: () => const Center(child: CircularProgressIndicator()),
-                error: (err, stack) => Center(child: Text("Error: $err")),
-              ),
+                }
+                return GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: products.length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: size.sm,
+                    mainAxisSpacing: size.sm,
+                    childAspectRatio: 0.7,
+                  ),
+                  itemBuilder: (context, index) {
+                    final product = products[index];
+                    return MyProductCard(
+                      productId: product.id,
+                      name: product.name,
+                      price: product.price,
+                      image: product.image,
+                    );
+                  },
+                );
+              },
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (err, stack) => Center(child: Text("Error: $err")),
             ),
           ],
         ),

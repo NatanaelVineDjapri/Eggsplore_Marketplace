@@ -155,7 +155,6 @@ class AuthController extends Controller
     public function updateProfile(Request $request)
     {
         $user = $request->user();
-
         $request->validate([
             'name'         => 'required|string|max:255',
             'email'        => 'required|email|unique:users,email,' . $user->id,
@@ -163,7 +162,6 @@ class AuthController extends Controller
             'address'      => 'nullable|string',
             'image'        => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-
         if ($request->has('name')) {
             $user->name = $request->name;
         }

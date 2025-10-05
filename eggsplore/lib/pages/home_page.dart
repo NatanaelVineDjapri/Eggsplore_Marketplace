@@ -1,9 +1,11 @@
-import 'package:eggsplore/constants/sizes.dart';
-import 'package:eggsplore/service/user_service.dart';
+import 'package:eggsplore/model/user.dart'; // <-- PASTIKAN IMPORT MODEL USER
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:eggsplore/constants/sizes.dart';
+import 'package:eggsplore/service/user_service.dart';
 import 'package:eggsplore/widget/TopNavBar.dart';
 import 'package:eggsplore/widget/eggsplore_pay/Eggsplore_Pay_Card.dart';
+import 'package:eggsplore/pages/eggsplore_pay_page.dart';
 import 'package:eggsplore/pages/chat_page.dart';
 import 'package:eggsplore/bar/bottom_nav.dart';
 import 'package:eggsplore/constants/images.dart';
@@ -13,6 +15,13 @@ import 'package:eggsplore/pages/search_page.dart';
 import 'package:eggsplore/widget/bannerSlider.dart';
 import 'package:eggsplore/pages/eggsplore_pay_page.dart';
 
+// LANGKAH 1: Buat Provider untuk mengambil data user
+// (Anda bisa pindahkan ini ke file provider terpisah, misal: provider/user_provider.dart)
+final userProvider = FutureProvider<User>((ref) {
+  return UserService.getCurrentUser();
+});
+
+
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
 
@@ -21,15 +30,15 @@ class HomePage extends ConsumerStatefulWidget {
 }
 
 class _HomePageState extends ConsumerState<HomePage> {
-  double balance = 0;
+  // Kita tidak perlu lagi state 'balance' dan fungsi _loadUser()
+  // karena semuanya sudah ditangani oleh Riverpod.
+
   final ScrollController _scrollController = ScrollController();
   double _scrollOffset = 0.0;
 
   @override
   void initState() {
     super.initState();
-    _loadUser();
-
     _scrollController.addListener(() {
       if (!mounted) return;
       setState(() {
@@ -44,12 +53,18 @@ class _HomePageState extends ConsumerState<HomePage> {
     super.dispose();
   }
 
-  void _loadUser() async {
-    final user = await UserService.getCurrentUser();
-    if (user != null) {
-      setState(() {
-        balance = user.balance;
-      });
+  // LANGKAH 2: Buat fungsi navigasi yang me-refresh provider
+  void _navigateToEggsplorePay() async {
+    // Navigasi ke halaman Top Up
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const EggsplorePayPage()),
+    );
+
+    // Setelah kembali dari halaman Top Up, refresh userProvider
+    // agar data saldo yang baru diambil ulang dari server.
+    if (mounted) {
+      ref.invalidate(userProvider);
     }
   }
 
@@ -57,6 +72,9 @@ class _HomePageState extends ConsumerState<HomePage> {
   Widget build(BuildContext context) {
     final size = Appsized(context);
     final bgHeight = size.height * 0.36;
+
+    // LANGKAH 3: 'watch' provider user di dalam build method
+    final userAsyncValue = ref.watch(userProvider);
 
     return Scaffold(
       body: Stack(
@@ -81,20 +99,10 @@ class _HomePageState extends ConsumerState<HomePage> {
                     vertical: size.sm,
                   ),
                   child: TopNavBar(
-                    onChatTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const ChatPage()),
-                      );
-                    },
+                    onChatTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const ChatPage())),
                     onSearch: (value) {
                       final query = value.trim();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => SearchPage(query: query),
-                        ),
-                      );
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => SearchPage(query: query)));
                     },
                   ),
                 ),
@@ -164,8 +172,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                             );
                           },
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ],

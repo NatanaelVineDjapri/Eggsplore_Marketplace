@@ -18,6 +18,7 @@ class Appsized{
   double get xxl => height * 0.06;  // ~6%
   double get xxxl=> height * 0.08;  // ~8%
   double get defaultSpace => height * 0.03;
+  static const double fontXs = 12.0;
 
   double get hsm => width * 0.02;
   double get hmd => width * 0.04;

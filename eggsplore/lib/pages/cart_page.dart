@@ -106,7 +106,7 @@ class _CartPageState extends ConsumerState<CartPage> {
                       Container(height: 10, color: const Color(0xFFF0F0F0)),
                     ],
                   );
-                }).toList(),
+                }),
               ],
             ),
 

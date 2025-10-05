@@ -3,11 +3,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eggsplore/bar/backBar.dart';
-import 'package:eggsplore/widget/shop_info_card.dart';
+import 'package:eggsplore/model/shop.dart';
+import 'package:eggsplore/service/shop_service.dart';
+import 'package:eggsplore/pages/myShop/modify_shop_info.dart';
 import 'package:eggsplore/widget/shop_actions_card.dart';
 import 'package:eggsplore/constants/text_style.dart';
 import 'package:eggsplore/constants/text_string.dart';
 import 'package:eggsplore/constants/images.dart';
+import 'package:eggsplore/widget/shop_info_card.dart';
 import 'package:eggsplore/constants/sizes.dart';
 import 'package:eggsplore/provider/product_provider.dart';
 import 'package:eggsplore/widget/my_product_card.dart';
@@ -19,12 +22,25 @@ class MyShopPage extends ConsumerStatefulWidget {
   ConsumerState<MyShopPage> createState() => _MyShopPageState();
 }
 
-class _MyShopPageState extends ConsumerState<MyShopPage> {
-  String shopName = AppStrings.shopName;
-  String followers = "120";
-  String buyers = "85";
-  String rating = "4.8";
-  String imagePath = AppImages.firstLogo;
+class _MyShopPageState extends State<MyShopPage> {
+  Shop? _myShop;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchMyShopData();
+  }
+
+  Future<void> _fetchMyShopData() async {
+    Shop? shop = await ShopService.getMyShop();
+    if (mounted) {
+      setState(() {
+        _myShop = shop;
+        _isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,34 +58,75 @@ class _MyShopPageState extends ConsumerState<MyShopPage> {
             repeat: ImageRepeat.repeatY,
             alignment: Alignment.topCenter,
           ),
+
+          // LAPISAN 2: KONTEN (YANG BISA DI-SCROLL)
+          // Widget ini diletakkan di atas background
+          _buildShopContent(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildShopContent() {
+    if (_isLoading) {
+      return const Center(child: CircularProgressIndicator(color: Colors.white));
+    }
+
+    if (_myShop == null) {
+      // ... (kode untuk 'Anda belum memiliki toko' tidak berubah)
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text("Anda belum memiliki toko.", style: AppTextStyle.mainTitle2),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () {
+                // TODO: Arahkan ke halaman pembuatan toko
+              },
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.white, foregroundColor: Colors.orange),
+              child: const Text("Buat Toko Sekarang"),
+            ),
+          ],
         ),
-        // 🌟 Ubah SingleChildScrollView menjadi Column dengan Expanded
+      );
+    }
+
+    return RefreshIndicator(
+      onRefresh: _fetchMyShopData,
+      child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ShopInfoCard(
-                    shopName: shopName,
-                    followers: followers,
-                    buyers: buyers,
-                    rating: rating,
-                    imagePath: imagePath,
-                    onModify: () {},
+            ShopInfoCard(
+              shopName: _myShop!.name,
+              description: _myShop!.description,
+              imagePath: _myShop!.image,
+              followers: "120",
+              buyers: "85",
+              rating: "4.8",
+              onModify: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ModifyShopInfoPage(),
                   ),
-                  const SizedBox(height: 20),
-                  const ShopActionsCard(),
-                  const SizedBox(height: 20),
-                  Center(
-                    child: Text(
-                      AppStrings.myProducts,
-                      style: AppTextStyle.mainTitle2,
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
+                ).then((_) => _fetchMyShopData());
+              },
+            ),
+            const SizedBox(height: 20),
+            const ShopActionsCard(),
+            const SizedBox(height: 20),
+            Center(
+              child: Text(
+                AppStrings.myProducts,
+                style: AppTextStyle.mainTitle2,
+                textAlign: TextAlign.center,
+              ),
+            ),
+            // TODO: Tambahkan daftar produk di sini
                   const SizedBox(height: 20),
                 ],
               ),

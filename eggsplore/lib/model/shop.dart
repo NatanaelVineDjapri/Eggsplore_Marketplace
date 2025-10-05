@@ -1,47 +1,37 @@
+import 'package:eggsplore/helper/image_helper.dart';
+import 'package:eggsplore/model/user.dart';
+
 class Shop {
   final int id;
+  final int userId;
   final String name;
-  final String? description;
-  final String? address;
-  final String? image;
-  final String? profilePicture;
+  final String description;
+  final String? imagePath; 
+  final DateTime createdAt;
   final User? user;
+  final String? address;
 
   Shop({
     required this.id,
+    required this.userId,
     required this.name,
-    this.description,
-    this.address,
-    this.image,
-    this.profilePicture,
+    required this.description,
+    this.imagePath, 
+    required this.createdAt,
     this.user,
+    this.address,
   });
 
   factory Shop.fromJson(Map<String, dynamic> json) {
     return Shop(
       id: json['id'],
+      userId: json['user_id'],
       name: json['name'],
       description: json['description'],
+      imagePath: json['image'] as String, 
+      createdAt: DateTime.parse(json['created_at']),
       address: json['address'],
-      image: json['image'],
-      profilePicture: json['profile_picture'],
       user: json['user'] != null ? User.fromJson(json['user']) : null,
-    );
-  }
-}
-
-class User {
-  final int id;
-  final String name;
-  final String email;
-
-  User({required this.id, required this.name, required this.email});
-
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
-      id: json['id'],
-      name: json['name'],
-      email: json['email'],
     );
   }
 }

@@ -20,10 +20,10 @@ class LikeController extends Controller
         $liked = $user->likedProducts()->where('product_id', $product->id)->exists();
 
         if ($liked) {
-            $user->likedProducts()->detach($product->id); // unlike
+            $user->likedProducts()->detach($product->id); 
             $status = 'unliked';
         } else {
-            $user->likedProducts()->attach($product->id); // like
+            $user->likedProducts()->attach($product->id); 
             $status = 'liked';
         }
 
@@ -38,7 +38,6 @@ class LikeController extends Controller
     {
         $user = auth()->user();
 
-        // Ambil semua produk yang user like
         $products = $user->likedProducts()->get();
 
         return response()->json($products);
@@ -46,4 +45,3 @@ class LikeController extends Controller
 
 
 }
-

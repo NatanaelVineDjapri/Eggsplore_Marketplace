@@ -1,4 +1,11 @@
-import 'package:eggsplore/widget/cart_item.dart';
+import 'package:eggsplore/bar/bottom_nav.dart';
+import 'package:eggsplore/constants/colors.dart';
+import 'package:eggsplore/widget/chart/cart_item.dart';
+import 'package:eggsplore/widget/chart/cart_top_bar.dart';
+import 'package:eggsplore/widget/chart/cart_bottom_bar.dart';
+import 'package:eggsplore/widget/chart/cart_select_all_header.dart';
+import 'package:eggsplore/widget/chart/cart_top_header.dart';
+import 'package:eggsplore/widget/chart/remove_item_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eggsplore/model/cart_item.dart';
@@ -18,75 +25,109 @@ class _CartPageState extends ConsumerState<CartPage> {
     Future.microtask(() => ref.read(cartProvider.notifier).loadCart());
   }
 
+  final Color appPrimaryColor = Colors.red.shade700;
+
   @override
   Widget build(BuildContext context) {
+    final Color primaryColor = AppColors.primary;
+
     final cartItems = ref.watch(cartProvider);
     final cartNotifier = ref.read(cartProvider.notifier);
 
+    final selectedItems = cartNotifier.selectedItems;
+    final totalPrice = cartNotifier.selectedTotalPrice;
+    final allSelected = cartNotifier.allSelected;
+
     final Map<String, List<CartItem>> groupedItems = {};
     for (var item in cartItems) {
-      final store = item.shopName ?? "Toko Tidak Diketahui";
-      groupedItems.putIfAbsent(store, () => []).add(item);
+      final shop = item.shopName;
+      groupedItems.putIfAbsent(shop, () => []).add(item);
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Keranjang"),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
+      // FIX FINAL: Panggil CartTopBar sebagai AppBar
+      appBar: CartTopBar(primaryColor: primaryColor),
       body: cartItems.isEmpty
-          ? const Center(child: Text("Keranjang masih kosong"))
+          ? const Center(child: Text("Keranjang masih kosong 🛒"))
           : ListView(
-              children: groupedItems.entries.map((entry) {
-                final storeName = entry.key;
-                final items = entry.value;
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      color: Colors.grey[200],
-                      child: Text(
-                        storeName,
-                        style: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
+              padding: const EdgeInsets.only(bottom: 80),
+              children: [
+                CartSelectAllHeader(
+                  primaryColor: primaryColor,
+                  cartNotifier: cartNotifier,
+                  allSelected: allSelected,
+                  selectedItems: selectedItems,
+                ),
+                const Divider(
+                  height: 1,
+                  thickness: 1,
+                  color: Color(0xFFE0E0E0),
+                ),
+
+                ...groupedItems.entries.map((entry) {
+                  final shopName = entry.key;
+                  final items = entry.value;
+                  final allShopSelected = items.every((i) => i.isSelected);
+
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CartShopHeader(
+                        shopName: shopName,
+                        allShopSelected: allShopSelected,
+                        cartNotifier: cartNotifier,
+                        primaryColor: primaryColor,
                       ),
-                    ),
-                    ...items.map((item) => CartItemWidget(
-                          item: item,
-                          onQuantityChanged: (newQty) async {
-                            await cartNotifier.updateItem(item.id, newQty);
-                          },
-                          onRemove: () async {
-                            await cartNotifier.removeItem(item.id);
-                          },
-                        )),
-                  ],
-                );
-              }).toList(),
+                      const Divider(
+                        height: 1,
+                        thickness: 0.5,
+                        color: Color(0xFFE0E0E0),
+                      ),
+
+                      ...items.map((item) {
+                        return Column(
+                          children: [
+                            CartItemWidget(
+                              item: item,
+                              onQuantityChanged: (newQty) {
+                                cartNotifier.updateItem(item.id, newQty);
+                              },
+                              onRemove: () => showRemoveItemConfirmationDialog(
+                                context: context,
+                                item: item,
+                                primaryColor: primaryColor,
+                                cartNotifier: cartNotifier,
+                              ),
+                              onToggleSelect: (_) =>
+                                  cartNotifier.toggleSelect(item.id),
+                            ),
+                            const Divider(
+                              height: 1,
+                              thickness: 0.5,
+                              color: Color(0xFFE0E0E0),
+                            ),
+                          ],
+                        );
+                      }).toList(),
+
+                      Container(height: 10, color: const Color(0xFFF0F0F0)),
+                    ],
+                  );
+                }).toList(),
+              ],
             ),
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              "Total: Rp ${cartNotifier.totalPrice.toStringAsFixed(0)}",
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("Checkout belum dibuat")),
-                );
-              },
-              child: const Text("Checkout"),
-            )
-          ],
-        ),
+      bottomNavigationBar: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // 1. Bar Checkout (Total Harga / Beli)
+          CartBottomBar(
+            totalPrice: totalPrice,
+            selectedItems: selectedItems,
+            primaryColor: primaryColor,
+          ),
+          // 2. Bar Navigasi Utama (Home/Cart/Profile)
+          const CustomBottomNavBar(currentIndex: 1), // Index 1 = Cart
+        ],
       ),
     );
   }

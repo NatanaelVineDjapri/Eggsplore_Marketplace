@@ -1,22 +1,12 @@
+import 'package:eggsplore/constants/colors.dart';
+import 'package:eggsplore/provider/message_provider.dart';
+import 'package:eggsplore/provider/product_provider.dart';
+import 'package:eggsplore/widget/random_product_grid.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:eggsplore/model/message.dart';
-import 'package:eggsplore/model/product.dart';
-import 'package:eggsplore/service/message_service.dart';
-import 'package:eggsplore/service/product_service.dart';
-import 'package:eggsplore/widget/product.dart';
 import 'package:eggsplore/pages/chat_account_page.dart';
 import 'package:eggsplore/constants/colors.dart';
 
-// Provider untuk chat
-final chatProvider = FutureProvider<List<UserChat>>((ref) async {
-  return await MessageService.getInbox();
-});
-
-// Provider untuk produk rekomendasi
-final productProvider = FutureProvider<List<Product>>((ref) async {
-  return await ProductService.fetchRandomProductsForCurrentUser();
-});
 
 class ChatPage extends ConsumerWidget {
   const ChatPage({super.key});
@@ -26,7 +16,6 @@ class ChatPage extends ConsumerWidget {
     final size = MediaQuery.of(context).size;
 
     final chatAsync = ref.watch(chatProvider);
-    final productAsync = ref.watch(productProvider);
 
     return Scaffold(
       backgroundColor: Colors.grey[100],
@@ -107,62 +96,8 @@ class ChatPage extends ConsumerWidget {
                 ),
               ),
 
-              const SizedBox(height: 20),
-
-              // PRODUCT RECOMMENDATION
-              Text(
-                "Produk Rekomendasi",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87,
-                ),
-              ),
-              const SizedBox(height: 12),
-
-              productAsync.when(
-                data: (products) {
-                  if (products.isEmpty) {
-                    return const Center(
-                      child: Text(
-                        "Tidak ada produk rekomendasi.",
-                        style: TextStyle(color:AppColors.grey),
-                      ),
-                    );
-                  }
-
-                  return GridView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    padding: const EdgeInsets.only(bottom: 12),
-                    itemCount: products.length,
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 8,
-                      mainAxisSpacing: 8,
-                      childAspectRatio: 0.7,
-                    ),
-                    itemBuilder: (context, index) {
-                      final product = products[index];
-                      return ProductCard(
-                        productId: product.id,
-                        name: product.name,
-                        price: product.price,
-                        image: product.image,
-                      );
-                    },
-                  );
-                },
-                loading: () => const Center(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 20),
-                    child: CircularProgressIndicator(color: AppColors.primary),
-                  ),
-                ),
-                error: (err, stack) => Center(
-                  child: Text("Error produk: $err"),
-                ),
-              ),
+              const SizedBox(height: 20),              
+              RandomProductsGrid()
             ],
           ),
         ),

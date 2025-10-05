@@ -4,12 +4,21 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+
+use App\Models\OrderItem; 
+use App\Models\Order;     
+use App\Models\Rating; 
+use App\Models\User; 
+use App\Models\Shop; 
+use App\Models\Cart; 
+use App\Models\Like; 
 
 class Product extends Model
 {
     use HasFactory;
 
-    protected $fillable=[
+    protected $fillable = [
         'name',
         'description',
         'price',
@@ -18,48 +27,55 @@ class Product extends Model
         'image',
     ];
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function likes(){
+    public function likes()
+    {
         return $this->hasMany(Like::class);
     }
 
-    public function likedByUsers() {
-        return $this->belongsToMany(User::class, 'likes'); // pivot table likes
+    public function likedByUsers()
+    {
+        return $this->belongsToMany(User::class, 'likes');
     }
 
+    public function cart()
+    {
+        return $this->hasMany(Cart::class);
+    }
 
-    // public function cart(){
-    //     return $this->hasMany(Cart::class);
-    // }
-
-    public function shop() {
+    public function shop()
+    {
         return $this->belongsTo(Shop::class);
     }
 
-
-    // public function payments(){
-    //     return $this->hasMany(Payment::class);
-    // }
-    public function averageRating()
-{
-    return $this->ratings()->avg('rating') ?? 0;
-}
-
-    public static function trending()
+    public function orderItems()
     {
-        return self::with(['user', 'ratings'])
-            ->withAvg('ratings', 'rating')
-            ->select('products.*')
-            ->groupBy('products.id')
-            ->having('ratings_avg_rating', '>=', 4)
-            ->orderByDesc('ratings_avg_rating')
-            ->get();
+        return $this->hasMany(OrderItem::class);
     }
 
-    public function ratings(){
+    public function payments(){
+       return $this->hasMany(Payment::class);
+     }
+    public function averageRating()  {
+    return $this->ratings()->avg('rating') ?? 0;
+    }
+
+    public function trendingProduct()
+    {
+        $products = Product::where('rating', '>=', 4)
+            ->orderBy('rating', 'desc')
+            ->get();
+
+        return response()->json($products);
+    }
+
+
+    public function ratings()
+    {
         return $this->hasMany(Rating::class);
     }
 

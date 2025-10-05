@@ -90,15 +90,12 @@ class ShopController extends Controller
 
     }
 
-        public function getUserShop(Request $request)
+    public function getUserShop(Request $request)
     {
-        // Ambil user yang sedang login dari token
         $user = $request->user();
 
-        // Cari toko pertama yang dimiliki oleh user tersebut
         $shop = Shop::where('user_id', $user->id)->first();
 
-        // Jika user tidak punya toko
         if (!$shop) {
             return response()->json(['message' => 'User does not have a shop'], 404);
         }

@@ -18,7 +18,6 @@ import 'package:eggsplore/pages/product_page.dart';
 import 'package:eggsplore/pages/shop_profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:eggsplore/pages/cart_page.dart';
-import 'package:eggsplore/pages/detail_product_page.dart';
 import 'package:eggsplore/pages/chat_page.dart';
 
 class AppRoutes {
@@ -43,6 +42,7 @@ class AppRoutes {
   static const String shopProfile = '/shop-profile';
   static const String detailProduct = '/detail-product';
   static const String chat = '/chat';
+  static const String checkout = '/checkout';
 
   static Map<String, WidgetBuilder> routes = {
     welcome: (context) => const WelcomeScreen(),
@@ -64,8 +64,8 @@ class AppRoutes {
     search: (context) => const SearchPage(query: ""),
     product: (context) => const ProductPage(),
     shopProfile: (context) => const ShopProfilePage(),
-    detailProduct: (context) => const DetailProductPage(),
+    // detailProduct: (context) =>  const DetailProductPage(),
     chat: (context) => const ChatPage(),
-
+    // checkout: (context) => const CheckoutPage(),
   };
 }

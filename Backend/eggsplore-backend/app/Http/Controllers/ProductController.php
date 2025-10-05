@@ -1,35 +1,51 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Services\ProductService;//tmbhn
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\Rating;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Auth; 
+use Illuminate\Http\JsonResponse;
 
 class ProductController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         $products = Product::with('user')->get();
         return response()->json($products);
     }
 
-    public function showProduct($id){
-        $product = Product::with(['user','likes','comments','payments','ratings'])->find($id);
-
+    public function showProduct($id)
+    {
+        $product = Product::with(['user','likes','ratings'])->find($id);
 
         if(!$product){
             return response()->json(['message' => 'Produk tidak ditemukan'], 404);
         }
 
         $averageRating = $product->ratings->avg('rating');
+        
+        $hasPurchased = $product->hasBeenPurchasedByCurrentUser();
+        $hasReviewed = $product->hasBeenReviewedByCurrentUser();
+        
+        $productData = $product->toArray();
+
+        $productData = array_merge($productData, [
+            'has_purchased' => $hasPurchased,
+            'has_reviewed' => $hasReviewed,
+        ]);
+
 
         return response()->json([
-            'product' => $product,
+            'product' => $productData, 
             'average_rating' => $averageRating
         ]);
     }
 
-
-    public function addProduct(Request $request){
+    public function addProduct(Request $request)
+    {
         $request->validate([
             'name' => 'required|string',
             'description' => 'nullable|string',
@@ -42,7 +58,7 @@ class ProductController extends Controller
         $data['user_id'] = auth()->id();
 
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('products', 'public');            
+            $path = $request->file('image')->store('products', 'public');
             $data['image'] = 'storage/' . $path;
         }
 
@@ -54,14 +70,15 @@ class ProductController extends Controller
         ]);
     }
 
-    public function updateProduct(Request $request, $id){
+    public function updateProduct(Request $request, $id)
+    {
         $product = Product::find($id);
 
-        if(!$product){
+        if (!$product) {
             return response()->json(['message' => 'Produk tidak ditemukan'], 404);
         }
 
-        if($product->user_id != auth()->id()){
+        if ($product->user_id != auth()->id()) {
             return response()->json(['message' => 'Tidak punya akses'], 403);
         }
 
@@ -73,10 +90,10 @@ class ProductController extends Controller
             'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
-        $data = $request->only(['name','description','price','stock']);
+        $data = $request->only(['name', 'description', 'price', 'stock']);
 
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('products', 'public');            
+            $path = $request->file('image')->store('products', 'public');
             $data['image'] = 'storage/' . $path;
         }
 
@@ -88,14 +105,15 @@ class ProductController extends Controller
         ]);
     }
 
-    public function deleteProduct($id){
+    public function deleteProduct($id)
+    {
         $product = Product::find($id);
 
-        if(!$product){
+        if (!$product) {
             return response()->json(['message' => 'Produk tidak ditemukan'], 404);
         }
 
-        if($product->user_id != auth()->id()){
+        if ($product->user_id != auth()->id()) {
             return response()->json(['message' => 'Tidak punya akses'], 403);
         }
 
@@ -104,47 +122,85 @@ class ProductController extends Controller
         return response()->json(['message' => "Produk berhasil dihapus"]);
     }
 
-    public function trendingProduct()
-{
-    $products = Product::with(['user', 'ratings'])->get();
-
-    $filtered = $products->filter(function ($product) {
-        return $product->averageRating() >= 4;
-    });
-
-    return response()->json($filtered->values());
-}
-
-
-    public function rateProduct(Request $request, $id){
-        $request->validate([
-            'rating' => 'required|integer|min:1|max:5',
-            'ulasan' => 'nullable|string|max:255',
-        ]);
-
-        $product = Product::find($id);
-        
-        if(!$product){
-            return response()->json(['message'=>'Produk tidak ditemukan'], 404);
-        }
-
-        $rating = $product->ratings()->updateOrCreate(
-            ['user_id'=>auth()->id()],
-            ['rating'=>$request->rating]
-        );
+    public function trendingProduct(): JsonResponse
+    {
+        $products = \App\Models\Product::trending();
 
         return response()->json([
-            'message'=>'Rating berhasil diberikan',
-            'rating'=>$rating,
-            'average_rating'=>$product->averageRating()
+            'data' => $products
         ]);
     }
 
     public function randomProducts(Request $request)
     {
-        $count = $request->query('count', 6); // default 6
+        $count = $request->query('count', 6);
         $products = Product::inRandomOrder()->take($count)->get();
         return response()->json($products);
     }
+    
+    public function rateProduct(Request $request, $productId): JsonResponse
+    {
+        if (!Auth::check()) {
+            return response()->json(['message' => 'Anda harus login untuk memberikan ulasan.'], 401);
+        }
 
+        try {
+            $request->validate([
+                'rating' => 'required|integer|min:1|max:5',
+                'comment' => 'nullable|string|max:1000',
+            ]);
+        } catch (ValidationException $e) {
+            return response()->json(['message' => $e->getMessage()], 422);
+        }
+        
+        $product = Product::find($productId);
+        if (!$product) {
+            return response()->json(['message' => 'Produk tidak ditemukan.'], 404);
+        }
+
+        if (!$product->hasBeenPurchasedByCurrentUser()) {
+            return response()->json(['message' => 'Anda hanya dapat mengulas produk yang sudah Anda beli.'], 403);
+        }
+
+        if ($product->hasBeenReviewedByCurrentUser()) {
+            return response()->json(['message' => 'Anda sudah memberikan ulasan untuk produk ini.'], 403);
+        }
+
+        $rating = Rating::create([
+            'product_id' => $product->id,
+            'user_id' => Auth::id(),
+            'rating' => $request->rating,
+            'ulasan' => $request->comment,
+        ]);
+
+        return response()->json([
+            'message' => 'Ulasan berhasil disimpan.',
+            'rating' => $rating,
+        ], 200);
+    }
+
+    public function shopProducts(Request $request, $id)
+    {
+        $query = Product::where('shop_id', $id);
+
+        if ($request->has('exclude')) {
+            $query->where('id', '!=', $request->query('exclude'));
+        }
+
+        $products = $query->inRandomOrder()->limit(6)->get();
+
+        return response()->json([
+            'data' => $products
+        ], 200);
+    }
+
+    public function productReviews(Product $product)
+    {
+        $reviews = Rating::where('product_id', $product->id)
+                         ->with('user:id,name,image')
+                         ->latest()
+                         ->paginate(10); 
+
+        return response()->json($reviews);
+    }
 }

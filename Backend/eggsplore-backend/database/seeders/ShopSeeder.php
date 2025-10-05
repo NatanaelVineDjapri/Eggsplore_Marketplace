@@ -17,7 +17,6 @@ class ShopSeeder extends Seeder
             return;
         }
 
-        // Buat 2 shop per user
         foreach ($users as $user) {
             Shop::factory()->count(2)->create([
                 'user_id' => $user->id,

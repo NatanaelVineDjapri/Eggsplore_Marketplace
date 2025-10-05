@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:eggsplore/constants/colors.dart';
 import 'package:eggsplore/model/shop.dart';
+import 'package:eggsplore/helper/image_helper.dart';
 
 class ShopCard extends StatelessWidget {
   final Shop shop;
@@ -9,6 +10,10 @@ class ShopCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final imageUrl = shop.imagePath != null && shop.imagePath!.isNotEmpty
+        ? ImageHelper.getImageUrl(shop.imagePath)
+        : null;
+
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(12),
@@ -28,11 +33,11 @@ class ShopCard extends StatelessWidget {
           CircleAvatar(
             radius: 24,
             backgroundColor: AppColors.redd,
-            backgroundImage: shop.profilePicture != null
-                ? NetworkImage(shop.profilePicture!)
+            backgroundImage: imageUrl != null && imageUrl.isNotEmpty
+                ? NetworkImage(imageUrl)
                 : null,
-            child: shop.profilePicture == null
-                ? Icon(Icons.store, color: Colors.white)
+            child: (imageUrl == null || imageUrl.isEmpty)
+                ? const Icon(Icons.store, color: Colors.white)
                 : null,
           ),
           const SizedBox(width: 12),

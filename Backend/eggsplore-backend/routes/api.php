@@ -9,6 +9,7 @@ use App\Http\Controllers\ShopController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\BalanceController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckoutController; // FIX 1: Import CheckoutController
 
 Route::post('register', [AuthController::class, 'register']);
 Route::get('users', [AuthController::class, 'allUsers']);
@@ -20,7 +21,7 @@ Route::get('/shops', [ShopController::class, 'index']);
 Route::get('/shops/{id}', [ShopController::class, 'showShop']);
 
 Route::middleware('auth:sanctum')->group(function() {
-    Route::post('/update-profile', [AuthController::class, 'updateProfile']);
+    Route::put('/user/profile', [AuthController::class, 'updateProfile']);
 
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'getAuthenticatedUser']);
@@ -42,7 +43,7 @@ Route::middleware('auth:sanctum')->group(function() {
 
     Route::post('/products/{id}/rate', [ProductController::class,'rateProduct']);
 
-    Route::get('/search', [SearchController::class, 'search']); //blm 
+    Route::get('/search', [SearchController::class, 'search']);
 
     Route::get('/messages/inbox', [MessageController::class, 'inbox']);
     Route::get('/messages/{user}', [MessageController::class, 'index']);
@@ -50,13 +51,23 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::delete('/messages/{user}/{message}', [MessageController::class, 'destroy']);
     Route::post('/shops', [ShopController::class, 'makeShop']);
     Route::put('/shops/{id}', [ShopController::class, 'updateShop']);
-    
+
     Route::post('/products/{id}/like', [LikeController::class, 'toggleLike']);
     Route::get('/user/liked-products', [LikeController::class, 'likedProducts']);
-
+    Route::get('/shops/{id}/products', [ProductController::class, 'shopProducts']);
+    Route::get('/products/{product}/reviews', [ProductController::class, 'productReviews']);
 
     Route::get('/cart', [CartController::class, 'showCart']);
     Route::post('/cart', [CartController::class, 'addCart']);
     Route::put('/cart/{itemId}', [CartController::class, 'updateCart']);
     Route::delete('/cart/{itemId}', [CartController::class, 'removeCart']);
+
+    Route::get('/user/shop', [ShopController::class, 'getUserShop']);
+    Route::get('/user', [AuthController::class, 'getAuthenticatedUser']);
+    Route::post('/orders', [CheckoutController::class, 'store']); // checkout
+    
+    // Route::post('/checkout', [CheckoutController::class, 'show']);      
+    // Route::post('/order/pay/{id}', [CheckoutController::class, 'pay']);
+    // Route::put('/user/{user}/update-balance', [AuthController::class, 'updateBalance']);
+
 });

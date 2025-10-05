@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:eggsplore/model/user.dart';
+import 'package:flutter/material.dart';
+import 'package:eggsplore/pages/modify_profile_info_page.dart';
 import 'package:eggsplore/constants/colors.dart';
 
 class ProfileInfoCard extends StatelessWidget {
@@ -15,15 +16,28 @@ class ProfileInfoCard extends StatelessWidget {
     final displayName = user?.name ?? 'Guest';
     final imagePath = user?.image ?? '';
     const androidEmulatorServer = "http://10.0.2.2:8000";
-    const iosEmulatorServer = "http://localhost:8000";   
+    const iosEmulatorServer = "http://localhost:8000";
+
+    final baseServerUrl = Theme.of(context).platform == TargetPlatform.iOS
+        ? iosEmulatorServer
+        : androidEmulatorServer;
 
     final imageUrl = imagePath.isNotEmpty
-        ? NetworkImage("$androidEmulatorServer$imagePath")
+        ? NetworkImage("$baseServerUrl$imagePath")
         : const AssetImage("assets/images/default_pfp.png") as ImageProvider;
 
     return Expanded(
       child: GestureDetector(
         onTap: () {
+          // Navigasi ke halaman edit profil
+          if (user != null) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ModifyProfileInfoPage(currentUser: user!),
+              ),
+            );
+          }
         },
         child: Container(
           height: 100,
@@ -56,6 +70,8 @@ class ProfileInfoCard extends StatelessWidget {
                   ),
                 ),
               ),
+              const Spacer(), // Dorong ikon edit ke kanan
+              const Icon(Icons.edit_rounded, color: AppColors.grey),
             ],
           ),
         ),

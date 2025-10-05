@@ -13,6 +13,7 @@ import 'package:eggsplore/widget/product.dart';
 import 'package:eggsplore/widget/profile/profile_actions_card.dart';
 import 'package:eggsplore/widget/profile/profile_info_card.dart';
 import 'package:eggsplore/widget/profile/profile_shop_card.dart';
+import 'package:eggsplore/widget/random_product_grid.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eggsplore/constants/colors.dart';
@@ -169,38 +170,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                             SizedBox(height: size.xl),
                             buildSectionTitle(context, AppStrings.maybe, Appsized.fontSm, FontWeight.normal),
                             SizedBox(height: size.md),
-                            randomProductsAsync.when(
-                              data: (products) {
-                                if (products.isEmpty) {
-                                  return const Text("Tidak ada produk rekomendasi.", style: TextStyle(color: AppColors.grey));
-                                }
-                                return GridView.builder(
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: products.length,
-                                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
-                                    crossAxisSpacing: size.sm,
-                                    mainAxisSpacing: size.sm,
-                                    childAspectRatio: 0.7,
-                                  ),
-                                  itemBuilder: (context, index) {
-                                    final product = products[index];
-                                    final isLiked = ref.watch(likeStateProvider)[product.id]?.userLiked ?? false;
-
-                                    return ProductCard(
-                                      productId: product.id,
-                                      name: product.name,
-                                      price: product.price,
-                                      image: product.image,
-                                      isLiked: isLiked,
-                                    );
-                                  },
-                                );
-                              },
-                              loading: () => const Center(child: CircularProgressIndicator()),
-                              error: (err, stack) => Text("Error: $err"),
-                            ),
+                            RandomProductsGrid()
                           ],
                         ),
                       ),

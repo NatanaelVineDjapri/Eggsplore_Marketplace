@@ -1,6 +1,7 @@
 import 'package:eggsplore/bar/bottom_nav.dart';
 import 'package:eggsplore/bar/titleBar.dart';
 import 'package:eggsplore/constants/colors.dart';
+import 'package:eggsplore/constants/text_string.dart';
 import 'package:eggsplore/widget/chart/cart_item.dart';
 import 'package:eggsplore/widget/chart/cart_bottom_bar.dart';
 import 'package:eggsplore/widget/chart/cart_select_all_header.dart';
@@ -44,7 +45,7 @@ class _CartPageState extends ConsumerState<CartPage> {
       appBar: const titleBar(title: "Cart"),
 
       body: cartItems.isEmpty
-          ? const Center(child: Text("Keranjang masih kosong 🛒"))
+          ? const Center(child: Text(AppStrings.emptcart))
           : ListView(
               padding: const EdgeInsets.only(bottom: 80),
               children: [

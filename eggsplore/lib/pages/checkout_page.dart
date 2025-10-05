@@ -1,4 +1,5 @@
 import 'package:eggsplore/app_routes.dart';
+import 'package:eggsplore/constants/text_string.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -49,7 +50,7 @@ class CheckoutPage extends ConsumerWidget {
                 SizedBox(height: sizes.xss),
                 Text(item.name, style: const TextStyle(color: Colors.black54)),
                 SizedBox(height: sizes.xs),
-                Text("Rp ${formatter.format(item.price)}",
+                Text('${AppStrings.pricerp} ${formatter.format(item.price)}',
                     style: const TextStyle(fontWeight: FontWeight.bold)),
               ],
             ),
@@ -68,12 +69,12 @@ class CheckoutPage extends ConsumerWidget {
       ScaffoldMessenger.of(context).removeCurrentSnackBar();
       if (current.isLoading) {
         ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text('Memproses pesanan...')));
+            .showSnackBar(const SnackBar(content: Text(AppStrings.orderproc)));
       }
       if (current.hasError) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Gagal: ${current.error.toString()}'),
+            content: Text('${AppStrings.fail} ${current.error.toString()}'),
             backgroundColor: Colors.red,
           ),
         );
@@ -81,7 +82,7 @@ class CheckoutPage extends ConsumerWidget {
       if (current.hasValue && current.value != null) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Pembayaran Berhasil!'),
+            content: Text(AppStrings.successpay),
             backgroundColor: Colors.green,
           ),
         );
@@ -131,7 +132,7 @@ class CheckoutPage extends ConsumerWidget {
                       color: Colors.black, size: Appsized.iconMd),
                 ),
                 SizedBox(width: Appsized.iconXs),
-                const Text("Checkout",
+                const Text(AppStrings.co,
                     style: TextStyle(
                         fontSize: Appsized.fontLg + 2, // 20
                         fontWeight: FontWeight.bold)),
@@ -148,15 +149,15 @@ class CheckoutPage extends ConsumerWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(user?.name ?? "Harap Login",
+                        Text(user?.name ?? AppStrings.pleaselog,
                             style: const TextStyle(
                                 fontSize: Appsized.fontMd,
                                 fontWeight: FontWeight.bold)),
                         SizedBox(height: sizes.xs),
                         // DIUBAH: Menambahkan null-aware '?'
-                        Text(user?.phoneNumber ?? "-"),
+                        Text(user?.phoneNumber ?? AppStrings.minus),
                         SizedBox(height: sizes.xs),
-                        Text(user?.address ?? "Login untuk melihat alamat",
+                        Text(user?.address ?? AppStrings.logaddress,
                             style: const TextStyle(color: Colors.black54)),
                       ],
                     ),
@@ -167,7 +168,7 @@ class CheckoutPage extends ConsumerWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text("Produk Dipesan",
+                        const Text(AppStrings.prodordered,
                             style: TextStyle(fontWeight: FontWeight.bold)),
                         SizedBox(height: sizes.xs),
                         ...itemsToCheckout
@@ -195,7 +196,7 @@ class CheckoutPage extends ConsumerWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text("Pilih metode pembayaran", style: TextStyle(fontWeight: FontWeight.bold)),
+                        const Text(AppStrings.choosepaymethod, style: TextStyle(fontWeight: FontWeight.bold)),
                         SizedBox(height: Appsized.iconXs),
                         Container(
                           width: double.infinity,
@@ -208,26 +209,26 @@ class CheckoutPage extends ConsumerWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text("Bayar dengan:"),
+                              const Text(AppStrings.paywith),
                               SizedBox(height: sizes.xs),
                               Row(
                                 children: const [
                                   Icon(Icons.circle, size: Appsized.fontSm, color: Colors.orange),
                                   SizedBox(width: 6),
-                                  Text("EggsplorePay"),
+                                  Text(AppStrings.eggsplorepay),
                                 ],
                               ),
                               SizedBox(height: sizes.xs),
-                              Text("Saldo: Rp ${formatter.format(userBalance)}"),
+                              Text('${AppStrings.acc} ${formatter.format(userBalance)}'),
                               if (user != null && !saldoCukup)
                                 Padding(
                                   padding: EdgeInsets.only(top: sizes.xs),
-                                  child: const Text("❌ Saldo tidak cukup untuk membayar!", style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+                                  child: const Text(AppStrings.notenough, style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
                                 ),
                               if (user == null)
                                 Padding(
                                   padding: EdgeInsets.only(top: sizes.xs),
-                                  child: const Text("⚠️ Anda harus login untuk dapat membayar.", style: TextStyle(color: Colors.orange, fontWeight: FontWeight.bold)),
+                                  child: const Text(AppStrings.logintopay, style: TextStyle(color: Colors.orange, fontWeight: FontWeight.bold)),
                                 ),
                             ],
                           ),
@@ -251,9 +252,9 @@ class CheckoutPage extends ConsumerWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text("Total", style: TextStyle(fontSize: Appsized.fontSm)),
+                    const Text(AppStrings.sum, style: TextStyle(fontSize: Appsized.fontSm)),
                     SizedBox(height: sizes.xs),
-                    Text("Rp ${formatter.format(totalPayment)}", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: Appsized.fontMd)),
+                    Text('${AppStrings.pricerp} ${formatter.format(totalPayment)}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: Appsized.fontMd)),
                   ],
                 ),
                 ElevatedButton(
@@ -286,7 +287,7 @@ class CheckoutPage extends ConsumerWidget {
                           height: Appsized.iconMd,
                           child: CircularProgressIndicator(strokeWidth: 2, color: Colors.black),
                         )
-                      : const Text("Checkout"),
+                      : const Text(AppStrings.co),
                 ),
               ],
             ),

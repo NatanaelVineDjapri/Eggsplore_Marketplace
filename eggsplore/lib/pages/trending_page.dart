@@ -5,6 +5,8 @@ import 'package:eggsplore/pages/search_page.dart';
 import 'package:eggsplore/pages/provider/product_provider.dart';
 import 'package:eggsplore/widget/product.dart';
 import 'package:eggsplore/widget/TopNavBar.dart';
+import 'package:eggsplore/constants/text_string.dart';
+import 'package:eggsplore/constants/images.dart';
 
 class TrendingPage extends ConsumerWidget {
   const TrendingPage({super.key});
@@ -20,7 +22,7 @@ class TrendingPage extends ConsumerWidget {
             child: Container(
               decoration: const BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage("assets/images/backgroundtrending.png"), 
+                  image: AssetImage(AppImages.trendingbg), 
                   fit: BoxFit.cover, 
                 ),
               ),
@@ -35,7 +37,7 @@ class TrendingPage extends ConsumerWidget {
                   TopNavBar(
                     onChatTap: () {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("Chat tapped!")),
+                        const SnackBar(content: Text(AppStrings.chattapped)),
                       );
                     },
                     onSearch: (value) {
@@ -49,7 +51,7 @@ class TrendingPage extends ConsumerWidget {
                   const SizedBox(height: 16),
                   Center(
                     child: Image.asset(
-                      "assets/images/trendingcard.png",
+                      AppImages.trendingcard,
                       height: 100,
                       fit: BoxFit.contain,
                     ),
@@ -64,7 +66,7 @@ class TrendingPage extends ConsumerWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: Text(
-                            'Gagal memuat produk: ${err.toString()}',
+                            '${AppStrings.failproductload} ${err.toString()}',
                             textAlign: TextAlign.center,
                             style: const TextStyle(color: Colors.white),
                           ),
@@ -74,7 +76,7 @@ class TrendingPage extends ConsumerWidget {
                         if (products.isEmpty) {
                           return const Center(
                             child: Text(
-                              'Belum ada produk trending saat ini.',
+                              AppStrings.Noitem,
                               style: TextStyle(color: Colors.white),
                             ),
                           );

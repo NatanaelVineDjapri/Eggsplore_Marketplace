@@ -1,5 +1,6 @@
 import 'package:eggsplore/bar/backBar2.dart';
 import 'package:eggsplore/constants/colors.dart';
+import 'package:eggsplore/constants/text_string.dart';
 import 'package:eggsplore/model/user.dart'; 
 import 'package:eggsplore/pages/provider/message_provider.dart';
 import 'package:eggsplore/pages/provider/product_provider.dart';
@@ -34,7 +35,7 @@ class ChatPage extends ConsumerWidget {
                       padding: EdgeInsets.symmetric(vertical: 20),
                       child: Center(
                         child: Text(
-                          "💬 Belum ada chat.\nMulai percakapan dengan mencari user!",
+                          AppStrings.nochat,
                           textAlign: TextAlign.center,
                           style: TextStyle(color: Colors.grey, fontSize: 16),
                         ),
@@ -64,7 +65,7 @@ class ChatPage extends ConsumerWidget {
                   ),
                 ),
                 error: (err, stack) => Center(
-                  child: Text("Error chat: $err"),
+                  child: Text('${AppStrings.errchat} $err'),
                 ),
               ),
 

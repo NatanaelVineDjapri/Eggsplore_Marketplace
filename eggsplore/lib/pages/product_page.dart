@@ -1,3 +1,5 @@
+import 'package:eggsplore/constants/images.dart';
+import 'package:eggsplore/constants/text_string.dart';
 import 'package:flutter/material.dart';
 import 'package:eggsplore/constants/sizes.dart';
 
@@ -34,7 +36,7 @@ class ProductPage extends StatelessWidget {
             height: size.height * 0.3,
             color: Colors.grey[300],
             child: const Center(
-              child: Text("Product Image",
+              child: Text(AppStrings.prodimage,
                   style: TextStyle(color: Colors.black54)),
             ),
           ),
@@ -45,11 +47,11 @@ class ProductPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text("Rp 1.000.000",
+                const Text(AppStrings.onemil,
                     style:
                         TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 4),
-                const Text("Cabe Rawit 1 Kg",
+                const Text(AppStrings.onekgchili,
                     style:
                         TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
                 const SizedBox(height: 8),
@@ -60,10 +62,10 @@ class ProductPage extends StatelessWidget {
                       children: [
                         Icon(Icons.star, color: Colors.black87, size: 18),
                         SizedBox(width: 4),
-                        Text("4.8 (20)"),
+                        Text(AppStrings.ratedummy),
                       ],
                     ),
-                    Text("stok : 9"),
+                    Text(AppStrings.stock),
                   ],
                 ),
               ],
@@ -84,10 +86,10 @@ class ProductPage extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: const [
-                Text("Review",
+                Text(AppStrings.review,
                     style:
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                Text("See all", style: TextStyle(color: Colors.blue)),
+                Text(AppStrings.seeall, style: TextStyle(color: Colors.blue)),
               ],
             ),
           ),
@@ -96,17 +98,17 @@ class ProductPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text("claudival123",
+                const Text(AppStrings.userdummy,
                     style: TextStyle(fontWeight: FontWeight.bold)),
                 Row(
                   children: const [
                     Icon(Icons.star, size: 18, color: Colors.black87),
                     SizedBox(width: 4),
-                    Text("3.1/5"),
+                    Text(AppStrings.givingrate),
                   ],
                 ),
                 const SizedBox(height: 4),
-                const Text("mesennya kayak iklan, banyak dramanya"),
+                const Text(AppStrings.commentreview),
                 const SizedBox(height: 8),
                 Row(
                   children: List.generate(
@@ -116,7 +118,7 @@ class ProductPage extends StatelessWidget {
                       width: 60,
                       height: 60,
                       color: Colors.grey[300],
-                      child: const Center(child: Text("Img")),
+                      child: const Center(child: Text(AppStrings.img)),
                     ),
                   ),
                 ),
@@ -147,11 +149,11 @@ class ProductPage extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: const [
-                        Text("Ayam Kecap",
+                        Text(AppStrings.soychicken,
                             style: TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.bold)),
                         SizedBox(height: 2),
-                        Text("Jakarta Barat",
+                        Text(AppStrings.westjakarta,
                             style: TextStyle(color: Colors.black54)),
                       ],
                     ),
@@ -163,7 +165,7 @@ class ProductPage extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(20))),
                     ),
-                    child: const Text("Follow"),
+                    child: const Text(AppStrings.followtext),
                   ),
                 ],
               ),
@@ -183,11 +185,11 @@ class ProductPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: const [
-                Text("Product Description",
+                Text(AppStrings.proddesct,
                     style:
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                 SizedBox(height: 8),
-                Text("Cabe belanda yang dibesarkan seperti anak sendiri"),
+                Text(AppStrings.eurochili),
               ],
             ),
           ),

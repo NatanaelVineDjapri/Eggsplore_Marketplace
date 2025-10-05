@@ -1,3 +1,4 @@
+import 'package:eggsplore/constants/text_string.dart';
 import 'package:eggsplore/model/user.dart';
 import 'package:flutter/material.dart';
 import 'package:eggsplore/constants/sizes.dart';
@@ -39,7 +40,7 @@ class _EggsplorePayPageState extends State<EggsplorePayPage> {
       if (mounted) {
         setState(() => _isLoading = false);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Gagal memuat data: ${e.toString()}')),
+          SnackBar(content: Text('${AppStrings.faildataload} ${e.toString()}')),
         );
       }
     }
@@ -55,11 +56,11 @@ class _EggsplorePayPageState extends State<EggsplorePayPage> {
         _currentUser = _currentUser?.copyWith(balance: newBalance);
       });
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Top Up berhasil: ${formatRupiah(amount)}")),
+        SnackBar(content: Text('${AppStrings.successtopup} ${formatRupiah(amount)}')),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Top Up gagal, coba lagi")),
+        const SnackBar(content: Text(AppStrings.failtopup)),
       );
     }
   }
@@ -76,7 +77,7 @@ class _EggsplorePayPageState extends State<EggsplorePayPage> {
       ),
       alignment: Alignment.center,
       child: const Text(
-        "Dapatkan Bonus Top Up 5% Hari Ini!",
+        AppStrings.getbonustopup,
         style: TextStyle(
           color: Colors.lightGreen,
           fontWeight: FontWeight.w600,
@@ -104,7 +105,7 @@ class _EggsplorePayPageState extends State<EggsplorePayPage> {
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _currentUser == null
-              ? const Center(child: Text("Gagal memuat data pengguna."))
+              ? const Center(child: Text(AppStrings.faildatauserload))
               : SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -143,7 +144,7 @@ class _EggsplorePayPageState extends State<EggsplorePayPage> {
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: sizes.md),
                         child: Text(
-                          "Pilih Nominal Top Up",
+                          AppStrings.choosenumtopup,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: Appsized.fontLg,

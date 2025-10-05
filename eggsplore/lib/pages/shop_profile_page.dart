@@ -1,3 +1,4 @@
+import 'package:eggsplore/constants/text_string.dart';
 import 'package:flutter/material.dart';
 
 class ShopProfilePage extends StatelessWidget {
@@ -30,7 +31,7 @@ class ShopProfilePage extends StatelessWidget {
                         ),
                         child: const TextField(
                           decoration: InputDecoration(
-                            hintText: "Cari di Toko Ini",
+                            hintText: AppStrings.findinshop,
                             border: InputBorder.none,
                           ),
                         ),

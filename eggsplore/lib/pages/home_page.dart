@@ -1,3 +1,4 @@
+import 'package:eggsplore/constants/text_string.dart';
 import 'package:eggsplore/model/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -92,9 +93,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   child: TopNavBar(
                     onChatTap: () => Navigator.push(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) => const ChatPage(),
-                      ),
+                      MaterialPageRoute(builder: (context) => const ChatPage()),
                     ),
                     onSearch: (value) {
                       final query = value.trim();
@@ -114,20 +113,18 @@ class _HomePageState extends ConsumerState<HomePage> {
                     children: [
                       const BannerSlider(
                         images: [
-                          "assets/images/banner.jpg",
-                          "assets/images/banner.jpg",
-                          "assets/images/banner.jpg",
+                          AppImages.homeBanner,
+                          AppImages.homeBanner,
+                          AppImages.homeBanner,
                         ],
                       ),
 
                       // Tampilkan saldo dari user provider
                       userAsyncValue.when(
-                        loading: () => const Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                        error: (err, stack) => Center(
-                          child: Text("Gagal memuat user: $err"),
-                        ),
+                        loading: () =>
+                            const Center(child: CircularProgressIndicator()),
+                        error: (err, stack) =>
+                            Center(child: Text('${AppStrings.failloaduser} $err')),
                         data: (user) => EggsplorePayCard(
                           balance: user.balance,
                           onTap: _navigateToEggsplorePay,
@@ -138,18 +135,22 @@ class _HomePageState extends ConsumerState<HomePage> {
                         padding: EdgeInsets.all(size.md),
                         child: Consumer(
                           builder: (context, ref, child) {
-                            final productsAsync = ref.watch(allProductsProvider);
+                            final productsAsync = ref.watch(
+                              allProductsProvider,
+                            );
                             return productsAsync.when(
                               loading: () => const Center(
                                 child: CircularProgressIndicator(),
                               ),
                               error: (err, stack) => Center(
-                                child: Text("Gagal load produk: $err"),
+                                child: Text(
+                                  '${AppStrings.failproductload} $err',
+                                ),
                               ),
                               data: (products) {
                                 if (products.isEmpty) {
                                   return const Center(
-                                    child: Text("Belum ada produk"),
+                                    child: Text(AppStrings.noproductyet),
                                   );
                                 }
                                 return GridView.builder(
@@ -158,11 +159,11 @@ class _HomePageState extends ConsumerState<HomePage> {
                                   itemCount: products.length,
                                   gridDelegate:
                                       SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
-                                    crossAxisSpacing: size.sm,
-                                    mainAxisSpacing: size.sm,
-                                    childAspectRatio: 0.7,
-                                  ),
+                                        crossAxisCount: 2,
+                                        crossAxisSpacing: size.sm,
+                                        mainAxisSpacing: size.sm,
+                                        childAspectRatio: 0.7,
+                                      ),
                                   itemBuilder: (context, index) {
                                     final product = products[index];
                                     return ProductCard(

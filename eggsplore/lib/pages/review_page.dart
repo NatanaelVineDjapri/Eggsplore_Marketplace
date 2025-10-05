@@ -1,3 +1,4 @@
+import 'package:eggsplore/constants/text_string.dart';
 import 'package:eggsplore/helper/image_helper.dart';
 import 'package:eggsplore/model/review.dart';
 import 'package:eggsplore/pages/provider/product_provider.dart';
@@ -14,13 +15,13 @@ class AllReviewsPage extends ConsumerWidget {
     final reviewsAsync = ref.watch(reviewsProvider(productId));
 
     return Scaffold(
-      appBar: const TopBar(title: "Ulasan Produk"),
+      appBar: const TopBar(title: AppStrings.productreview),
       body: reviewsAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (err, stack) => Center(child: Text("Error: $err")),
         data: (reviews) {
           if (reviews.isEmpty) {
-            return const Center(child: Text("Belum ada ulasan untuk produk ini."));
+            return const Center(child: Text(AppStrings.noreviewproduct));
           }
           return ListView.builder(
             itemCount: reviews.length,

@@ -6,7 +6,7 @@ import 'package:eggsplore/constants/images.dart';
 import 'package:eggsplore/constants/sizes.dart';
 import 'package:eggsplore/constants/text_string.dart';
 import 'package:eggsplore/widget/passwordForm.dart';
-import 'package:eggsplore/provider/auth_provider.dart';
+import 'package:eggsplore/pages/provider/auth_provider.dart';
 
 class NewPasswordPage extends ConsumerStatefulWidget {
   const NewPasswordPage({super.key});

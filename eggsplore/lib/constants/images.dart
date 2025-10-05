@@ -7,8 +7,8 @@ class AppImages {
   static const String loginLogo = 'assets/logo/eggsplore2.png';
   static const String forgetPassLogo = 'assets/logo/logo4.png';
   static const String loginBackground = 'assets/images/loginBackground.png';
-  static const String introLogo ='assets/logo/eggsyLogin.png';
-  static const String logo ='assets/logo/logo.png';
+  static const String introLogo = 'assets/logo/eggsyLogin.png';
+  static const String logo = 'assets/logo/logo.png';
   static const String profileHeader = 'assets/images/profileHeader.png';
   static const String homeHeader = 'assets/images/homeHeader2.png';
   static const String shopPattern = 'assets/images/patterns.png';
@@ -27,6 +27,8 @@ class AppImages {
   static const String poni = 'assets/images/poni.png';
   static const String mouse = 'assets/images/mouse.png';
   static const String monitor = 'assets/images/monitor.png';
+  static const String trendingbg = 'assets/images/backgroundtrending.png';
+  static const String trendingcard = 'assets/images/trendingcard.png';
   static const String map = 'assets/images/map.png';
   static const String baju = 'assets/images/baju.png';
   static const String marco = 'assets/images/marco.png';

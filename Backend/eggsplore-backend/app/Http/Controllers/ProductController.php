@@ -142,10 +142,10 @@ class ProductController extends Controller
         return response()->json(['message' => "Produk berhasil dihapus"]);
     }
 
-    public function trendingProduct()
+    public function trending()
     {
-        $products = Product::trending();
-        return response()->json($products);
+        $trendingProducts = Product::trending();
+        return response()->json($trendingProducts);
     }
 
     public function randomProducts(Request $request)

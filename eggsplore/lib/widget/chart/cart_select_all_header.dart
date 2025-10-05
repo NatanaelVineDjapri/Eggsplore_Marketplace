@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:eggsplore/provider/cart_provider.dart';
+import 'package:eggsplore/pages/provider/cart_provider.dart';
 import 'package:eggsplore/model/cart_item.dart';
 
 class CartSelectAllHeader extends StatelessWidget {

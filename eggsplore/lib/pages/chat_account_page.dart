@@ -1,3 +1,4 @@
+import 'package:eggsplore/constants/text_string.dart';
 import 'package:flutter/material.dart';
 import 'package:eggsplore/model/message.dart';
 import 'package:eggsplore/service/message_service.dart';
@@ -75,7 +76,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
 
           if (snapshot.hasError) {
             return Center(
-              child: Text("Gagal ambil chat: ${snapshot.error}"),
+              child: Text('${AppStrings.failget} ${snapshot.error}'),
             );
           }
 

@@ -5,8 +5,8 @@ import 'package:eggsplore/constants/text_string.dart';
 import 'package:eggsplore/constants/text_style.dart';
 import 'package:eggsplore/model/like_model.dart';
 import 'package:eggsplore/model/user.dart';
-import 'package:eggsplore/provider/product_provider.dart';
-import 'package:eggsplore/provider/like_provider.dart';
+import 'package:eggsplore/pages/provider/product_provider.dart';
+import 'package:eggsplore/pages/provider/like_provider.dart';
 import 'package:eggsplore/service/user_service.dart';
 import 'package:eggsplore/widget/product.dart';
 import 'package:eggsplore/widget/profile/profile_actions_card.dart';
@@ -87,8 +87,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                 final username = userSnapshot.hasData && user != null
                     ? _getUsername(user)
                     : (userSnapshot.connectionState == ConnectionState.waiting
-                          ? 'Loading...'
-                          : 'Pengguna');
+                          ? AppStrings.loading
+                          : AppStrings.user);
 
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -104,7 +104,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Halo, $username',
+                            '${AppStrings.greetuser} ${username}',
                             style: AppTextStyle.mainTitle2.copyWith(
                               color: Colors.white,
                               fontSize: Appsized.fontxxl,
@@ -147,7 +147,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                                         vertical: 5.0,
                                       ),
                                       child: Text(
-                                        "Belum ada produk dalam Wishlist Anda.",
+                                        AppStrings.noproductwishlist,
                                         style: TextStyle(
                                           color: Colors.grey,
                                           fontSize: Appsized.fontSm,
@@ -213,7 +213,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                               loading: () => const Center(
                                 child: CircularProgressIndicator(),
                               ),
-                              error: (err, stack) => Text("Error: $err"),
+                              error: (err, stack) => Text('${AppStrings.usererror} $err'),
                             ),
                             SizedBox(height: size.xl),
                             buildSectionTitle(

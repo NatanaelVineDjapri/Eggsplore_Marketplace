@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:eggsplore/constants/text_string.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:eggsplore/bar/backBar.dart';
@@ -68,17 +69,17 @@ class _ModifyProfileInfoPageState extends State<ModifyProfileInfoPage> {
 
         if (success) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Profil berhasil diperbarui!")),
+            const SnackBar(content: Text(AppStrings.modifysuccessprofile)),
           );
           Navigator.pop(context);
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Gagal memperbarui profil.")),
+            const SnackBar(content: Text(AppStrings.modifyfailprofile)),
           );
         }
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Terjadi kesalahan: $e")),
+          SnackBar(content: Text('${AppStrings.failedattempt} {$e}')),
         );
       }
     }
@@ -194,7 +195,7 @@ class _ModifyProfileInfoPageState extends State<ModifyProfileInfoPage> {
                   textStyle: AppTextStyle.mainTitle2,
                 ),
                 onPressed: _submitForm,
-                child: const Text("SAVE"),
+                child: const Text(AppStrings.save),
               ),
             ],
           ),

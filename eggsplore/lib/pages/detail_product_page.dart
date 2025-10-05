@@ -1,3 +1,4 @@
+import 'package:eggsplore/constants/text_string.dart';
 import 'package:eggsplore/helper/image_helper.dart';
 import 'package:eggsplore/pages/review_page.dart';
 import 'package:eggsplore/widget/detail_product/add_to_cart_button2.dart';
@@ -10,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:eggsplore/constants/colors.dart';
-import '../provider/product_provider.dart';
+import 'provider/product_provider.dart';
 import '../model/product.dart';
 import '../widget/detail_product/topbar.dart';
 import '../widget/detail_product/follow_button.dart';
@@ -35,7 +36,7 @@ class DetailProductPage extends ConsumerWidget {
         loading: () => const Center(
           child: CircularProgressIndicator(color: AppColors.primary),
         ),
-        error: (err, stack) => Center(child: Text("Gagal memuat produk: $err")),
+        error: (err, stack) => Center(child: Text('${AppStrings.failproductload} $err')),
         data: (product) {
           final String shopImageUrl = ImageHelper.getImageUrl(
             product.shopImage,
@@ -79,7 +80,7 @@ class DetailProductPage extends ConsumerWidget {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        "Rp ${formatter.format(product.price)}",
+                        '${AppStrings.pricerp} ${formatter.format(product.price)}',
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -92,7 +93,7 @@ class DetailProductPage extends ConsumerWidget {
                         height: 24,
                       ),
                       const Text(
-                        "Deskripsi Produk",
+                        AppStrings.proddesc,
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -131,7 +132,7 @@ class DetailProductPage extends ConsumerWidget {
                                 ),
                               ),
                               const Text(
-                                "Online 5 menit lalu",
+                                AppStrings.dmdesc,
                                 style: TextStyle(
                                   fontSize: 13,
                                   color: AppColors.grey,
@@ -230,13 +231,13 @@ class DetailProductPage extends ConsumerWidget {
       error: (err, stack) => const SizedBox.shrink(),
       data: (reviews) {
         if (reviews.isEmpty) {
-          return const Center(child: Text("Belum ada ulasan."));
+          return const Center(child: Text(AppStrings.dmnoreview));
         }
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              "Ulasan Pembeli",
+              AppStrings.buyerrev,
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
@@ -258,7 +259,7 @@ class DetailProductPage extends ConsumerWidget {
                         ),
                       );
                     },
-                    child: const Text("Lihat Semua Ulasan"),
+                    child: const Text(AppStrings.seeallrev),
                   ),
                 ),
               ),

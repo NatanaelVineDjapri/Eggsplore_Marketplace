@@ -9,7 +9,7 @@ use App\Http\Controllers\ShopController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\BalanceController;
 use App\Http\Controllers\CartController;
-use App\Http\Controllers\CheckoutController; // FIX 1: Import CheckoutController
+use App\Http\Controllers\CheckoutController;
 
 Route::post('register', [AuthController::class, 'register']);
 Route::get('users', [AuthController::class, 'allUsers']);
@@ -18,27 +18,42 @@ Route::post('verify-user', [AuthController::class, 'verifyUser']);
 Route::put('change-password', [AuthController::class, 'changePassword']);
 
 Route::middleware('auth:sanctum')->group(function() {
-    Route::put('/user/profile', [AuthController::class, 'updateProfile']);
-
-    Route::get('/user/shop', [ShopController::class, 'getUserShop']);
 
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'getAuthenticatedUser']);
+    Route::put('/user/profile', [AuthController::class, 'updateProfile']);
+    Route::get('/user/shop', [ShopController::class, 'getUserShop']);
+    Route::get('/user/liked-products', [LikeController::class, 'likedProducts']);
 
     Route::get('/products', [ProductController::class,'index']);
+    Route::get('/my-products', [ProductController::class, 'myProducts']);
+
+    Route::get('/products/trending', [ProductController::class, 'trending']);
     Route::get('/products/random', [ProductController::class, 'randomProducts']);
+
+    Route::get('/products/{id}', [ProductController::class,'showProduct']);
+    Route::post('/products', [ProductController::class,'addProduct']);
+    Route::post('/products/{id}', [ProductController::class,'updateProduct']);
+    Route::delete('/products/{id}', [ProductController::class,'deleteProduct']);
+    Route::post('/products/{id}/rate', [ProductController::class,'rateProduct']);
+    Route::post('/products/{id}/like', [LikeController::class, 'toggleLike']);
+    Route::get('/products/{product}/reviews', [ProductController::class, 'productReviews']);
+
+    Route::get('/shops', [ShopController::class, 'index']);
+    Route::get('/shops/{id}', [ShopController::class, 'showShop']);
+    Route::post('/shops', [ShopController::class, 'makeShop']);
+    Route::put('/shops/{id}', [ShopController::class, 'updateShop']);
+    Route::get('/shops/{id}/products', [ProductController::class, 'shopProducts']);
 
     Route::post('/topup', [BalanceController::class, 'topUp']);
     Route::post('/reduce', [BalanceController::class, 'reduce']);
 
-    Route::get('/products/{id}', [ProductController::class,'showProduct']);
-    Route::post('/products', [ProductController::class,'addProduct']);
-    Route::put('/products/{id}', [ProductController::class,'updateProduct']);
-    Route::delete('/products/{id}', [ProductController::class,'deleteProduct']);
+    Route::get('/cart', [CartController::class, 'showCart']);
+    Route::post('/cart', [CartController::class, 'addCart']);
+    Route::put('/cart/{itemId}', [CartController::class, 'updateCart']);
+    Route::delete('/cart/{itemId}', [CartController::class, 'removeCart']);
 
-    Route::get('/products/trending', [ProductController::class,'trendingProduct']);
-
-    Route::post('/products/{id}/rate', [ProductController::class,'rateProduct']);
+    Route::post('/orders', [CheckoutController::class, 'store']);
 
     Route::get('/search', [SearchController::class, 'search']);
 
@@ -46,29 +61,4 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('/messages/{user}', [MessageController::class, 'index']);
     Route::post('/messages/{user}', [MessageController::class, 'store']);
     Route::delete('/messages/{user}/{message}', [MessageController::class, 'destroy']);
-    Route::get('/shops', [ShopController::class, 'index']);
-    Route::get('/shops/{id}', [ShopController::class, 'showShop']);
-    Route::post('/shops', [ShopController::class, 'makeShop']);
-    Route::put('/shops/{id}', [ShopController::class, 'updateShop']);
-
-    Route::post('/products/{id}/like', [LikeController::class, 'toggleLike']);
-    Route::get('/user/liked-products', [LikeController::class, 'likedProducts']);
-    Route::get('/shops/{id}/products', [ProductController::class, 'shopProducts']);
-    Route::get('/products/{product}/reviews', [ProductController::class, 'productReviews']);
-
-    Route::get('/cart', [CartController::class, 'showCart']);
-    Route::post('/cart', [CartController::class, 'addCart']);
-    Route::put('/cart/{itemId}', [CartController::class, 'updateCart']);
-    Route::delete('/cart/{itemId}', [CartController::class, 'removeCart']);
-
-    Route::get('/user/shop', [ShopController::class, 'getUserShop']);
-    Route::get('/user', [AuthController::class, 'getAuthenticatedUser']);
-
-    Route::get('/my-products', [ProductController::class, 'myProducts']);
-    Route::post('/orders', [CheckoutController::class, 'store']); // checkout
-    
-    // Route::post('/checkout', [CheckoutController::class, 'show']);      
-    // Route::post('/order/pay/{id}', [CheckoutController::class, 'pay']);
-    // Route::put('/user/{user}/update-balance', [AuthController::class, 'updateBalance']);
-
 });

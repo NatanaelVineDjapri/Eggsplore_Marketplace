@@ -10,7 +10,7 @@ import 'package:eggsplore/constants/text_string.dart';
 import 'package:eggsplore/constants/images.dart';
 import 'package:eggsplore/widget/shop_info_card.dart';
 import 'package:eggsplore/constants/sizes.dart';
-import 'package:eggsplore/provider/product_provider.dart';
+import 'package:eggsplore/pages/provider/product_provider.dart';
 import 'package:eggsplore/widget/my_product_card.dart';
 
 class MyShopPage extends ConsumerStatefulWidget {

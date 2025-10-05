@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:eggsplore/constants/colors.dart';
-import '../provider/product_provider.dart';
+import 'provider/product_provider.dart';
 import '../model/product.dart';
 import '../widget/detail_product/topbar.dart';
 import '../widget/detail_product/follow_button.dart';

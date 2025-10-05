@@ -1,13 +1,12 @@
   import 'dart:convert';
   import 'package:eggsplore/model/shop.dart';
-  import 'package:eggsplore/service/user_service.dart'; // Pastikan path ini benar
+  import 'package:eggsplore/service/user_service.dart';
   import 'package:flutter/foundation.dart';
   import 'package:http/http.dart' as http;
 
   class ShopService {
     static const String baseUrl = "http://10.0.2.2:8000/api";
 
-    // Method untuk mengambil data toko milik user yang sedang login
     static Future<Shop?> getMyShop() async {
       final token = await UserService.getToken();
       if (token == null) {
@@ -35,8 +34,6 @@
       }
     }
 
-    // --- METHOD YANG HILANG, SEKARANG DITAMBAHKAN ---
-    // Method untuk mengupdate data toko
     static Future<bool> updateShop(int shopId, Map<String, dynamic> shopData) async {
       final token = await UserService.getToken();
       if (token == null) {
@@ -58,7 +55,6 @@
 
         debugPrint("UPDATE SHOP => ${response.statusCode} : ${response.body}");
 
-        // Berhasil jika status code 200
         return response.statusCode == 200;
       } catch (e) {
         debugPrint("Error updating shop: $e");

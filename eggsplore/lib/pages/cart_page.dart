@@ -9,7 +9,7 @@ import 'package:eggsplore/widget/chart/remove_item_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eggsplore/model/cart_item.dart';
-import 'package:eggsplore/provider/cart_provider.dart';
+import 'package:eggsplore/pages/provider/cart_provider.dart';
 
 class CartPage extends ConsumerStatefulWidget {
   const CartPage({super.key});

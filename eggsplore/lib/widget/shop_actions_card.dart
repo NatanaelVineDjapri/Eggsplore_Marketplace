@@ -4,10 +4,11 @@ import 'package:eggsplore/app_routes.dart';
 class ShopActionsCard extends StatelessWidget {
   const ShopActionsCard({super.key});
 
-  Widget _buildAction(
-      {required IconData icon,
-      required String label,
-      required VoidCallback onTap}) {
+  Widget _buildAction({
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+  }) {
     return GestureDetector(
       onTap: onTap,
       child: Column(
@@ -18,8 +19,13 @@ class ShopActionsCard extends StatelessWidget {
             child: Icon(icon, size: 28, color: Colors.black87),
           ),
           const SizedBox(height: 8),
-          Text(label,
-              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500)),
+          Text(
+            label,
+            style: const TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
         ],
       ),
     );
@@ -28,16 +34,16 @@ class ShopActionsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 8),
+      width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
-            blurRadius: 6,
-            offset: const Offset(0, 3),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
           ),
         ],
       ),

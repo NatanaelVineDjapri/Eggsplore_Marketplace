@@ -13,7 +13,6 @@ import 'package:eggsplore/pages/trending_page.dart';
 import 'package:eggsplore/pages/search_page.dart';
 import 'package:eggsplore/pages/shop_result_page.dart';
 import 'package:eggsplore/pages/notification_page.dart';
-import 'package:eggsplore/pages/profile_shop_transition.dart';
 import 'package:eggsplore/pages/product_page.dart';
 import 'package:eggsplore/pages/shop_profile_page.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +44,6 @@ class AppRoutes {
   static const String search = '/search';
   static const String shopresult = '/shopresult';
   static const String notifications = '/notifications';
-  static const String profileShopTransition = '/profile-shop-transition';
   static const String product = '/product';
   static const String shopProfile = '/shop-profile';
   static const String detailProduct = '/detail-product';
@@ -71,7 +69,6 @@ class AppRoutes {
     profile: (context) => const ProfilePage(),
     cart: (context) => const CartPage(),
     trending: (context) => const TrendingPage(),
-    profileShopTransition: (context) => const ProfileShopTransitionPage(),
     shopresult: (context) => const ShopResultPage(query: ""),
     notifications: (context) => const NotificationsPage(),
     search: (context) => const SearchPage(query: ""),

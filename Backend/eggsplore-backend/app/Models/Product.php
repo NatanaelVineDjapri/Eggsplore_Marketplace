@@ -6,13 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
-use App\Models\OrderItem; 
-use App\Models\Order;     
-use App\Models\Rating; 
-use App\Models\User; 
-use App\Models\Shop; 
-use App\Models\Cart; 
-use App\Models\Like; 
+use App\Models\OrderItem;
+use App\Models\Order;
+use App\Models\Rating;
+use App\Models\User;
+use App\Models\Shop;
+use App\Models\Cart;
+use App\Models\Like;
 
 class Product extends Model
 {
@@ -24,6 +24,7 @@ class Product extends Model
         'price',
         'stock',
         'user_id',
+        'shop_id',
         'image',
     ];
 
@@ -61,7 +62,7 @@ class Product extends Model
     {
         return $this->hasMany(Rating::class);
     }
-    
+
     public function hasBeenPurchasedByCurrentUser()
     {
         if (!Auth::check()) {
@@ -69,7 +70,7 @@ class Product extends Model
         }
         return OrderItem::where('product_id', $this->id)
             ->whereHas('order', function ($query) {
-                $query->where('user_id', auth()->id())->where('status', 'completed'); 
+                $query->where('user_id', auth()->id())->where('status', 'completed');
             })
             ->exists();
     }

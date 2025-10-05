@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Shop;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -15,6 +16,7 @@ class AuthController extends Controller
         $users = User::all();
         return response()->json($users);
     }
+
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -25,7 +27,7 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['message' => 'Validasi Gagal'], 422);
+            return response()->json(['message' => 'Error Validation'], 422);
         }
 
         $user = User::create([
@@ -34,12 +36,21 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
             'role' => 'user',
             'image' => url('images/products/eggsplore1.jpg'),
-
         ]);
 
+        $shop = Shop::create([
+            'user_id' => $user->id,
+            'name' => $user->name . "'s Shop",
+            'description' => 'Owned by ' . $user->name,
+        ]);
+
+        $token = $user->createToken('Token for user ' . $user->email)->plainTextToken;
+
         return response()->json([
-            'message' => 'Register Berhasil',
+            'message' => 'Registration Success, Please Continue to Login!',
             'user' => $user,
+            'shop' => $shop,
+            'token' => $token,
         ], 201);
     }
 
@@ -57,13 +68,13 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json(['message' => 'Email atau password salah'], 401);
+            return response()->json(['message' => 'Wrong Email or Password'], 401);
         }
 
         $token = $user->createToken('Token for user ' . $user->email)->plainTextToken;
 
         return response()->json([
-            'message' => 'Login berhasil',
+            'message' => 'Login Success',
             'user' => $user,
             'token' => $token
         ]);
@@ -87,11 +98,11 @@ class AuthController extends Controller
                     ->first();
 
         if (!$user) {
-            return response()->json(['message' => 'User tidak ditemukan'], 404);
+            return response()->json(['message' => 'User not found'], 404);
         }
 
         return response()->json([
-            'message' => 'User ditemukan',
+            'message' => 'User found',
             'data' => [
                 'email' => $request->email,
             ]
@@ -105,7 +116,7 @@ class AuthController extends Controller
             'newpassword'     => 'required|min:6',
             'confirmpassword' => 'required|same:newpassword',
         ],[
-            'confirmpassword.same' => 'Konfirmasi password tidak sesuai.',
+            'confirmpassword.same' => 'Wrong password.',
         ]);
 
         if ($validator->fails()) {
@@ -115,13 +126,13 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if (!$user) {
-            return response()->json(['message' => 'User tidak ditemukan'], 404);
+            return response()->json(['message' => 'User not found'], 404);
         }
 
         $user->password = Hash::make($request->newpassword);
         $user->save();
 
-        return response()->json(['message' => 'Password berhasil diubah'],200);
+        return response()->json(['message' => 'Password changed successfully'],200);
     }
 
     public function logout(Request $request)
@@ -129,7 +140,7 @@ class AuthController extends Controller
         $request->user()->currentAccessToken()->delete();
 
         return response()->json([
-            'message' => 'Berhasil logout'
+            'message' => 'Logout successfull'
         ]);
     }
 
@@ -179,7 +190,7 @@ class AuthController extends Controller
         $user->save();
 
         return response()->json([
-            'message' => 'Profile berhasil diperbarui',
+            'message' => 'Profile changed succesfully',
             'user'    => $user->refresh(),
         ], 200);
     }

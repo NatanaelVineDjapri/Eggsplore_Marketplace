@@ -1,3 +1,4 @@
+import 'package:eggsplore/bar/backBar2.dart';
 import 'package:eggsplore/constants/colors.dart';
 import 'package:eggsplore/model/user.dart'; 
 import 'package:eggsplore/provider/message_provider.dart';
@@ -17,10 +18,9 @@ class ChatPage extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: Colors.grey[100],
-      appBar: AppBar(
-        title: const Text("Chat"),
-        backgroundColor: AppColors.primary,
-      ),
+
+      appBar: const backBar2(title: "Chat"), 
+
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),

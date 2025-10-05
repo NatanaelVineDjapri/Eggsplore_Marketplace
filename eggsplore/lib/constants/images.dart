@@ -29,4 +29,8 @@ class AppImages {
   static const String monitor = 'assets/images/monitor.png';
   static const String trendingbg = 'assets/images/backgroundtrending.png';
   static const String trendingcard = 'assets/images/trendingcard.png';
+  static const String map = 'assets/images/map.png';
+  static const String baju = 'assets/images/baju.png';
+  static const String marco = 'assets/images/marco.png';
+  static const String smile = 'assets/images/smile.png';
 }

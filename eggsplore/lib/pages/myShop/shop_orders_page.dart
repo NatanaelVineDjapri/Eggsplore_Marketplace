@@ -14,24 +14,24 @@ class _ShopOrdersPageState extends State<ShopOrdersPage> {
   List<Map<String, dynamic>> orders = [
     {
       "username": "johndoe_12",
-      "productName": "Egg Mayo Sandwich",
-      "quantity": 2,
-      "price": 48000,
-      "image": AppImages.voucher1,
+      "productName": "Smile T-Shirt XL",
+      "quantity": 1,
+      "price": 79000,
+      "image": AppImages.smile,
     },
     {
       "username": "sarah_lee",
-      "productName": "Cheese Omelette",
+      "productName": "Classic Shirt",
       "quantity": 1,
-      "price": 30000,
-      "image": AppImages.voucher2,
+      "price": 99000,
+      "image": AppImages.baju,
     },
     {
       "username": "yuna88",
-      "productName": "Fried Egg Rice Bowl",
-      "quantity": 3,
-      "price": 90000,
-      "image": AppImages.voucher3,
+      "productName": "Casual Brown Shirt",
+      "quantity": 1,
+      "price": 89000,
+      "image": AppImages.marco,
     },
   ];
 

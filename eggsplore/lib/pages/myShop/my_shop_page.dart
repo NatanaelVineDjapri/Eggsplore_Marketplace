@@ -76,7 +76,6 @@ class _MyShopPageState extends ConsumerState<MyShopPage> {
             const SizedBox(height: 10),
             ElevatedButton(
               onPressed: () {
-                // TODO: Arahkan ke halaman pembuatan toko
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,
@@ -91,80 +90,96 @@ class _MyShopPageState extends ConsumerState<MyShopPage> {
 
     return RefreshIndicator(
       onRefresh: _fetchMyShopData,
-      child: SingleChildScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ShopInfoCard(
-              shopName: _myShop!.name,
-              description: _myShop!.description,
-              imagePath: _myShop!.image,
-              followers: "120",
-              buyers: "85",
-              rating: "4.8",
-              onModify: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ModifyShopInfoPage(),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: const EdgeInsets.all(16),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: constraints.maxHeight,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ShopInfoCard(
+                    shopName: _myShop!.name,
+                    description: _myShop!.description,
+                    imagePath: _myShop!.image,
+                    followers: "120",
+                    buyers: "85",
+                    rating: "4.8",
+                    onModify: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ModifyShopInfoPage(),
+                        ),
+                      ).then((_) => _fetchMyShopData());
+                    },
                   ),
-                ).then((_) => _fetchMyShopData());
-              },
-            ),
-            const SizedBox(height: 20),
-            const ShopActionsCard(),
-            const SizedBox(height: 20),
-            Center(
-              child: Text(
-                AppStrings.myProducts,
-                style: AppTextStyle.mainTitle2,
-                textAlign: TextAlign.center,
+                  const SizedBox(height: 20),
+                  const ShopActionsCard(),
+                  const SizedBox(height: 20),
+                  Center(
+                    child: Text(
+                      AppStrings.myProducts,
+                      style: AppTextStyle.mainTitle2,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+
+                  myProductsAsync.when(
+                    data: (products) {
+                      if (products.isEmpty) {
+                        return SizedBox(
+                          height: constraints.maxHeight * 0.4,
+                          child: const Center(
+                            child: Text(
+                              "Belum ada produk.",
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.black54,
+                              ),
+                            ),
+                          ),
+                        );
+                      }
+
+                      return GridView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: products.length,
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                          childAspectRatio: 0.7,
+                        ),
+                        itemBuilder: (context, index) {
+                          final product = products[index];
+                          return MyProductCard(
+                            productId: product.id,
+                            name: product.name,
+                            price: product.price,
+                            image: product.image,
+                          );
+                        },
+                      );
+                    },
+                    loading: () => const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                    error: (err, stack) => Center(
+                      child: Text("Error: $err"),
+                    ),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 20),
-
-            // 🔹 Daftar produk (pakai myProductsAsync)
-            myProductsAsync.when(
-              data: (products) {
-                if (products.isEmpty) {
-                  return const Center(
-                    child: Text(
-                      "Belum ada produk.",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.black54,
-                      ),
-                    ),
-                  );
-                }
-                return GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: products.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: size.sm,
-                    mainAxisSpacing: size.sm,
-                    childAspectRatio: 0.7,
-                  ),
-                  itemBuilder: (context, index) {
-                    final product = products[index];
-                    return MyProductCard(
-                      productId: product.id,
-                      name: product.name,
-                      price: product.price,
-                      image: product.image,
-                    );
-                  },
-                );
-              },
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error: (err, stack) => Center(child: Text("Error: $err")),
-            ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

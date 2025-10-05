@@ -24,7 +24,7 @@ class OrderDetailPage extends StatelessWidget {
                 padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min, // biar tinggi pas, ga full
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
                       "${order["username"]}",
@@ -68,7 +68,7 @@ class OrderDetailPage extends StatelessWidget {
                     const SizedBox(height: 16),
                     const Divider(),
                     const SizedBox(height: 8),
-                    const Text("Address: Jl. Sunset Road No. 8, Bali"),
+                    const Text("Address: Jalan Kumbang Parayang No. 31, Jakarta Utara"),
                     const SizedBox(height: 8),
                     const Text(
                       "Status: On Process",

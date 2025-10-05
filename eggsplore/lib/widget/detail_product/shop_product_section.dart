@@ -40,20 +40,17 @@ class ShopProductsSection extends ConsumerWidget {
               return const Text("Tidak ada produk lain di toko ini.");
             }
             
-            // Hapus SizedBox dengan batasan tinggi, gunakan Flexible/Expanded jika diperlukan,
-            // tetapi karena ini di dalam SingleChildScrollView, kita gunakan GridView yang menyusut.
             return GridView.builder(
-              // Properti penting untuk GridView di dalam SingleChildScrollView
               shrinkWrap: true,
               primary: false,
               
-              scrollDirection: Axis.vertical, // Ganti menjadi vertikal (default)
+              scrollDirection: Axis.vertical,
               itemCount: products.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, // 2 kolom
+                crossAxisCount: 2,
                 crossAxisSpacing: 16.0, 
                 mainAxisSpacing: 1.0, 
-                childAspectRatio: 0.7, // Aspek rasio item
+                childAspectRatio: 0.7,
               ),
               itemBuilder: (context, index) {
                 final shopProduct = products[index];

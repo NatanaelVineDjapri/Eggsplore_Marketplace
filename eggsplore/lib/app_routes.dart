@@ -77,12 +77,12 @@ class AppRoutes {
     product: (context) => const ProductPage(),
     shopProfile: (context) => const ShopProfilePage(),
     chat: (context) => const ChatPage(),
-    checkout: (context) => const CheckoutPage(),
     transaction: (context) => const TransactionPage(),
     onProcess: (context) => const OnProcessPage(),
     sent: (context) => const SentPage(),
     reviews: (context) => const ReviewsPage(),
     deliveryTracking: (context) => const DeliveryTrackingPage(),
     // checkout: (context) => const CheckoutPage(),
+    checkout: (context) => const CheckoutPage(itemsToCheckout: []),
   };
 }

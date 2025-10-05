@@ -13,20 +13,29 @@ final productDetailProvider = FutureProvider.family<Product, int>((ref, productI
   return ProductService.fetchProductDetail(productId);
 });
 
-final productsFromShopProvider = FutureProvider.autoDispose.family<List<Product>, Map<String, int>>(
-  (ref, params) async {
-    final shopId = params['shopId'];
-    final excludeProductId = params['productId'];
+// final productsFromShopProvider = FutureProvider.autoDispose.family<List<Product>, Map<String, int>>(
+//   (ref, params) async {
+//     final shopId = params['shopId'];
+//     final excludeProductId = params['productId'];
 
-    if (shopId == null || excludeProductId == null) {
-      return [];
-    }
+//     if (shopId == null || excludeProductId == null) {
+//       return [];
+//     }
 
+//     return ProductService.fetchProductsFromShop(
+//       shopId: args.shopId, 
+//       excludeProductId: args.excludeProductId, 
+//     );
+//   }
+// );
+
+final productsFromShopProvider = FutureProvider.autoDispose.family<List<Product>, ShopProductsArgs>(
+  (ref, args) async {
     return ProductService.fetchProductsFromShop(
-      shopId: args.shopId, 
-      excludeProductId: args.excludeProductId, 
+      shopId: args.shopId,
+      excludeProductId: args.excludeProductId,
     );
-  }
+  },
 );
 
 final allProductsProvider = FutureProvider<List<Product>>((ref) async {

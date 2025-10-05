@@ -65,12 +65,11 @@ Pastikan semua tools berikut telah terinstal di perangkat kamu:
 ---
 
 ### 🔧 Step 1 — Clone the Repository
-
 ```bash
-# Clone full project (Frontend + Backend)
+# Clone the full project (Frontend + Backend)
 git clone https://github.com/NatanaelVineDjapri/Eggsplore_Marketplace.git
 
-# Masuk ke folder utama project
+# Enter the main project directory
 cd Eggsplore_Marketplace
 
 ```
@@ -118,3 +117,4 @@ flutter run
 ```
 
  
+

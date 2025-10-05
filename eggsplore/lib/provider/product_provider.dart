@@ -3,6 +3,7 @@ import 'package:eggsplore/service/user_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eggsplore/model/product.dart';
 import 'package:eggsplore/service/product_service.dart';
+import 'package:eggsplore/model/shop_products_args.dart';
 
 final randomProductsProvider = FutureProvider<List<Product>>((ref) async {
   return ProductService.fetchRandomProductsForCurrentUser();
@@ -22,8 +23,8 @@ final productsFromShopProvider = FutureProvider.autoDispose.family<List<Product>
     }
 
     return ProductService.fetchProductsFromShop(
-      shopId: shopId,
-      excludeProductId: excludeProductId,
+      shopId: args.shopId, 
+      excludeProductId: args.excludeProductId, 
     );
   }
 );

@@ -1,7 +1,9 @@
 import 'package:eggsplore/bar/backBar2.dart';
 import 'package:eggsplore/constants/colors.dart';
+import 'package:eggsplore/model/user.dart'; 
 import 'package:eggsplore/provider/message_provider.dart';
 import 'package:eggsplore/provider/product_provider.dart';
+import 'package:eggsplore/widget/chat/chat_item.dart';
 import 'package:eggsplore/widget/random_product_grid.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,8 +14,6 @@ class ChatPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final size = MediaQuery.of(context).size;
-
     final chatAsync = ref.watch(chatProvider);
 
     return Scaffold(
@@ -27,7 +27,6 @@ class ChatPage extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // CHAT LIST
               chatAsync.when(
                 data: (contacts) {
                   if (contacts.isEmpty) {
@@ -48,37 +47,12 @@ class ChatPage extends ConsumerWidget {
                     shrinkWrap: true,
                     itemCount: contacts.length,
                     itemBuilder: (context, index) {
-                      final user = contacts[index];
-                      return Column(
-                        children: [
-                          ListTile(
-                            leading: CircleAvatar(
-                              backgroundColor: Colors.orange,
-                              child: Text(
-                                user.name[0].toUpperCase(),
-                                style: const TextStyle(color: AppColors.white),
-                              ),
-                            ),
-                            title: Text(user.name),
-                            subtitle: Text(user.email),
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ChatDetailPage(
-                                    userId: user.id,
-                                    username: user.name,
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                          Divider(
-                            color: Colors.grey.shade300,
-                            thickness: 1,
-                            height: 1,
-                          ),
-                        ],
+                      final dynamic shop = contacts[index]; 
+                      return ChatItem(
+                        userId: shop.id as int,
+                        name: shop.name as String,
+                        username: shop.email as String, 
+                        imagePath: shop.image as String?, 
                       );
                     },
                   );
@@ -94,7 +68,7 @@ class ChatPage extends ConsumerWidget {
                 ),
               ),
 
-              const SizedBox(height: 20),              
+              const SizedBox(height: 20), 
               RandomProductsGrid()
             ],
           ),

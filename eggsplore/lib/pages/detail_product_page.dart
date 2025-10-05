@@ -1,8 +1,9 @@
-import 'package:eggsplore/helper/image_helper.dart'; 
+import 'package:eggsplore/helper/image_helper.dart';
 import 'package:eggsplore/pages/review_page.dart';
 import 'package:eggsplore/widget/detail_product/add_to_cart_button2.dart';
 import 'package:eggsplore/widget/detail_product/buy_now_button.dart';
 import 'package:eggsplore/widget/detail_product/chat_button_product.dart';
+import 'package:eggsplore/widget/detail_product/shop_product_section.dart';
 import 'package:eggsplore/widget/product.dart';
 import 'package:eggsplore/widget/random_product_grid.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +37,9 @@ class DetailProductPage extends ConsumerWidget {
         ),
         error: (err, stack) => Center(child: Text("Gagal memuat produk: $err")),
         data: (product) {
-          final String shopImageUrl = ImageHelper.getImageUrl(product.shopImage); 
+          final String shopImageUrl = ImageHelper.getImageUrl(
+            product.shopImage,
+          );
 
           return Stack(
             children: [
@@ -58,11 +61,12 @@ class DetailProductPage extends ConsumerWidget {
                         child: Image.network(
                           product.image,
                           fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) => const Icon(
-                            Icons.broken_image,
-                            size: 50,
-                            color: Colors.grey,
-                          ),
+                          errorBuilder: (context, error, stackTrace) =>
+                              const Icon(
+                                Icons.broken_image,
+                                size: 50,
+                                color: Colors.grey,
+                              ),
                         ),
                       ),
                       const SizedBox(height: 16),
@@ -82,19 +86,36 @@ class DetailProductPage extends ConsumerWidget {
                           color: AppColors.primary,
                         ),
                       ),
-                      const Divider(color: AppColors.primary, thickness: 1, height: 24),
-                      const Text("Deskripsi Produk", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                      const Divider(
+                        color: AppColors.primary,
+                        thickness: 1,
+                        height: 24,
+                      ),
+                      const Text(
+                        "Deskripsi Produk",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                       const SizedBox(height: 6),
                       ExpandableDescription(text: product.description),
-                      const Divider(color: AppColors.primary, thickness: 1, height: 24),
+                      const Divider(
+                        color: AppColors.primary,
+                        thickness: 1,
+                        height: 24,
+                      ),
                       Row(
                         children: [
                           CircleAvatar(
-                            backgroundImage: shopImageUrl.isNotEmpty 
+                            backgroundImage: shopImageUrl.isNotEmpty
                                 ? NetworkImage(shopImageUrl)
                                 : null,
-                            child: shopImageUrl.isEmpty 
-                                ? const Icon(Icons.store, color: AppColors.white)
+                            child: shopImageUrl.isEmpty
+                                ? const Icon(
+                                    Icons.store,
+                                    color: AppColors.white,
+                                  )
                                 : null,
                             backgroundColor: AppColors.primary,
                           ),
@@ -111,7 +132,10 @@ class DetailProductPage extends ConsumerWidget {
                               ),
                               const Text(
                                 "Online 5 menit lalu",
-                                style: TextStyle(fontSize: 13, color: AppColors.grey),
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: AppColors.grey,
+                                ),
                               ),
                             ],
                           ),
@@ -123,72 +147,32 @@ class DetailProductPage extends ConsumerWidget {
                           ),
                         ],
                       ),
-                      const Divider(color: AppColors.primary, thickness: 1, height: 24),
+                      const Divider(
+                        color: AppColors.primary,
+                        thickness: 1,
+                        height: 24,
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          ProductRating(
-                            averageRating: product.averageRating,
-                            totalReviews: 120,
-                          ),
+                          ProductRating(averageRating: product.averageRating),
                           ProductStock(stock: product.stock),
                         ],
                       ),
-                      const Divider(color: AppColors.primary, thickness: 1, height: 24),
+                      const Divider(
+                        color: AppColors.primary,
+                        thickness: 1,
+                        height: 24,
+                      ),
                       _buildReviewsSummarySection(context, ref, product.id),
                       const SizedBox(height: 40),
-                      Consumer(
-                        builder: (context, ref, child) {
-                          final shopProductsAsync = ref.watch(
-                            productsFromShopProvider({
-                              'shopId': product.shopId,
-                              'productId': product.id,
-                            }),
-                          );
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                "Lainnya di toko ini",
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const SizedBox(height: 16),
-                              shopProductsAsync.when(
-                                loading: () => const Center(child: CircularProgressIndicator()),
-                                error: (err, stack) => Text('Gagal memuat produk toko: $err'),
-                                data: (products) {
-                                  if (products.isEmpty) {
-                                    return const Text("Tidak ada produk lain di toko ini.");
-                                  }
-                                  return SizedBox(
-                                    height: 250,
-                                    child: ListView.builder(
-                                      scrollDirection: Axis.horizontal,
-                                      itemCount: products.length,
-                                      itemBuilder: (context, index) {
-                                        final shopProduct = products[index];
-                                        return Padding(
-                                          padding: const EdgeInsets.only(right: 16.0),
-                                          child: ProductCard(
-                                            productId: shopProduct.id,
-                                            name: shopProduct.name,
-                                            price: shopProduct.price,
-                                            image: shopProduct.image,
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  );
-                                },
-                              ),
-                            ],
-                          );
-                        },
+
+                      ShopProductsSection(
+                        shopId: product.shopId,
+                        currentProductId: product.id,
                       ),
-                      const SizedBox(height: 40),
+
+                      const SizedBox(height: 10),
                       const RandomProductsGrid(),
                     ],
                   ),
@@ -202,8 +186,11 @@ class DetailProductPage extends ConsumerWidget {
     );
   }
 
-  // >>> KODE _buildBottomNavBar DIKOREKSI UNTUK MENAMBAH TOMBOL CHAT
-  Widget _buildBottomNavBar(BuildContext context, Product product, Color primaryColor) {
+  Widget _buildBottomNavBar(
+    BuildContext context,
+    Product product,
+    Color primaryColor,
+  ) {
     return Align(
       alignment: Alignment.bottomCenter,
       child: Container(
@@ -225,15 +212,18 @@ class DetailProductPage extends ConsumerWidget {
             const SizedBox(width: 12),
             AddToCartButtonProduct(product: product, color: primaryColor),
             const SizedBox(width: 12),
-            BuyNowButton(color: primaryColor),
+            BuyNowButton(color: primaryColor, product: product),
           ],
         ),
       ),
     );
   }
 
-
-  Widget _buildReviewsSummarySection(BuildContext context, WidgetRef ref, int productId) {
+  Widget _buildReviewsSummarySection(
+    BuildContext context,
+    WidgetRef ref,
+    int productId,
+  ) {
     final reviewsAsync = ref.watch(reviewsProvider(productId));
     return reviewsAsync.when(
       loading: () => const SizedBox.shrink(),
@@ -245,9 +235,15 @@ class DetailProductPage extends ConsumerWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text("Ulasan Pembeli", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            const Text(
+              "Ulasan Pembeli",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 8),
-            ...reviews.take(3).map((review) => ReviewTile(review: review)).toList(),
+            ...reviews
+                .take(3)
+                .map((review) => ReviewTile(review: review))
+                .toList(),
             if (reviews.length > 3)
               Padding(
                 padding: const EdgeInsets.only(top: 8.0),
@@ -256,7 +252,10 @@ class DetailProductPage extends ConsumerWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => AllReviewsPage(productId: productId)),
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              AllReviewsPage(productId: productId),
+                        ),
                       );
                     },
                     child: const Text("Lihat Semua Ulasan"),

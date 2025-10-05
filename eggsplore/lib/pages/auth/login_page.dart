@@ -93,14 +93,18 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   const SnackBar(content: Text(AppStrings.failLogin)),
                 );
               } else {
-                final user = ref.read(authProvider);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      "${AppStrings.welcomeBack}, ${user?.name}",
+                final user = ref.read(authProvider).value;
+
+                // Lakukan pengecekan null sebelum menampilkan SnackBar
+                if (user != null && context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        "${AppStrings.welcomeBack}, ${user.name}",
+                      ), // Sekarang aman, tidak perlu '?.' lagi
                     ),
-                  ),
-                );
+                  );
+                }
                 Navigator.pushNamedAndRemoveUntil(
                   context,
                   AppRoutes.homepage,

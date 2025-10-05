@@ -83,5 +83,6 @@ class AppRoutes {
     sent: (context) => const SentPage(),
     reviews: (context) => const ReviewsPage(),
     deliveryTracking: (context) => const DeliveryTrackingPage(),
+    // checkout: (context) => const CheckoutPage(),
   };
 }

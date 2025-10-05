@@ -1,178 +1,234 @@
+import 'package:eggsplore/app_routes.dart';
 import 'package:flutter/material.dart';
-import 'cart_page.dart'; // ✅ Import CartPage
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
+import 'package:eggsplore/model/cart_item.dart';
+import 'package:eggsplore/model/order.dart';
+import 'package:eggsplore/provider/auth_provider.dart';
+import 'package:eggsplore/provider/cart_provider.dart';
+import 'package:eggsplore/provider/checkout_provider.dart';
+import 'package:eggsplore/service/checkout_service.dart';
+import 'package:eggsplore/constants/sizes.dart';
 
-class CheckoutPage extends StatelessWidget {
-  const CheckoutPage({super.key});
+class CheckoutPage extends ConsumerWidget {
+  final List<CartItem> itemsToCheckout;
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFDADADA), // Background abu-abu
-      body: Column(
+  const CheckoutPage({super.key, required this.itemsToCheckout});
+
+  Widget _buildProductRow(CartItem item, NumberFormat formatter, Appsized sizes) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: sizes.xs),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // HEADER
           Container(
-            padding: const EdgeInsets.only(
-              top: 40,
-              left: 16,
-              right: 16,
-              bottom: 16,
+            width: sizes.xxl,
+            height: sizes.xxl,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(sizes.xs),
+              color: Colors.grey[300],
             ),
-            color: Colors.orange,
-            child: Row(
+            clipBehavior: Clip.hardEdge,
+            child: item.image != null && item.image!.isNotEmpty
+                ? Image.network(item.image!,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) =>
+                        const Icon(Icons.broken_image))
+                : const Icon(Icons.image,
+                    size: Appsized.iconLg, color: Colors.black45),
+          ),
+          SizedBox(width: Appsized.iconXs),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // ✅ Back button menuju CartPage
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => const CartPage()),
-                    );
-                  },
-                  child: const Icon(Icons.arrow_back, color: Colors.black),
-                ),
-                const SizedBox(width: 12),
-                const Text(
-                  "Checkout",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
+                Text(item.shopName,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: Appsized.fontSm - 1)), 
+                SizedBox(height: sizes.xss),
+                Text(item.name, style: const TextStyle(color: Colors.black54)),
+                SizedBox(height: sizes.xs),
+                Text("Rp ${formatter.format(item.price)}",
+                    style: const TextStyle(fontWeight: FontWeight.bold)),
               ],
             ),
           ),
+          Text("x${item.quantity}"),
+        ],
+      ),
+    );
+  }
 
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final sizes = Appsized(context);
+
+    ref.listen<AsyncValue<Order?>>(checkoutProvider, (previous, current) {
+      ScaffoldMessenger.of(context).removeCurrentSnackBar();
+      if (current.isLoading) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text('Memproses pesanan...')));
+      }
+      if (current.hasError) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Gagal: ${current.error.toString()}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+      if (current.hasValue && current.value != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Pembayaran Berhasil!'),
+            backgroundColor: Colors.green,
+          ),
+        );
+        ref.invalidate(authProvider);
+        ref.invalidate(cartProvider);
+        Future.delayed(const Duration(milliseconds: 1500), () {
+          if (context.mounted) {
+            Navigator.of(context).pushNamedAndRemoveUntil(
+              AppRoutes.homepage,
+              (Route<dynamic> route) => false,
+            );
+          }
+        });
+      }
+    });
+
+    final checkoutState = ref.watch(checkoutProvider);
+    
+    final user = ref.watch(authProvider).value;
+
+    final formatter = NumberFormat('#,###', 'id_ID');
+    final itemsSubtotal = itemsToCheckout.fold<double>(
+        0, (sum, item) => sum + (item.price * item.quantity));
+    final shippingFee = 10000;
+    final serviceFee =
+        (itemsSubtotal * 0.025).clamp(2000, double.infinity).toInt();
+    final totalPayment = itemsSubtotal + shippingFee + serviceFee;
+    final userBalance = user?.balance ?? 0;
+    final bool saldoCukup = userBalance >= totalPayment;
+
+    return Scaffold(
+      backgroundColor: const Color(0xFFDADADA),
+      body: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.only(
+                top: sizes.xl,
+                left: sizes.hmd,
+                right: sizes.hmd,
+                bottom: sizes.md),
+            color: Colors.orange,
+            child: Row(
+              children: [
+                GestureDetector(
+                  onTap: () => Navigator.pop(context),
+                  child: const Icon(Icons.arrow_back,
+                      color: Colors.black, size: Appsized.iconMd),
+                ),
+                SizedBox(width: Appsized.iconXs),
+                const Text("Checkout",
+                    style: TextStyle(
+                        fontSize: Appsized.fontLg + 2, // 20
+                        fontWeight: FontWeight.bold)),
+              ],
+            ),
+          ),
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.all(12),
+              padding: EdgeInsets.all(Appsized.iconXs),
               child: Column(
                 children: [
-                  // SECTION IDENTITAS
                   _buildBox(
+                    sizes: sizes,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text(
-                          "Claudioooooooo",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 4),
-                        Text("(+62) 87884848484"),
-                        SizedBox(height: 4),
-                        Text(
-                          "Jl. letjen s.parman blok 123 no 5 lorem ipsum dolor sit amet constectuoer",
-                          style: TextStyle(color: Colors.black54),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-
-                  // SECTION PRODUK
-                  _buildBox(
-                    child: Row(
                       children: [
-                        // IMAGE placeholder
-                        Container(
-                          width: 70,
-                          height: 70,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[300],
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: const Icon(
-                            Icons.image,
-                            size: 40,
-                            color: Colors.black45,
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-
-                        // INFO produk
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
-                              Text(
-                                "Claudiva Official",
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(height: 2),
-                              Text(
-                                "Capybara Import",
-                                style: TextStyle(color: Colors.black54),
-                              ),
-                              SizedBox(height: 6),
-                              Text(
-                                "Rp 999.999.999",
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        // JUMLAH
-                        const Text("x1"),
+                        Text(user?.name ?? "Harap Login",
+                            style: const TextStyle(
+                                fontSize: Appsized.fontMd,
+                                fontWeight: FontWeight.bold)),
+                        SizedBox(height: sizes.xs),
+                        // DIUBAH: Menambahkan null-aware '?'
+                        Text(user?.phoneNumber ?? "-"),
+                        SizedBox(height: sizes.xs),
+                        Text(user?.address ?? "Login untuk melihat alamat",
+                            style: const TextStyle(color: Colors.black54)),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 12),
-
-                  // SECTION RINCIAN PEMBAYARAN
+                  SizedBox(height: Appsized.iconXs),
                   _buildBox(
+                    sizes: sizes,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text("Produk Dipesan",
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                        SizedBox(height: sizes.xs),
+                        ...itemsToCheckout
+                            .map((item) => _buildProductRow(item, formatter, sizes))
+                            .toList(),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: Appsized.iconXs),
+                  _buildBox(
+                    sizes: sizes,
                     child: Column(
                       children: [
-                        _buildRow("Subtotal Pesanan", "Rp 999.999.999"),
-                        _buildRow("Subtotal Pengiriman", "Rp 100.000"),
-                        _buildRow("Biaya Layanan", "Rp 1.000"),
+                        _buildRow(sizes, "Subtotal Pesanan", "Rp ${formatter.format(itemsSubtotal)}"),
+                        _buildRow(sizes, "Subtotal Pengiriman", "Rp ${formatter.format(shippingFee)}"),
+                        _buildRow(sizes, "Biaya Layanan", "Rp ${formatter.format(serviceFee)}"),
                         const Divider(color: Colors.orange, thickness: 1),
-                        _buildRow(
-                          "Total Pembayaran",
-                          "Rp 1.000.100.999",
-                          isBold: true,
-                        ),
+                        _buildRow(sizes, "Total Pembayaran", "Rp ${formatter.format(totalPayment)}", isBold: true),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 12),
-
-                  // SECTION METODE PEMBAYARAN
+                  SizedBox(height: Appsized.iconXs),
                   _buildBox(
+                    sizes: sizes,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          "Pilih metode pembayaran",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(height: 12),
+                        const Text("Pilih metode pembayaran", style: TextStyle(fontWeight: FontWeight.bold)),
+                        SizedBox(height: Appsized.iconXs),
                         Container(
                           width: double.infinity,
-                          padding: const EdgeInsets.all(12),
+                          padding: EdgeInsets.all(Appsized.iconXs),
                           decoration: BoxDecoration(
                             color: Colors.grey[100],
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(sizes.xs),
                             border: Border.all(color: Colors.orange),
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
-                              Text("Bayar dengan:"),
-                              SizedBox(height: 6),
+                            children: [
+                              const Text("Bayar dengan:"),
+                              SizedBox(height: sizes.xs),
                               Row(
-                                children: [
-                                  Icon(
-                                    Icons.circle,
-                                    size: 14,
-                                    color: Colors.orange,
-                                  ),
+                                children: const [
+                                  Icon(Icons.circle, size: Appsized.fontSm, color: Colors.orange),
                                   SizedBox(width: 6),
                                   Text("EggsplorePay"),
                                 ],
                               ),
-                              SizedBox(height: 6),
-                              Text("Saldo: Rp 2.000.000.000"),
+                              SizedBox(height: sizes.xs),
+                              Text("Saldo: Rp ${formatter.format(userBalance)}"),
+                              if (user != null && !saldoCukup)
+                                Padding(
+                                  padding: EdgeInsets.only(top: sizes.xs),
+                                  child: const Text("❌ Saldo tidak cukup untuk membayar!", style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+                                ),
+                              if (user == null)
+                                Padding(
+                                  padding: EdgeInsets.only(top: sizes.xs),
+                                  child: const Text("⚠️ Anda harus login untuk dapat membayar.", style: TextStyle(color: Colors.orange, fontWeight: FontWeight.bold)),
+                                ),
                             ],
                           ),
                         ),
@@ -183,51 +239,54 @@ class CheckoutPage extends StatelessWidget {
               ),
             ),
           ),
-
-          // BOTTOM BAR dengan shadow
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            padding: EdgeInsets.symmetric(horizontal: sizes.hmd, vertical: Appsized.iconXs),
             decoration: const BoxDecoration(
               color: Colors.orange,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black26,
-                  offset: Offset(0, -2),
-                  blurRadius: 4,
-                ),
-              ],
+              boxShadow: [BoxShadow(color: Colors.black26, offset: Offset(0, -2), blurRadius: 4)],
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    Text("Total", style: TextStyle(fontSize: 14)),
-                    SizedBox(height: 4),
-                    Text(
-                      "Rp 1.000.100.999",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
+                  children: [
+                    const Text("Total", style: TextStyle(fontSize: Appsized.fontSm)),
+                    SizedBox(height: sizes.xs),
+                    Text("Rp ${formatter.format(totalPayment)}", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: Appsized.fontMd)),
                   ],
                 ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    foregroundColor: Colors.black,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 24,
-                      vertical: 12,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
+                    backgroundColor: (saldoCukup && user != null) ? Colors.white : Colors.grey[400],
+                    foregroundColor: (saldoCukup && user != null) ? Colors.black : Colors.black38,
+                    padding: EdgeInsets.symmetric(horizontal: Appsized.iconMd, vertical: Appsized.iconXs),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(sizes.xs)),
                   ),
-                  onPressed: () {},
-                  child: const Text("Checkout"),
+                  // DIUBAH: Mengisi kembali logika onPressed
+                  onPressed: saldoCukup && user != null && !checkoutState.isLoading
+                      ? () {
+                          final params = CheckoutParams(
+                            shippingAddress: user.address ?? 'Alamat belum diatur',
+                            receiverName: user.name ?? 'Tanpa Nama',
+                            receiverPhone: user.phoneNumber ?? '-',
+                            items: itemsToCheckout
+                                .map((item) => CartItemToSend(
+                                      productId: item.productId,
+                                      quantity: item.quantity,
+                                    ))
+                                .toList(),
+                          );
+                          ref.read(checkoutProvider.notifier).checkout(params);
+                        }
+                      : null,
+                  child: checkoutState.isLoading
+                      ? const SizedBox(
+                          width: Appsized.iconMd,
+                          height: Appsized.iconMd,
+                          child: CircularProgressIndicator(strokeWidth: 2, color: Colors.black),
+                        )
+                      : const Text("Checkout"),
                 ),
               ],
             ),
@@ -237,40 +296,26 @@ class CheckoutPage extends StatelessWidget {
     );
   }
 
-  // Reusable box
-  Widget _buildBox({required Widget child}) {
+  Widget _buildBox({required Widget child, required Appsized sizes}) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(12),
+      padding: EdgeInsets.all(Appsized.iconXs),
       decoration: BoxDecoration(
-        color: Colors.white, // box putih
-        borderRadius: BorderRadius.circular(12),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(Appsized.iconXs),
       ),
       child: child,
     );
   }
 
-  // Reusable row untuk rincian
-  Widget _buildRow(String label, String value, {bool isBold = false}) {
+  Widget _buildRow(Appsized sizes, String label, String value, {bool isBold = false}) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
+      padding: EdgeInsets.symmetric(vertical: sizes.xs),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
-            ),
-          ),
-          Text(
-            value,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
-            ),
-          ),
+          Text(label, style: TextStyle(fontSize: Appsized.fontSm, fontWeight: isBold ? FontWeight.bold : FontWeight.normal)),
+          Text(value, style: TextStyle(fontSize: Appsized.fontSm, fontWeight: isBold ? FontWeight.bold : FontWeight.normal)),
         ],
       ),
     );

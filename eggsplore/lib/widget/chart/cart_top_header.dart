@@ -1,6 +1,6 @@
 import 'package:eggsplore/widget/chart/remove_shop_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:eggsplore/pages/provider/cart_provider.dart';
+import 'package:eggsplore/provider/cart_provider.dart';
 
 class CartShopHeader extends StatelessWidget {
   final String shopName;
@@ -41,7 +41,6 @@ class CartShopHeader extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
           ),
-          // TOMBOL HAPUS TOKO
           IconButton(
             icon: const Icon(
               Icons.delete_outline,

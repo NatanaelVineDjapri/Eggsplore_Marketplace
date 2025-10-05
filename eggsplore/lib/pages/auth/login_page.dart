@@ -7,7 +7,7 @@ import 'package:eggsplore/constants/sizes.dart';
 import 'package:eggsplore/constants/text_string.dart';
 import 'package:eggsplore/widget/customForm.dart';
 import 'package:eggsplore/widget/passwordForm.dart';
-import 'package:eggsplore/pages/provider/auth_provider.dart';
+import 'package:eggsplore/provider/auth_provider.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});

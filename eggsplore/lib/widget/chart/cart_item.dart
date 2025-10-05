@@ -101,12 +101,12 @@ class CartItemWidget extends StatelessWidget {
                         color: Colors.grey,
                         size: 20,
                       ),
-                      onPressed: onRemove, // Panggil onRemove
+                      onPressed: onRemove, 
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(),
                     ),
                     const SizedBox(width: 10),
-                    // Quantity Control
+                    
                     Container(
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.grey.shade300),

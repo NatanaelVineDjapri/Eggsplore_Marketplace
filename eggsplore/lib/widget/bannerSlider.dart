@@ -2,12 +2,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 class BannerSlider extends StatefulWidget {
-  final List<String> images; // list asset path gambar banner
-  final Duration autoScrollDuration; // durasi auto scroll
+  final List<String> images; 
+  final Duration autoScrollDuration; 
   const BannerSlider({
     super.key,
     required this.images,
-    this.autoScrollDuration = const Duration(seconds: 3), // default 3 detik
+    this.autoScrollDuration = const Duration(seconds: 3), 
   });
 
   @override
@@ -29,12 +29,11 @@ class _BannerSliderState extends State<BannerSlider> {
       });
     });
 
-    // start auto scroll timer
     _timer = Timer.periodic(widget.autoScrollDuration, (timer) {
       if (!mounted) return;
       int nextPage = (_pageController.page?.round() ?? 0) + 1;
       if (nextPage >= widget.images.length) {
-        nextPage = 0; // kembali ke awal
+        nextPage = 0; 
       }
       _pageController.animateToPage(
         nextPage,

@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 class TrendingProductCard extends StatelessWidget {
   final String name;
   final String price;
-  final String? image; // bikin nullable
-
+  final String? image; 
   const TrendingProductCard({
     super.key,
     required this.name,
@@ -21,7 +20,6 @@ class TrendingProductCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // 🔹 Bagian gambar / placeholder
           Expanded(
   child: image != null
       ? ClipRRect(
@@ -40,9 +38,6 @@ class TrendingProductCard extends StatelessWidget {
           child: const Icon(Icons.image, size: 50, color: Colors.grey),
         ),
 ),
-
-
-          // 🔹 Info produk
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
@@ -60,8 +55,6 @@ class TrendingProductCard extends StatelessWidget {
               ],
             ),
           ),
-
-          // 🔹 Tombol bawah
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

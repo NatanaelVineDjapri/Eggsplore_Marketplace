@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:eggsplore/model/cart_item.dart';
 import 'package:eggsplore/constants/colors.dart';
-import 'package:eggsplore/pages/checkout_page.dart'; // Import halaman checkout
+import 'package:eggsplore/pages/checkout_page.dart'; 
 
 class CartBottomBar extends StatelessWidget {
   final double totalPrice;

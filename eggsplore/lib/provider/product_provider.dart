@@ -3,10 +3,13 @@ import 'package:eggsplore/model/product.dart';
 import 'package:eggsplore/model/review.dart';
 import 'package:eggsplore/model/shop_products_args.dart';
 import 'package:eggsplore/service/product_service.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 final trendingProductsProvider = FutureProvider<List<Product>>((ref) async {
   return ProductService.fetchTrendingProducts();
 });
+
 
 final randomProductsProvider = FutureProvider<List<Product>>((ref) async {
   return ProductService.fetchRandomProductsForCurrentUser();
@@ -25,19 +28,14 @@ final productsFromShopProvider = FutureProvider.autoDispose.family<List<Product>
   },
 );
 
-// --- BAGIAN YANG DIPERBAIKI ---
-
 final allProductsProvider = FutureProvider<List<Product>>((ref) async {
-  // Logika token dihapus dari sini
-  return ProductService.fetchProducts(); // Panggil langsung tanpa argumen
+  return ProductService.fetchProducts(); 
 });
 
 final myProductsProvider = FutureProvider<List<Product>>((ref) async {
-  // Logika token juga dihapus dari sini
-  return ProductService.fetchMyProducts(); // Panggil langsung tanpa argumen
-});
 
-// --- AKHIR BAGIAN YANG DIPERBAIKI ---
+  return ProductService.fetchMyProducts(); 
+});
 
 final reviewsProvider = FutureProvider.autoDispose.family<List<Review>, int>((ref, productId) async {
   return ProductService.fetchReviews(productId);

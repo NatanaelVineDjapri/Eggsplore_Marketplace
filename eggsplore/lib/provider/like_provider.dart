@@ -7,7 +7,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final likeServiceProvider = Provider<LikeService>((ref) => LikeService());
 
-// State provider
 final likeStateProvider = StateNotifierProvider<LikeNotifier, Map<int, Like>>((ref) {
   final service = ref.watch(likeServiceProvider);
   return LikeNotifier(service, ref);
@@ -33,9 +32,7 @@ class LikeNotifier extends StateNotifier<Map<int, Like>> {
         ref.invalidate(likedProductsProvider);
       }
     } catch (e) {
-      // FIX PENTING: Logging yang lebih informatif
       print('🔥 Toggle Like FAILED: $e'); 
-      // Anda bisa menambahkan SnackBar di sini untuk memberitahu user
     }
   }
 }

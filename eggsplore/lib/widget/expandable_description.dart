@@ -41,7 +41,6 @@ class _ExpandableDescriptionState extends State<ExpandableDescription> {
         if (isLongText)
           InkWell(
             onTap: () {
-              // Ubah state saat tombol ditekan
               setState(() {
                 _isExpanded = !_isExpanded;
               });

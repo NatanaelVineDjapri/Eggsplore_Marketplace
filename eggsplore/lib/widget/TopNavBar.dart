@@ -10,7 +10,6 @@ class TopNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        // Search bar
         Expanded(
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -26,7 +25,7 @@ class TopNavBar extends StatelessWidget {
               ],
             ),
             child: TextField(
-              onSubmitted: onSearch, // enter = trigger search
+              onSubmitted: onSearch,
               decoration: const InputDecoration(
                 hintText: "Search Product",
                 border: InputBorder.none,
@@ -37,8 +36,6 @@ class TopNavBar extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 12),
-
-        // Chat button
         GestureDetector(
           onTap: onChatTap,
           child: Container(

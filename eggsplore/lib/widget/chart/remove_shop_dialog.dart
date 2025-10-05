@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:eggsplore/pages/provider/cart_provider.dart';
+import 'package:eggsplore/provider/cart_provider.dart';
 
 void showRemoveShopConfirmationDialog({
   required BuildContext context,

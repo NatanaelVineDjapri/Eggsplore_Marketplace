@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eggsplore/bar/bottom_nav.dart';
-import 'package:eggsplore/pages/search_page.dart';
-import 'package:eggsplore/pages/provider/product_provider.dart';
+import 'package:eggsplore/pages/search/search_page.dart';
+import 'package:eggsplore/provider/product_provider.dart';
 import 'package:eggsplore/widget/product.dart';
 import 'package:eggsplore/widget/TopNavBar.dart';
 import 'package:eggsplore/constants/text_string.dart';

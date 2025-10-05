@@ -14,7 +14,6 @@ class AuthNotifier extends AsyncNotifier<User?> {
     }
   }
 
-  /// Memproses login dan memperbarui state.
   Future<bool> login(String email, String password) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
@@ -36,15 +35,14 @@ class AuthNotifier extends AsyncNotifier<User?> {
   Future<bool> register(String firstName, String lastName, String email, String password) async {
     try {
       await UserService.register(firstName, lastName, email, password);
-      return true; // Jika tidak ada error, kembalikan true
+      return true;
     } catch (e) {
       print("Register failed: ${e.toString()}");
-      return false; // Jika ada error (Exception), kembalikan false
+      return false; 
     }
   }
 
   Future<bool> verifyUser(String firstName, String lastName, String email) async {
-    // Mengganti _isLoading dengan AsyncLoading/await
     final success = await UserService.verifyUser(firstName, lastName, email);
     return success;
   }

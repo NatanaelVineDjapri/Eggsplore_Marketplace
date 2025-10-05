@@ -1,6 +1,6 @@
 import 'package:eggsplore/model/user.dart';
 import 'package:flutter/material.dart';
-import 'package:eggsplore/pages/modify_profile_info_page.dart'; // Pastikan Anda mengimpor halaman baru
+import 'package:eggsplore/pages/modify_profile_info_page.dart'; 
 
 class ProfileInfoCard extends StatelessWidget {
   final User? user;
@@ -25,7 +25,6 @@ class ProfileInfoCard extends StatelessWidget {
     return Expanded(
       child: GestureDetector(
         onTap: () {
-          // Navigasi ke halaman edit profil
           if (user != null) {
             Navigator.push(
               context,
@@ -63,7 +62,7 @@ class ProfileInfoCard extends StatelessWidget {
                   ),
                 ),
               ),
-              const Spacer(), // Dorong ikon edit ke kanan
+              const Spacer(),
               const Icon(Icons.edit_rounded, color: Colors.grey),
             ],
           ),

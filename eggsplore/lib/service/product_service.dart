@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io'; // Diperlukan untuk error jaringan
+import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:eggsplore/model/product.dart';
@@ -7,15 +7,10 @@ import 'package:eggsplore/model/review.dart';
 import 'package:eggsplore/service/user_service.dart';
 
 class ProductService {
-  // Gunakan satu variabel baseUrl yang konsisten dan bersifat private
   static const String _baseUrl = "http://10.0.2.2:8000/api";
-
-  // -- FUNGSI-FUNGSI UTAMA PENGAMBILAN PRODUK --
-
-  static Future<List<Product>> fetchProducts() async {
-    final token = await UserService.getToken();
-    if (token == null)
-      throw Exception("Otorisasi gagal: Pengguna belum login.");
+  static Future<List<Product>> fetchProducts([String? tokenParam]) async {
+    final token = tokenParam ?? await UserService.getToken();
+    if (token == null) throw Exception("User belum login / token kosong");
 
     final url = Uri.parse("$_baseUrl/products");
     try {
@@ -30,18 +25,42 @@ class ProductService {
       debugPrint("FETCH ALL PRODUCTS => ${response.statusCode}");
 
       if (response.statusCode == 200) {
-        final List<dynamic> data = jsonDecode(response.body);
-        return data.map((json) => Product.fromJson(json)).toList();
+        final body = jsonDecode(response.body);
+        final List<dynamic> list =
+            (body is List) ? body : (body['data'] as List<dynamic>? ?? []);
+        return list
+            .map((e) => Product.fromJson(Map<String, dynamic>.from(e)))
+            .toList();
       } else {
         throw Exception("Gagal memuat produk: ${response.body}");
       }
     } on SocketException {
       throw const SocketException(
-        "Tidak ada koneksi internet atau server tidak dapat dihubungi.",
-      );
+          "Tidak ada koneksi internet atau server tidak dapat dihubungi.");
     } catch (e) {
       debugPrint("Error di fetchProducts: ${e.toString()}");
       rethrow;
+    }
+  }
+
+  static Future<List<Product>> fetchRandomProducts(
+    String token, {
+    int count = 6,
+  }) async {
+    final response = await http.get(
+      Uri.parse("$_baseUrl/products/random?count=$count"),
+      headers: {'Authorization': 'Bearer $token', 'Accept': 'application/json'},
+    );
+
+    if (response.statusCode == 200) {
+      final body = jsonDecode(response.body);
+      final List<dynamic> list =
+          (body is List) ? body : (body['data'] as List<dynamic>? ?? []);
+      return list
+          .map((e) => Product.fromJson(Map<String, dynamic>.from(e)))
+          .toList();
+    } else {
+      throw Exception("Gagal load produk random: ${response.statusCode}");
     }
   }
 
@@ -49,98 +68,72 @@ class ProductService {
     int count = 6,
   }) async {
     final token = await UserService.getToken();
-    if (token == null) return []; // Kembalikan list kosong jika tidak login
+    if (token == null) return [];
 
-    final url = Uri.parse("$_baseUrl/products/random?count=$count");
     try {
-      final response = await http.get(
-        url,
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Accept': 'application/json',
-        },
-      );
-
-      debugPrint("FETCH RANDOM PRODUCTS => ${response.statusCode}");
-
-      if (response.statusCode == 200) {
-        final List<dynamic> data = jsonDecode(response.body);
-        return data.map((json) => Product.fromJson(json)).toList();
-      } else {
-        return []; // Kembalikan list kosong jika gagal
-      }
+      return fetchRandomProducts(token, count: count);
     } catch (e) {
-      debugPrint("Error di fetchRandomProducts: ${e.toString()}");
+      debugPrint("Error di fetchRandomProductsForCurrentUser: $e");
       return [];
     }
   }
 
   static Future<List<Product>> fetchTrendingProducts() async {
-    final token = await UserService.getToken();
-    if (token == null)
-      throw Exception("Otorisasi gagal: Pengguna belum login.");
+  final token = await UserService.getToken();
+  if (token == null) throw Exception("User belum login / token kosong");
 
-    final url = Uri.parse('$_baseUrl/products/trending');
-    try {
-      final response = await http
-          .get(
-            url,
-            headers: {
-              "Authorization": "Bearer $token",
-              "Accept": "application/json",
-            },
-          )
-          .timeout(const Duration(seconds: 15));
+  final url = Uri.parse("$_baseUrl/products/trending");
+  try {
+    final response = await http.get(
+      url,
+      headers: {"Authorization": "Bearer $token", "Accept": "application/json"},
+    ).timeout(const Duration(seconds: 15));
 
-      debugPrint("FETCH TRENDING => ${response.statusCode}");
+    debugPrint("FETCH TRENDING => ${response.statusCode} ${response.body}");
 
-      if (response.statusCode == 200) {
-        final List<dynamic> data = jsonDecode(response.body);
-        return data.map((json) => Product.fromJson(json)).toList();
-      } else {
-        throw Exception("Gagal mengambil produk trending: ${response.body}");
-      }
-    } on SocketException {
-      throw const SocketException(
-        "Tidak ada koneksi internet atau server tidak dapat dihubungi.",
-      );
-    } catch (e) {
-      debugPrint("Error di fetchTrendingProducts: ${e.toString()}");
-      rethrow;
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      final List<dynamic> products = data is List ? data : (data['data'] ?? []);
+      return products.map((e) => Product.fromJson(e)).toList();
+    } else {
+      throw Exception("Gagal mengambil produk trending: ${response.body}");
     }
+  } catch (e) {
+    debugPrint("Error di fetchTrendingProducts: $e");
+    rethrow;
   }
+}
+
 
   static Future<Product> fetchProductDetail(int productId) async {
     final token = await UserService.getToken();
-    if (token == null)
-      throw Exception("Otorisasi gagal: Pengguna belum login.");
+    if (token == null) throw Exception("User belum login / token kosong");
 
-    final url = Uri.parse('$_baseUrl/products/$productId');
+    final url = Uri.parse("$_baseUrl/products/$productId");
     try {
       final response = await http.get(
         url,
-        headers: {
-          "Authorization": "Bearer $token",
-          "Accept": "application/json",
-        },
+        headers: {"Authorization": "Bearer $token", "Accept": "application/json"},
       );
 
       debugPrint("FETCH DETAIL PRODUCT => ${response.statusCode}");
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        final productJson = data['product'] as Map<String, dynamic>;
-        productJson['average_rating'] = data['average_rating'] ?? 0.0;
+
+        final Map<String, dynamic> productJson = data['product'] != null
+            ? Map<String, dynamic>.from(data['product'])
+            : Map<String, dynamic>.from(data);
+
+        productJson['average_rating'] =
+            data['average_rating'] ?? productJson['average_rating'] ?? 0.0;
+
         return Product.fromJson(productJson);
       } else {
-        throw Exception("Gagal memuat detail produk: ${response.body}");
+        throw Exception("Gagal load detail produk: ${response.statusCode}");
       }
-    } on SocketException {
-      throw const SocketException(
-        "Tidak ada koneksi internet atau server tidak dapat dihubungi.",
-      );
     } catch (e) {
-      debugPrint("Error di fetchProductDetail: ${e.toString()}");
+      debugPrint("Error di fetchProductDetail: $e");
       rethrow;
     }
   }
@@ -150,14 +143,11 @@ class ProductService {
     int? excludeProductId,
   }) async {
     final token = await UserService.getToken();
-    if (token == null)
-      throw Exception("Otorisasi gagal: Pengguna belum login.");
+    if (token == null) throw Exception("User belum login / token kosong");
 
-    var uri = Uri.parse('$_baseUrl/shops/$shopId/products');
+    var uri = Uri.parse("$_baseUrl/shops/$shopId/products");
     if (excludeProductId != null) {
-      uri = uri.replace(
-        queryParameters: {'exclude': excludeProductId.toString()},
-      );
+      uri = uri.replace(queryParameters: {'exclude': excludeProductId.toString()});
     }
 
     try {
@@ -180,50 +170,34 @@ class ProductService {
       } else {
         throw Exception("Gagal memuat produk toko: ${response.body}");
       }
-    } on SocketException {
-      throw const SocketException(
-        "Tidak ada koneksi internet atau server tidak dapat dihubungi.",
-      );
     } catch (e) {
-      debugPrint("Error di fetchProductsFromShop: ${e.toString()}");
+      debugPrint("Error di fetchProductsFromShop: $e");
       rethrow;
     }
   }
 
-  static Future<List<Product>> fetchMyProducts() async {
-    final token = await UserService.getToken();
-    if (token == null)
-      throw Exception("Otorisasi gagal: Pengguna belum login.");
+  static Future<List<Product>> fetchMyProducts([String? tokenParam]) async {
+    final token = tokenParam ?? await UserService.getToken();
+    if (token == null) throw Exception("User belum login / token kosong");
 
-    final url = Uri.parse('$_baseUrl/my-products');
-    try {
-      final response = await http.get(
-        url,
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Accept': 'application/json',
-        },
-      );
+    final url = Uri.parse("$_baseUrl/my-products");
+    final response = await http.get(
+      url,
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Accept': 'application/json',
+      },
+    );
 
-      debugPrint("FETCH MY PRODUCTS => ${response.statusCode}");
+    debugPrint("FETCH MY PRODUCTS => ${response.statusCode}");
 
-      if (response.statusCode == 200) {
-        final List<dynamic> jsonList = jsonDecode(response.body);
-        return jsonList.map((json) => Product.fromJson(json)).toList();
-      } else {
-        throw Exception('Gagal memuat produk saya: ${response.body}');
-      }
-    } on SocketException {
-      throw const SocketException(
-        "Tidak ada koneksi internet atau server tidak dapat dihubungi.",
-      );
-    } catch (e) {
-      debugPrint("Error di fetchMyProducts: ${e.toString()}");
-      rethrow;
+    if (response.statusCode == 200) {
+      final List<dynamic> jsonList = jsonDecode(response.body);
+      return jsonList.map((json) => Product.fromJson(json)).toList();
+    } else {
+      throw Exception('Gagal memuat produk saya: ${response.statusCode}');
     }
   }
-
-  // -- FUNGSI-FUNGSI AKSI PRODUK (CREATE, UPDATE, DELETE) --
 
   static Future<bool> addProduct({
     required Map<String, dynamic> productData,
@@ -231,30 +205,25 @@ class ProductService {
   }) async {
     final token = await UserService.getToken();
     if (token == null) {
-      debugPrint('Token tidak ditemukan. User belum login.');
+      debugPrint("Token tidak ditemukan. User belum login.");
       return false;
     }
 
     try {
       final shopResponse = await http.get(
         Uri.parse("$_baseUrl/user/shop"),
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Accept': 'application/json',
-        },
+        headers: {'Authorization': 'Bearer $token', 'Accept': 'application/json'},
       );
 
-      if (shopResponse.statusCode != 200 || shopResponse.body.isEmpty) {
+      if (shopResponse.statusCode != 200) {
         throw Exception("Anda harus membuat toko terlebih dahulu.");
       }
-      final shopData = jsonDecode(shopResponse.body);
-      final shopId = shopData['id'];
-      if (shopId == null) throw Exception("ID Toko tidak ditemukan.");
 
-      var request = http.MultipartRequest(
-        'POST',
-        Uri.parse('$_baseUrl/products'),
-      );
+      final shopData = jsonDecode(shopResponse.body);
+      final shopId = shopData['id'] ?? shopData['shop_id'];
+      if (shopId == null) throw Exception("Shop ID tidak ditemukan.");
+
+      var request = http.MultipartRequest('POST', Uri.parse("$_baseUrl/products"));
       request.headers.addAll({
         'Authorization': 'Bearer $token',
         'Accept': 'application/json',
@@ -272,19 +241,13 @@ class ProductService {
 
       final response = await request.send();
       final responseBody = await response.stream.bytesToString();
+
       debugPrint("ADD PRODUCT => ${response.statusCode} : $responseBody");
 
-      if (response.statusCode == 201) {
-        return true;
-      } else {
-        final errorResponse = jsonDecode(responseBody);
-        throw Exception(
-          errorResponse['message'] ?? "Gagal menambahkan produk.",
-        );
-      }
+      return response.statusCode == 201;
     } catch (e) {
-      debugPrint('Error saat menambahkan produk: $e');
-      throw Exception('Gagal menambahkan produk: ${e.toString()}');
+      debugPrint("Error saat menambahkan produk: $e");
+      return false;
     }
   }
 
@@ -292,7 +255,7 @@ class ProductService {
     final token = await UserService.getToken();
     if (token == null) throw Exception("User belum login / token kosong");
 
-    final url = Uri.parse('$_baseUrl/products/${product.id}');
+    final url = Uri.parse("$_baseUrl/products/${product.id}");
     final response = await http.put(
       url,
       headers: {
@@ -305,11 +268,12 @@ class ProductService {
     return response.statusCode == 200;
   }
 
+  /// Hapus produk
   static Future<bool> deleteProduct(int id) async {
     final token = await UserService.getToken();
     if (token == null) throw Exception("User belum login / token kosong");
 
-    final url = Uri.parse('$_baseUrl/products/$id');
+    final url = Uri.parse("$_baseUrl/products/$id");
     final response = await http.delete(
       url,
       headers: {"Authorization": "Bearer $token"},
@@ -318,6 +282,7 @@ class ProductService {
     return response.statusCode == 200;
   }
 
+  /// Beri rating produk
   static Future<bool> rateProduct(
     int productId,
     int rating, {
@@ -326,51 +291,56 @@ class ProductService {
     final token = await UserService.getToken();
     if (token == null) return false;
 
-    try {
-      final response = await http.post(
-        Uri.parse('$_baseUrl/products/$productId/rate'),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $token',
-          'Accept': 'application/json',
-        },
-        body: jsonEncode({"rating": rating, "comment": comment ?? ""}),
-      );
-      debugPrint("RATE PRODUCT => ${response.statusCode}");
-      return response.statusCode == 200;
-    } catch (e) {
-      debugPrint("Rate Product Error: $e");
-      return false;
-    }
+    final response = await http.post(
+      Uri.parse("$_baseUrl/products/$productId/rate"),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+        'Accept': 'application/json',
+      },
+      body: jsonEncode({"rating": rating, "comment": comment ?? ""}),
+    );
+
+    debugPrint("RATE PRODUCT => ${response.statusCode}");
+    return response.statusCode == 200;
   }
 
   static Future<List<Review>> fetchReviews(int productId) async {
     final token = await UserService.getToken();
-    if (token == null)
-      throw Exception("Otorisasi gagal: Pengguna belum login.");
+    if (token == null) throw Exception("User belum login / token kosong");
 
-    final url = Uri.parse('$_baseUrl/products/$productId/reviews');
-    try {
-      final response = await http.get(
-        url,
-        headers: {
-          "Authorization": "Bearer $token",
-          "Accept": "application/json",
-        },
-      );
+    final url = Uri.parse("$_baseUrl/products/$productId/reviews");
+    final response = await http.get(
+      url,
+      headers: {
+        "Authorization": "Bearer $token",
+        "Accept": "application/json",
+      },
+    );
 
-      debugPrint("FETCH REVIEWS => ${response.statusCode}");
+    debugPrint("FETCH REVIEWS => ${response.statusCode}");
 
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        final List<dynamic> reviewList = data['data'];
-        return reviewList.map((json) => Review.fromJson(json)).toList();
-      } else {
-        return [];
-      }
-    } catch (e) {
-      debugPrint("Error di fetchReviews: $e");
-      return [];
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      final List<dynamic> reviewList = data['data'];
+      return reviewList.map((json) => Review.fromJson(json)).toList();
+    } else {
+      throw Exception("Gagal memuat ulasan produk");
+    }
+  }
+
+  static Future<String?> getShopId(String token) async {
+    final response = await http.get(
+      Uri.parse("$_baseUrl/user/shop"),
+      headers: {"Authorization": "Bearer $token"},
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      return data["id"].toString();
+    } else {
+      debugPrint("Gagal ambil shop_id: ${response.body}");
+      return null;
     }
   }
 }

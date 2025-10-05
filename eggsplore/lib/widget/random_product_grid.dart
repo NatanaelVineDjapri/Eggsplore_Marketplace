@@ -1,8 +1,8 @@
 import 'package:eggsplore/widget/product.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../pages/provider/product_provider.dart';
-import '../pages/provider/like_provider.dart';
+import '../provider/product_provider.dart';
+import '../provider/like_provider.dart';
 
 class RandomProductsGrid extends ConsumerWidget {
   const RandomProductsGrid({super.key});

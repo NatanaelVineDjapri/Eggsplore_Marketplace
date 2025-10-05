@@ -20,10 +20,10 @@ class Message {
       id: json['id'] ?? 0,
       senderId: json['sender_id'] ?? 0,
       receiverId: json['receiver_id'] ?? 0,
-      message: json['message'] ?? "", // default "" biar ga null
+      message: json['message'] ?? "", 
       createdAt: json['created_at'] != null
           ? DateTime.parse(json['created_at'])
-          : DateTime.now(), // fallback biar ga crash
+          : DateTime.now(), 
       updatedAt: json['updated_at'] != null
           ? DateTime.parse(json['updated_at'])
           : DateTime.now(),

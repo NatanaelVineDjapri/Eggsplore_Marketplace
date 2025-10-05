@@ -20,7 +20,6 @@ class ChatItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Dapatkan URL absolut
     final String imageUrl = ImageHelper.getImageUrl(imagePath);
     final bool hasImage = imageUrl.isNotEmpty;
 

@@ -1,7 +1,6 @@
 import 'user.dart';
 import 'cart_item.dart';
 
-// Helper function untuk mengatasi masalah 'String' is not a subtype of 'num'
 double _parseDouble(dynamic value) {
   if (value == null) return 0.0;
   if (value is num) return value.toDouble();

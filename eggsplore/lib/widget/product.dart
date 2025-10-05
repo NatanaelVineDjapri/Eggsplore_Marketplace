@@ -1,6 +1,6 @@
 import 'package:eggsplore/constants/colors.dart';
 import 'package:eggsplore/constants/sizes.dart';
-import 'package:eggsplore/pages/provider/like_provider.dart';
+import 'package:eggsplore/provider/like_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -123,12 +123,14 @@ class ProductCard extends ConsumerWidget {
                         ],
                       ),
                     ),
+
+                    /// Nama produk + harga
                     Padding(
                       padding: EdgeInsets.fromLTRB(
-                        sizes.sm,
-                        sizes.md,
-                        sizes.sm,
-                        sizes.lg,
+                        sizes.sm, // kiri konsisten sm
+                        sizes.md, // atas
+                        sizes.sm, // kanan konsisten sm
+                        sizes.lg, // bawah
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -159,10 +161,15 @@ class ProductCard extends ConsumerWidget {
               ),
             ),
           ),
+
+          /// Tombol add to cart
           Positioned(
             right: -5,
             bottom: 15,
-            child: AddToCartButton(productId: productId, productName: name),
+            child: AddToCartButton(
+              productId: productId,
+              productName: name,
+            ),
           ),
         ],
       ),

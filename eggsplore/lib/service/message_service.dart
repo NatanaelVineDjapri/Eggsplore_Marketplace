@@ -31,10 +31,10 @@ class MessageService {
     final fetch = () async {
       try {
         final contacts = await _fetchInboxOnce();
-        // Emit data terbaru ke Stream
+
         controller.sink.add(contacts);
       } catch (e) {
-        // Emit error ke Stream jika gagal
+
         controller.sink.addError(e);
       }
     };

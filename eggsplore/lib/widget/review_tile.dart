@@ -27,7 +27,6 @@ class ReviewTile extends StatelessWidget {
                 backgroundImage: imageUrl.isNotEmpty
                     ? NetworkImage(imageUrl)
                     : null,
-                // child: imageUrl.isEmpty ? const Icon(Icons.person) : null,
               ),
               const SizedBox(width: 12),
               Text(

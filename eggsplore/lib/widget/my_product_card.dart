@@ -1,9 +1,7 @@
-// File: widget/my_product_card.dart
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eggsplore/constants/sizes.dart';
-import 'package:eggsplore/pages/provider/product_provider.dart';
+import 'package:eggsplore/provider/product_provider.dart';
 import 'package:eggsplore/service/product_service.dart';
 import 'package:intl/intl.dart';
 

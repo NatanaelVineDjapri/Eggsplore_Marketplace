@@ -1,7 +1,7 @@
 import 'package:eggsplore/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:eggsplore/pages/provider/cart_provider.dart';
+import 'package:eggsplore/provider/cart_provider.dart';
 
 class AddToCartButton extends ConsumerWidget {
   final int productId;

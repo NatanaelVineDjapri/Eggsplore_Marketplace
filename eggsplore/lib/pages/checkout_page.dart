@@ -5,9 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:eggsplore/model/cart_item.dart';
 import 'package:eggsplore/model/order.dart';
-import 'package:eggsplore/pages/provider/auth_provider.dart';
-import 'package:eggsplore/pages/provider/cart_provider.dart';
-import 'package:eggsplore/pages/provider/checkout_provider.dart';
+import 'package:eggsplore/provider/auth_provider.dart';
+import 'package:eggsplore/provider/cart_provider.dart';
+import 'package:eggsplore/provider/checkout_provider.dart';
 import 'package:eggsplore/service/checkout_service.dart';
 import 'package:eggsplore/constants/sizes.dart';
 

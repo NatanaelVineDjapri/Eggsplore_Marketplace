@@ -1,5 +1,5 @@
 import 'package:eggsplore/model/product.dart';
-import 'package:eggsplore/pages/provider/cart_provider.dart';
+import 'package:eggsplore/provider/cart_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

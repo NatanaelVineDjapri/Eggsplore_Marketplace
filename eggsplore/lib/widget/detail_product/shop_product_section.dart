@@ -1,9 +1,9 @@
 import 'package:eggsplore/constants/sizes.dart';
-import 'package:eggsplore/pages/provider/product_provider.dart';
+import 'package:eggsplore/provider/product_provider.dart';
 import 'package:eggsplore/widget/product.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:eggsplore/model/shop_products_args.dart'; // SESUAIKAN PATH INI!
+import 'package:eggsplore/model/shop_products_args.dart';
 
 class ShopProductsSection extends ConsumerWidget {
   final int shopId;
@@ -30,7 +30,6 @@ class ShopProductsSection extends ConsumerWidget {
           "Lainnya di toko ini",
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
-        // Jarak dikurangi dari 16 menjadi 8
         const SizedBox(height: 8),
         shopProductsAsync.when(
           loading: () => const Center(child: CircularProgressIndicator()),

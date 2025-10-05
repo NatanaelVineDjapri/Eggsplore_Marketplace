@@ -65,4 +65,43 @@
         return false;
       }
     }
+    
+  static Future<Shop?> getShopDetails(int shopId) async {
+    final token = await UserService.getToken();
+    if (token == null) {
+      debugPrint("[ShopService] ❌ Token tidak ditemukan");
+      return null;
+    }
+
+    final url = Uri.parse('$baseUrl/shops/$shopId');
+    try {
+      final response = await http.get(
+        url,
+        headers: {
+          "Authorization": "Bearer $token",
+          "Accept": "application/json",
+        },
+      );
+
+      debugPrint("[ShopService] 🛰️ GET SHOP DETAILS => ${response.statusCode}");
+      debugPrint("[ShopService] 🧾 Body => ${response.body}");
+
+      if (response.statusCode == 200) {
+        try {
+          final decoded = jsonDecode(response.body);
+          return Shop.fromJson(decoded);
+        } catch (e, st) {
+          debugPrint("[ShopService] ❌ JSON parse error: $e");
+          debugPrint("[ShopService] Stacktrace: $st");
+        }
+      } else {
+        debugPrint("[ShopService] ⚠️ Gagal ambil detail toko, status: ${response.statusCode}");
+      }
+      return null;
+    } catch (e, st) {
+      debugPrint("[ShopService] ❌ Exception saat GET SHOP DETAILS: $e");
+      debugPrint("[ShopService] Stacktrace: $st");
+      return null;
+    }
   }
+}

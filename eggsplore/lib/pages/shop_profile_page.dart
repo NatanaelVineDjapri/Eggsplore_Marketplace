@@ -1,3 +1,5 @@
+// File: lib/pages/shop_profile_page.dart
+
 import 'package:flutter/material.dart';
 
 class ShopProfilePage extends StatelessWidget {
@@ -11,7 +13,8 @@ class ShopProfilePage extends StatelessWidget {
         children: [
           // Header dengan background kuning
           Container(
-            padding: const EdgeInsets.only(top: 40, left: 16, right: 16, bottom: 16),
+            padding:
+                const EdgeInsets.only(top: 40, left: 16, right: 16, bottom: 16),
             color: Colors.orange,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -19,7 +22,11 @@ class ShopProfilePage extends StatelessWidget {
                 // Search bar
                 Row(
                   children: [
-                    const Icon(Icons.arrow_back, color: Colors.black),
+                    GestureDetector(
+                      onTap: () => Navigator.pop(context),
+                      child:
+                          const Icon(Icons.arrow_back, color: Colors.black),
+                    ),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Container(
@@ -58,11 +65,17 @@ class ShopProfilePage extends StatelessWidget {
                         children: [
                           const Text(
                             "Ayam Kecap",
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                           const Text(
                             "Jakarta Barat",
-                            style: TextStyle(fontSize: 14, color: Colors.black54),
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.black54,
+                            ),
                           ),
                           const SizedBox(height: 4),
 
@@ -70,11 +83,18 @@ class ShopProfilePage extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: const [
-                              Icon(Icons.star, size: 16, color: Colors.black),
+                              Icon(Icons.star,
+                                  size: 16, color: Colors.black),
                               SizedBox(width: 4),
                               Text("4.8 (20)", style: TextStyle(fontSize: 14)),
                               SizedBox(width: 12),
-                              Text("100 terjual", style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                              Text(
+                                "100 terjual",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ],
                           ),
                         ],
@@ -83,12 +103,16 @@ class ShopProfilePage extends StatelessWidget {
 
                     // Tombol Follow
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 14, vertical: 6),
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.black),
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      child: const Text("Follow", style: TextStyle(fontWeight: FontWeight.bold)),
+                      child: const Text(
+                        "Follow",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ],
                 ),
@@ -127,7 +151,8 @@ class ShopProfilePage extends StatelessWidget {
                             child: Container(
                               color: Colors.grey[300], // placeholder image
                               child: const Center(
-                                child: Icon(Icons.image, size: 40, color: Colors.black45),
+                                child: Icon(Icons.image,
+                                    size: 40, color: Colors.black45),
                               ),
                             ),
                           ),
@@ -139,15 +164,21 @@ class ShopProfilePage extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: const [
-                              Text("Ayam Potong 1 Ekor",
-                                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                              Text(
+                                "Ayam Potong 1 Ekor",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
                               SizedBox(height: 4),
                               Text(
                                 "Rp. 1.000.000",
                                 style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.orange),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.orange,
+                                ),
                               ),
                             ],
                           ),

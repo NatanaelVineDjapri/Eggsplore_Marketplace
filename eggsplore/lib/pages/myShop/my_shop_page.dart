@@ -1,5 +1,3 @@
-// File: my_shop_page.dart
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eggsplore/bar/backBar.dart';
@@ -22,7 +20,7 @@ class MyShopPage extends ConsumerStatefulWidget {
   ConsumerState<MyShopPage> createState() => _MyShopPageState();
 }
 
-class _MyShopPageState extends State<MyShopPage> {
+class _MyShopPageState extends ConsumerState<MyShopPage> {
   Shop? _myShop;
   bool _isLoading = true;
 
@@ -58,22 +56,18 @@ class _MyShopPageState extends State<MyShopPage> {
             repeat: ImageRepeat.repeatY,
             alignment: Alignment.topCenter,
           ),
-
-          // LAPISAN 2: KONTEN (YANG BISA DI-SCROLL)
-          // Widget ini diletakkan di atas background
-          _buildShopContent(),
-        ],
+        ),
+        child: _buildShopContent(myProductsAsync, size),
       ),
     );
   }
 
-  Widget _buildShopContent() {
+  Widget _buildShopContent(AsyncValue myProductsAsync, Appsized size) {
     if (_isLoading) {
       return const Center(child: CircularProgressIndicator(color: Colors.white));
     }
 
     if (_myShop == null) {
-      // ... (kode untuk 'Anda belum memiliki toko' tidak berubah)
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -84,7 +78,10 @@ class _MyShopPageState extends State<MyShopPage> {
               onPressed: () {
                 // TODO: Arahkan ke halaman pembuatan toko
               },
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.white, foregroundColor: Colors.orange),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+                foregroundColor: Colors.orange,
+              ),
               child: const Text("Buat Toko Sekarang"),
             ),
           ],
@@ -126,50 +123,45 @@ class _MyShopPageState extends State<MyShopPage> {
                 textAlign: TextAlign.center,
               ),
             ),
-            // TODO: Tambahkan daftar produk di sini
-                  const SizedBox(height: 20),
-                ],
-              ),
-            ),
-            Expanded( // 🌟 Tambahkan Expanded di sini
-              child: myProductsAsync.when(
-                data: (products) {
-                  if (products.isEmpty) {
-                    // 🌟 Menggunakan Center tanpa SizedBox agar pas di dalam Expanded
-                    return const Center(
-                      child: Text(
-                        "Belum ada produk.",
-                        style: TextStyle(fontSize: 16, color: Colors.black54), // Ubah ukuran font di sini
+            const SizedBox(height: 20),
+
+            // 🔹 Daftar produk (pakai myProductsAsync)
+            myProductsAsync.when(
+              data: (products) {
+                if (products.isEmpty) {
+                  return const Center(
+                    child: Text(
+                      "Belum ada produk.",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.black54,
                       ),
-                    );
-                  }
-                  return SingleChildScrollView(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: GridView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: products.length,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: size.sm,
-                        mainAxisSpacing: size.sm,
-                        childAspectRatio: 0.7,
-                      ),
-                      itemBuilder: (context, index) {
-                        final product = products[index];
-                        return MyProductCard(
-                          productId: product.id,
-                          name: product.name,
-                          price: product.price,
-                          image: product.image,
-                        );
-                      },
                     ),
                   );
-                },
-                loading: () => const Center(child: CircularProgressIndicator()),
-                error: (err, stack) => Center(child: Text("Error: $err")),
-              ),
+                }
+                return GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: products.length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: size.sm,
+                    mainAxisSpacing: size.sm,
+                    childAspectRatio: 0.7,
+                  ),
+                  itemBuilder: (context, index) {
+                    final product = products[index];
+                    return MyProductCard(
+                      productId: product.id,
+                      name: product.name,
+                      price: product.price,
+                      image: product.image,
+                    );
+                  },
+                );
+              },
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (err, stack) => Center(child: Text("Error: $err")),
             ),
           ],
         ),

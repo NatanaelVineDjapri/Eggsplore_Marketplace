@@ -35,18 +35,22 @@ class UserChat {
   final int id;
   final String name;
   final String email;
+  final String? image; 
 
   UserChat({
     required this.id,
     required this.name,
     required this.email,
+    this.image, 
   });
 
   factory UserChat.fromJson(Map<String, dynamic> json) {
     return UserChat(
       id: json['id'] ?? 0,
-      name: json['name'] ?? "Unknown", // default "Unknown"
-      email: json['email'] ?? "-",     // default "-" biar ga null
+      name: json['name'] ?? "Unknown", 
+      email: json['email'] ?? "-", 
+      image: json['image'] as String?, 
     );
   }
 }
+

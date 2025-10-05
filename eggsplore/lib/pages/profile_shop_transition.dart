@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:eggsplore/app_routes.dart';
+import 'package:eggsplore/bar/backBar2.dart';
+import 'package:eggsplore/constants/colors.dart';
+import 'package:eggsplore/constants/text_string.dart';
+import 'package:eggsplore/constants/text_style.dart';
 
 class ProfileShopTransitionPage extends StatelessWidget {
   const ProfileShopTransitionPage({super.key});
@@ -7,22 +11,22 @@ class ProfileShopTransitionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Konfirmasi Toko"),
-        backgroundColor: Colors.orange,
-      ),
+      appBar: backBar2(title: AppStrings.confirmShopTitle),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.storefront, size: 80, color: Colors.orange),
+              const Icon(Icons.storefront, size: 80, color: AppColors.primary),
               const SizedBox(height: 20),
-              const Text(
-                "Apakah kamu ingin membuka halaman toko?",
+              Text(
+                AppStrings.confirmShopQuestion,
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                style: AppTextStyle.subtitle.copyWith(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
               const SizedBox(height: 30),
               Row(
@@ -30,30 +34,35 @@ class ProfileShopTransitionPage extends StatelessWidget {
                 children: [
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.orange,
+                      backgroundColor: AppColors.primary,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
                     onPressed: () {
-                      // Jika setuju, arahkan ke shop page
-                      Navigator.pushReplacementNamed(context, AppRoutes.myshop);
+                      Navigator.pushReplacementNamed(
+                          context, AppRoutes.myshop);
                     },
-                    child: const Text("Ya, lanjut"),
+                    child: Text(
+                      AppStrings.confirmShopYes,
+                      style: const TextStyle(color: AppColors.white),
+                    ),
                   ),
                   const SizedBox(width: 16),
                   OutlinedButton(
                     style: OutlinedButton.styleFrom(
-                      side: const BorderSide(color: Colors.orange),
+                      side: const BorderSide(color: AppColors.primary),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
                     onPressed: () {
-                      // Jika batal, kembali ke profile page
                       Navigator.pop(context);
                     },
-                    child: const Text("Tidak"),
+                    child: Text(
+                      AppStrings.confirmShopNo,
+                      style: const TextStyle(color: AppColors.primary),
+                    ),
                   ),
                 ],
               ),

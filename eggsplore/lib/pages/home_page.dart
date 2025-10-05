@@ -13,6 +13,7 @@ import 'package:eggsplore/provider/product_provider.dart';
 import 'package:eggsplore/widget/product.dart';
 import 'package:eggsplore/pages/search_page.dart';
 import 'package:eggsplore/widget/bannerSlider.dart';
+import 'package:eggsplore/pages/eggsplore_pay_page.dart';
 
 // LANGKAH 1: Buat Provider untuk mengambil data user
 // (Anda bisa pindahkan ini ke file provider terpisah, misal: provider/user_provider.dart)
@@ -106,60 +107,70 @@ class _HomePageState extends ConsumerState<HomePage> {
                   ),
                 ),
                 Expanded(
-                  // LANGKAH 4: Gunakan .when() untuk menangani state loading, error, dan data
-                  child: userAsyncValue.when(
-                    loading: () => const Center(child: CircularProgressIndicator()),
-                    error: (err, stack) => Center(child: Text("Gagal memuat data: ${err.toString()}")),
-                    data: (user) => ListView( // <-- data user berhasil dimuat
-                      controller: _scrollController,
-                      padding: EdgeInsets.zero,
-                      children: [
-                        const BannerSlider(
-                          images: [
-                            "assets/images/banner.jpg", "assets/images/banner.jpg", "assets/images/banner.jpg",
-                          ],
-                        ),
-                        // LANGKAH 5: Gunakan data user untuk balance dan onTap
-                        EggsplorePayCard(
-                          balance: user.balance,
-                          onTap: _navigateToEggsplorePay, // <-- Panggil fungsi navigasi
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(size.md),
-                          child: Consumer(
-                            builder: (context, ref, child) {
-                              final productsAsync = ref.watch(allProductsProvider);
-                              return productsAsync.when(
-                                loading: () => const Center(child: CircularProgressIndicator()),
-                                error: (err, stack) => Center(child: Text("Gagal load produk: $err")),
-                                data: (products) {
-                                  if (products.isEmpty) {
-                                    return const Center(child: Text("Belum ada produk"));
-                                  }
-                                  return GridView.builder(
-                                    shrinkWrap: true,
-                                    physics: const NeverScrollableScrollPhysics(),
-                                    itemCount: products.length,
-                                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2,
-                                      crossAxisSpacing: size.sm,
-                                      mainAxisSpacing: size.sm,
-                                      childAspectRatio: 0.7,
-                                    ),
-                                    itemBuilder: (context, index) {
-                                      final product = products[index];
-                                      return ProductCard(
-                                        productId: product.id,
-                                        name: product.name,
-                                        price: product.price,
-                                        image: product.image,
-                                      );
-                                    },
-                                  );
-                                },
-                              );
-                            },
-                          ),
+                  child: ListView(
+                    controller: _scrollController,
+                    padding: EdgeInsets.zero,
+                    children: [
+                      const BannerSlider(
+                        images: [
+                          "assets/images/banner.jpg",
+                          "assets/images/banner.jpg",
+                          "assets/images/banner.jpg",
+                        ],
+                      ),
+                      EggsplorePayCard(
+                        balance: balance,
+                        onTap: () async {
+                          // buka halaman Eggsplore Pay
+                          final updatedBalance = await Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => const EggsplorePayPage()),
+                          );
+
+                          // kalau halaman itu return balance baru, update
+                          if (updatedBalance != null && updatedBalance is double) {
+                            setState(() {
+                              balance = updatedBalance;
+                            });
+                          }
+                        },
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(size.md),
+                        child: Consumer(
+                          builder: (context, ref, child) {
+                            final productsAsync = ref.watch(allProductsProvider);
+                            return productsAsync.when(
+                              loading: () => const Center(child: CircularProgressIndicator()),
+                              error: (err, stack) => Center(child: Text("Gagal load produk: $err")),
+                              data: (products) {
+                                if (products.isEmpty) {
+                                  return const Center(child: Text("Belum ada produk"));
+                                }
+                                return GridView.builder(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: products.length,
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    crossAxisSpacing: size.sm,
+                                    mainAxisSpacing: size.sm,
+                                    childAspectRatio: 0.7,
+                                  ),
+                                  itemBuilder: (context, index) {
+                                    final product = products[index];
+                                    return ProductCard(
+                                      productId: product.id,
+                                      name: product.name,
+                                      price: product.price,
+                                      image: product.image,
+                                    );
+                                  },
+                                );
+                              },
+                            );
+                          },
                         ),
                       ],
                     ),

@@ -36,7 +36,6 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
             'role' => 'user',
             'image' => url('images/products/eggsplore1.jpg'),
-
         ]);
 
         $shop = Shop::create([

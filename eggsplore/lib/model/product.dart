@@ -13,6 +13,7 @@ class Product {
   final bool hasReviewed;
   final double averageRating;
   final String? shopImage; 
+  final String? imageUrl;
 
   Product({
     required this.id,
@@ -28,7 +29,7 @@ class Product {
     this.hasReviewed = false,
     this.averageRating = 0.0,
     this.shopImage, 
-
+    this.imageUrl,
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
@@ -53,6 +54,7 @@ class Product {
       shopName: json['user']?['shop_name'] ?? json['user']?['name'] ?? '', 
       hasPurchased: json['has_purchased'] ?? false,
       hasReviewed: json['has_reviewed'] ?? false,
+      imageUrl: json['image_url'],
       averageRating: parsedAverageRating,
     );
   }

@@ -21,6 +21,11 @@ import 'package:eggsplore/pages/cart_page.dart';
 import 'package:eggsplore/pages/detail_product_page.dart';
 import 'package:eggsplore/pages/chat_page.dart';
 import 'package:eggsplore/pages/checkout_page.dart';
+import 'package:eggsplore/pages/profile/transaction_page.dart';
+import 'package:eggsplore/pages/profile/on_process_page.dart';
+import 'package:eggsplore/pages/profile/sent_page.dart';
+import 'package:eggsplore/pages/profile/reviews_page.dart';
+import 'package:eggsplore/pages/profile/delivery_tracking_page.dart';
 
 class AppRoutes {
   static const String welcome = '/';
@@ -45,6 +50,11 @@ class AppRoutes {
   static const String detailProduct = '/detail-product';
   static const String chat = '/chat';
   static const String checkout = '/checkout';
+  static const String transaction = '/transaction';
+  static const String onProcess = '/on-process';
+  static const String sent = '/sent';
+  static const String reviews = '/reviews';
+  static const String deliveryTracking = '/delivery-tracking';
 
   static Map<String, WidgetBuilder> routes = {
     welcome: (context) => const WelcomeScreen(),
@@ -66,8 +76,13 @@ class AppRoutes {
     search: (context) => const SearchPage(query: ""),
     product: (context) => const ProductPage(),
     shopProfile: (context) => const ShopProfilePage(),
-    // detailProduct: (context) =>  const DetailProductPage(),
     chat: (context) => const ChatPage(),
+    transaction: (context) => const TransactionPage(),
+    onProcess: (context) => const OnProcessPage(),
+    sent: (context) => const SentPage(),
+    reviews: (context) => const ReviewsPage(),
+    deliveryTracking: (context) => const DeliveryTrackingPage(),
     // checkout: (context) => const CheckoutPage(),
+    checkout: (context) => const CheckoutPage(itemsToCheckout: []),
   };
 }

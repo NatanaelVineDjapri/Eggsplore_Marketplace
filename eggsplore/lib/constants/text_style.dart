@@ -8,8 +8,8 @@ class AppTextStyle{
     fontWeight: FontWeight.bold
   );
 
-  static const TextStyle mainTitle = TextStyle(
-    fontSize: Appsized.fontxxl,
+static const TextStyle mainTitle = TextStyle(
+    fontSize: Appsized.fontxl,
     fontWeight: FontWeight.bold,
     color: Colors.black,
   );

@@ -152,17 +152,14 @@ class UserService {
 
 // ... the rest of the UserService class remains the same
 
-  static Future<bool> verifyUser(
-    String firstname,
-    String lastname,
-    String email,
-  ) async {
+  static Future<bool> verifyUser(String firstname, String lastname, String email) async {
     final url = Uri.parse('$baseUrl/verify-user');
 
-    final response = await http.post(
-      url,
-      body: {'firstname': firstname, 'lastname': lastname, 'email': email},
-    );
+    final response = await http.post(url, body: {
+      'firstname': firstname,
+      'lastname': lastname,
+      'email': email,
+    });
 
     print("VERIFY USER => ${response.statusCode} : ${response.body}");
 
@@ -172,21 +169,15 @@ class UserService {
     return false;
   }
 
-  static Future<bool> changePassword(
-    String email,
-    String newPassword,
-    String confirmPassword,
-  ) async {
+  // ---------- CHANGE PASSWORD ----------
+  static Future<bool> changePassword(String email, String newPassword, String confirmPassword) async {
     final url = Uri.parse('$baseUrl/change-password');
 
-    final response = await http.put(
-      url,
-      body: {
-        'email': email,
-        'newpassword': newPassword,
-        'confirmpassword': confirmPassword,
-      },
-    );
+    final response = await http.put(url, body: {
+      'email': email,
+      'newpassword': newPassword,
+      'confirmpassword': confirmPassword,
+    });
 
     print("CHANGE PASSWORD => ${response.statusCode} : ${response.body}");
 

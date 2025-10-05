@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'app_routes.dart';
-import 'provider/auth_provider.dart'; // pastikan path-nya bener
+import 'provider/auth_provider.dart'; 
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
@@ -28,7 +28,7 @@ class _MyAppState extends ConsumerState<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: AppRoutes.login,
+      initialRoute: AppRoutes.profile,
       routes: AppRoutes.routes,
     );
   }

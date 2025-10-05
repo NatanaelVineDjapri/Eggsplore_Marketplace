@@ -1,6 +1,9 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:eggsplore/bar/backBar.dart';
 import 'package:eggsplore/constants/text_style.dart';
+import 'package:eggsplore/service/product_service.dart';
 
 class AddProductPage extends StatefulWidget {
   const AddProductPage({super.key});
@@ -12,15 +15,12 @@ class AddProductPage extends StatefulWidget {
 class _AddProductPageState extends State<AddProductPage> {
   final _formKey = GlobalKey<FormState>();
 
-  // Controller buat ambil input user
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _stockController = TextEditingController();
-  final TextEditingController _minPurchaseController = TextEditingController();
 
-  // Placeholder buat gambar
-  String? productImage;
+  File? _selectedImage;
 
   @override
   void dispose() {
@@ -28,27 +28,56 @@ class _AddProductPageState extends State<AddProductPage> {
     _descriptionController.dispose();
     _priceController.dispose();
     _stockController.dispose();
-    _minPurchaseController.dispose();
     super.dispose();
   }
 
-  // Simulasi kirim data ke backend
-  void _submitForm() {
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _selectedImage = File(pickedFile.path);
+      });
+    }
+  }
+
+  void _submitForm() async {
     if (_formKey.currentState!.validate()) {
+      if (_selectedImage == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Pilih gambar produk terlebih dahulu.")),
+        );
+        return;
+      }
+
       final Map<String, dynamic> productData = {
         "name": _nameController.text.trim(),
         "description": _descriptionController.text.trim(),
         "price": double.tryParse(_priceController.text.trim()) ?? 0,
         "stock": int.tryParse(_stockController.text.trim()) ?? 0,
-        "minPurchase": int.tryParse(_minPurchaseController.text.trim()) ?? 1,
-        "image": productImage ?? "no_image.png",
       };
 
-      debugPrint("Product Data: $productData");
+      try {
+        final success = await ProductService.addProduct(
+          productData: productData,
+          imagePath: _selectedImage!.path,
+        );
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Product submitted!")),
-      );
+        if (success) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Produk berhasil ditambahkan!")),
+          );
+          Navigator.pop(context);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Gagal menambahkan produk.")),
+          );
+        }
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Terjadi kesalahan: $e")),
+        );
+      }
     }
   }
 
@@ -57,8 +86,8 @@ class _AddProductPageState extends State<AddProductPage> {
       label: Container(
         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
         decoration: BoxDecoration(
-          color: Colors.white, // solid bg
-          borderRadius: BorderRadius.circular(6), // rounded bg label
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(6),
         ),
         child: Text(
           label,
@@ -72,7 +101,7 @@ class _AddProductPageState extends State<AddProductPage> {
         borderRadius: BorderRadius.circular(8),
       ),
       filled: true,
-      fillColor: Colors.white, // field solid bg
+      fillColor: Colors.white,
       prefixText: prefix,
       prefixStyle: const TextStyle(color: Colors.black54),
       hintStyle: const TextStyle(color: Colors.black54),
@@ -91,20 +120,16 @@ class _AddProductPageState extends State<AddProductPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Upload Foto Produk
               Center(
                 child: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      productImage = "assets/logo/placeholder.png";
-                    });
-                  },
+                  onTap: _pickImage,
                   child: CircleAvatar(
                     radius: 50,
                     backgroundColor: Colors.grey[300],
-                    backgroundImage:
-                        productImage != null ? AssetImage(productImage!) : null,
-                    child: productImage == null
+                    backgroundImage: _selectedImage != null
+                        ? FileImage(_selectedImage!) as ImageProvider
+                        : null,
+                    child: _selectedImage == null
                         ? const Icon(Icons.camera_alt,
                             size: 40, color: Colors.black54)
                         : null,
@@ -112,8 +137,6 @@ class _AddProductPageState extends State<AddProductPage> {
                 ),
               ),
               const SizedBox(height: 20),
-
-              // Nama Produk
               TextFormField(
                 controller: _nameController,
                 style: const TextStyle(color: Colors.black54),
@@ -122,8 +145,6 @@ class _AddProductPageState extends State<AddProductPage> {
                     value == null || value.isEmpty ? "Enter product name" : null,
               ),
               const SizedBox(height: 16),
-
-              // Deskripsi Produk
               TextFormField(
                 controller: _descriptionController,
                 style: const TextStyle(color: Colors.black54),
@@ -134,8 +155,6 @@ class _AddProductPageState extends State<AddProductPage> {
                     : null,
               ),
               const SizedBox(height: 16),
-
-              // Harga
               TextFormField(
                 controller: _priceController,
                 keyboardType: TextInputType.number,
@@ -145,8 +164,6 @@ class _AddProductPageState extends State<AddProductPage> {
                     value == null || value.isEmpty ? "Enter price" : null,
               ),
               const SizedBox(height: 16),
-
-              // Stock
               TextFormField(
                 controller: _stockController,
                 keyboardType: TextInputType.number,
@@ -155,25 +172,11 @@ class _AddProductPageState extends State<AddProductPage> {
                 validator: (value) =>
                     value == null || value.isEmpty ? "Enter stock" : null,
               ),
-              const SizedBox(height: 16),
-
-              // Minimum pembelian
-              TextFormField(
-                controller: _minPurchaseController,
-                keyboardType: TextInputType.number,
-                style: const TextStyle(color: Colors.black54),
-                decoration: _inputDecoration("Minimum Purchase"),
-                validator: (value) => value == null || value.isEmpty
-                    ? "Enter minimum purchase"
-                    : null,
-              ),
               const SizedBox(height: 24),
-
-              // Tombol Sell
               Center(
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.grey[800], // abu tua
+                    backgroundColor: Colors.grey[800],
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(
                         horizontal: 40, vertical: 14),

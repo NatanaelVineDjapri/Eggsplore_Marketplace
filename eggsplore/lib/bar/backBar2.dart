@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:eggsplore/constants/text_style.dart';
 import 'package:eggsplore/constants/colors.dart';
 
-class backBar extends StatelessWidget implements PreferredSizeWidget {
+class backBar2 extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final VoidCallback? onBack;
 
-  const backBar({
+  const backBar2({
     super.key,
     required this.title,
     this.onBack,
@@ -15,7 +15,7 @@ class backBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: AppColors.darkGrey,
+      backgroundColor: AppColors.primary,
       leading: IconButton(
         icon: const Icon(Icons.arrow_back, color: Colors.white),
         onPressed: onBack ?? () => Navigator.pop(context),
@@ -29,7 +29,7 @@ class backBar extends StatelessWidget implements PreferredSizeWidget {
         child: Text(
           title.toUpperCase(),
           style: AppTextStyle.mainTitle.copyWith(
-            color: AppColors.darkGrey,
+            color: AppColors.primary,
             fontWeight: FontWeight.bold,
           ),
         ),

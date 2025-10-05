@@ -4,7 +4,6 @@ import 'package:eggsplore/constants/sizes.dart';
 import 'package:eggsplore/constants/text_string.dart';
 import 'package:eggsplore/constants/text_style.dart';
 import 'package:eggsplore/model/like_model.dart';
-import 'package:eggsplore/model/product.dart';
 import 'package:eggsplore/model/user.dart';
 import 'package:eggsplore/provider/product_provider.dart';
 import 'package:eggsplore/provider/like_provider.dart';
@@ -35,7 +34,12 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
 
   String _getUsername(User user) => user.name;
 
-  Widget buildSectionTitle(BuildContext context, String title, double fontSize, FontWeight fontWeight) {
+  Widget buildSectionTitle(
+    BuildContext context,
+    String title,
+    double fontSize,
+    FontWeight fontWeight,
+  ) {
     final size = Appsized(context);
     return Row(
       children: [
@@ -66,7 +70,6 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     return Scaffold(
       body: Stack(
         children: [
-          // HEADER IMAGE
           Container(
             height: size.height * 0.41,
             width: double.infinity,
@@ -84,15 +87,19 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                 final username = userSnapshot.hasData && user != null
                     ? _getUsername(user)
                     : (userSnapshot.connectionState == ConnectionState.waiting
-                        ? 'Loading...'
-                        : 'Pengguna');
+                          ? 'Loading...'
+                          : 'Pengguna');
 
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // HEADER TEXT & CARDS
                     Padding(
-                      padding: EdgeInsets.fromLTRB(size.hmd, size.md, size.hmd, size.md),
+                      padding: EdgeInsets.fromLTRB(
+                        size.hmd,
+                        size.md,
+                        size.hmd,
+                        size.md,
+                      ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -124,17 +131,49 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            buildSectionTitle(context, "$username's Wishlist", Appsized.fontMd, FontWeight.bold),
-                            SizedBox(height: size.md),
+                            buildSectionTitle(
+                              context,
+                              "$username's Wishlist",
+                              Appsized.fontMd,
+                              FontWeight.bold,
+                            ),
+                            SizedBox(height: size.lg),
                             likedProductsAsync.when(
                               data: (likedProducts) {
-                                WidgetsBinding.instance.addPostFrameCallback((_) {
-                                  final notifier = ref.read(likeStateProvider.notifier);
+                                if (likedProducts.isEmpty) {
+                                  return const Center(
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: 5.0,
+                                      ),
+                                      child: Text(
+                                        "Belum ada produk dalam Wishlist Anda.",
+                                        style: TextStyle(
+                                          color: Colors.grey,
+                                          fontSize: Appsized.fontSm,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                }
+
+                                WidgetsBinding.instance.addPostFrameCallback((
+                                  _,
+                                ) {
+                                  final notifier = ref.read(
+                                    likeStateProvider.notifier,
+                                  );
                                   for (var product in likedProducts) {
-                                    if (!notifier.state.containsKey(product.id)) {
+                                    if (!notifier.state.containsKey(
+                                      product.id,
+                                    )) {
                                       notifier.state = {
                                         ...notifier.state,
-                                        product.id: Like(productId: product.id, totalLikes: 0, userLiked: true),
+                                        product.id: Like(
+                                          productId: product.id,
+                                          totalLikes: 0,
+                                          userLiked: true,
+                                        ),
                                       };
                                     }
                                   }
@@ -144,15 +183,22 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                                   shrinkWrap: true,
                                   physics: const NeverScrollableScrollPhysics(),
                                   itemCount: likedProducts.length,
-                                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
-                                    crossAxisSpacing: size.sm,
-                                    mainAxisSpacing: size.sm,
-                                    childAspectRatio: 0.7,
-                                  ),
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2,
+                                        crossAxisSpacing: size.sm,
+                                        mainAxisSpacing: size.sm,
+                                        childAspectRatio: 0.7,
+                                      ),
                                   itemBuilder: (context, index) {
                                     final product = likedProducts[index];
-                                    final isLiked = ref.watch(likeStateProvider)[product.id]?.userLiked ?? false;
+                                    final isLiked =
+                                        ref
+                                            .watch(
+                                              likeStateProvider,
+                                            )[product.id]
+                                            ?.userLiked ??
+                                        false;
 
                                     return ProductCard(
                                       productId: product.id,
@@ -164,13 +210,20 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                                   },
                                 );
                               },
-                              loading: () => const Center(child: CircularProgressIndicator()),
+                              loading: () => const Center(
+                                child: CircularProgressIndicator(),
+                              ),
                               error: (err, stack) => Text("Error: $err"),
                             ),
                             SizedBox(height: size.xl),
-                            buildSectionTitle(context, AppStrings.maybe, Appsized.fontSm, FontWeight.normal),
+                            buildSectionTitle(
+                              context,
+                              AppStrings.maybe,
+                              Appsized.fontSm,
+                              FontWeight.normal,
+                            ),
                             SizedBox(height: size.md),
-                            RandomProductsGrid()
+                            RandomProductsGrid(),
                           ],
                         ),
                       ),

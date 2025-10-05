@@ -57,7 +57,6 @@ class NotificationsPage extends StatelessWidget {
           ),
         ],
       ),
-
       bottomNavigationBar: const CustomBottomNavBar(currentIndex: 3),
     );
   }

@@ -17,8 +17,11 @@ class ProductResultPage extends StatelessWidget {
 
     final filtered = query.isEmpty
         ? products
-        : products.where((p) => p["name"]!.toLowerCase().contains(query.toLowerCase())).toList();
-
+        : products
+              .where(
+                (p) => p["name"]!.toLowerCase().contains(query.toLowerCase()),
+              )
+              .toList();
     return GridView.builder(
       padding: const EdgeInsets.all(12),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -30,10 +33,7 @@ class ProductResultPage extends StatelessWidget {
       itemCount: filtered.length,
       itemBuilder: (context, index) {
         final p = filtered[index];
-        return TrendingProductCard(
-          name: p["name"]!,
-          price: p["price"]!,
-        );
+        return TrendingProductCard(name: p["name"]!, price: p["price"]!);
       },
     );
   }

@@ -95,13 +95,12 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               } else {
                 final user = ref.read(authProvider).value;
 
-                // Lakukan pengecekan null sebelum menampilkan SnackBar
                 if (user != null && context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(
                         "${AppStrings.welcomeBack}, ${user.name}",
-                      ), // Sekarang aman, tidak perlu '?.' lagi
+                      ),
                     ),
                   );
                 }

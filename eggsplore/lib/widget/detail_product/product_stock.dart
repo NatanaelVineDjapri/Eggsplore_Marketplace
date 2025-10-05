@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 class ProductStock extends StatelessWidget {
   final int stock;
 
-  const ProductStock({
-    super.key,
-    required this.stock,
-  });
+  const ProductStock({super.key, required this.stock});
 
   @override
   Widget build(BuildContext context) {

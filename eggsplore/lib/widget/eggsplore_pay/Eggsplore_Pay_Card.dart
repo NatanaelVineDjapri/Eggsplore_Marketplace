@@ -13,7 +13,7 @@ class EggsplorePayCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-  final formatter = NumberFormat('#,###', 'id_ID');
+    final formatter = NumberFormat('#,###', 'id_ID');
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -38,7 +38,8 @@ class EggsplorePayCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 4),
-                Text("Rp. ${formatter.format(balance)}",
+                Text(
+                  "Rp. ${formatter.format(balance)}",
                   style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
@@ -63,7 +64,7 @@ class EggsplorePayCard extends StatelessWidget {
                       color: Colors.orange,
                       fontWeight: FontWeight.bold,
                     ),
-                  )
+                  ),
                 ],
               ),
             ),

@@ -42,7 +42,9 @@ class ShopInfoCard extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: 40,
-            backgroundImage: imagePath.isNotEmpty ? NetworkImage(imagePath) : null,
+            backgroundImage: imagePath.isNotEmpty
+                ? NetworkImage(imagePath)
+                : null,
             backgroundColor: Colors.grey[200],
             child: imagePath.isEmpty
                 ? Icon(Icons.storefront, size: 40, color: Colors.grey[400])
@@ -53,16 +55,33 @@ class ShopInfoCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(shopName, style: AppTextStyle.shopTitle, maxLines: 1, overflow: TextOverflow.ellipsis),
+                Text(
+                  shopName,
+                  style: AppTextStyle.shopTitle,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
                 const SizedBox(height: 4),
-                Text(description, style: AppTextStyle.description.copyWith(color: Colors.black54), maxLines: 2, overflow: TextOverflow.ellipsis),
+                Text(
+                  description,
+                  style: AppTextStyle.description.copyWith(
+                    color: Colors.black54,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
                 const SizedBox(height: 12),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     _buildStat('Followers', followers),
                     _buildStat('Buyers', buyers),
-                    _buildStat('Rating', rating, icon: Icons.star, iconColor: Colors.amber),
+                    _buildStat(
+                      'Rating',
+                      rating,
+                      icon: Icons.star,
+                      iconColor: Colors.amber,
+                    ),
                   ],
                 ),
               ],
@@ -80,15 +99,22 @@ class ShopInfoCard extends StatelessWidget {
     );
   }
 
-  Widget _buildStat(String label, String value, {IconData? icon, Color? iconColor}) {
+  Widget _buildStat(
+    String label,
+    String value, {
+    IconData? icon,
+    Color? iconColor,
+  }) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Row(children: [
-          if (icon != null) Icon(icon, size: 16, color: iconColor),
-          if (icon != null) const SizedBox(width: 4),
-          Text(value, style: AppTextStyle.shopStatsValue),
-        ]),
+        Row(
+          children: [
+            if (icon != null) Icon(icon, size: 16, color: iconColor),
+            if (icon != null) const SizedBox(width: 4),
+            Text(value, style: AppTextStyle.shopStatsValue),
+          ],
+        ),
         const SizedBox(height: 2),
         Text(label, style: AppTextStyle.shopStatsLabel),
       ],

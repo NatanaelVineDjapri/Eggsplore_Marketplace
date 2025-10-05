@@ -4,11 +4,7 @@ class ShopCard extends StatelessWidget {
   final String name;
   final String location;
 
-  const ShopCard({
-    super.key,
-    required this.name,
-    required this.location,
-  });
+  const ShopCard({super.key, required this.name, required this.location});
 
   @override
   Widget build(BuildContext context) {

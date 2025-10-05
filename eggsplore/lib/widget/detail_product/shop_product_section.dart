@@ -39,17 +39,17 @@ class ShopProductsSection extends ConsumerWidget {
             if (products.isEmpty) {
               return const Text("Tidak ada produk lain di toko ini.");
             }
-            
+
             return GridView.builder(
               shrinkWrap: true,
               primary: false,
-              
+
               scrollDirection: Axis.vertical,
               itemCount: products.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                crossAxisSpacing: 16.0, 
-                mainAxisSpacing: 1.0, 
+                crossAxisSpacing: 16.0,
+                mainAxisSpacing: 1.0,
                 childAspectRatio: 0.7,
               ),
               itemBuilder: (context, index) {

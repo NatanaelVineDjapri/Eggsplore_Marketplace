@@ -9,7 +9,6 @@ class ProductPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = Appsized(context);
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.orange,
@@ -21,39 +20,40 @@ class ProductPage extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.chat_bubble_outline, color: Colors.white),
-            onPressed: () {}, // ke chat toko nanti
+            onPressed: () {},
           ),
           IconButton(
             icon: const Icon(Icons.shopping_cart_outlined, color: Colors.white),
-            onPressed: () {}, // ke cart nanti
+            onPressed: () {},
           ),
         ],
       ),
       body: ListView(
         children: [
-          // Gambar Produk
           Container(
             height: size.height * 0.3,
             color: Colors.grey[300],
             child: const Center(
-              child: Text(AppStrings.prodimage,
-                  style: TextStyle(color: Colors.black54)),
+              child: Text(
+                AppStrings.prodimage,
+                style: TextStyle(color: Colors.black54),
+              ),
             ),
           ),
-
-          // Info Produk
           Padding(
             padding: EdgeInsets.all(size.md),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(AppStrings.onemil,
-                    style:
-                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                const Text(
+                  AppStrings.onemil,
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
                 const SizedBox(height: 4),
-                const Text(AppStrings.onekgchili,
-                    style:
-                        TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+                const Text(
+                  AppStrings.onekgchili,
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                ),
                 const SizedBox(height: 8),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -81,14 +81,17 @@ class ProductPage extends StatelessWidget {
 
           // Review Section
           Padding(
-            padding:
-                EdgeInsets.symmetric(horizontal: size.md, vertical: size.sm),
+            padding: EdgeInsets.symmetric(
+              horizontal: size.md,
+              vertical: size.sm,
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: const [
-                Text(AppStrings.review,
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                Text(
+                  AppStrings.review,
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                ),
                 Text(AppStrings.seeall, style: TextStyle(color: Colors.blue)),
               ],
             ),
@@ -98,8 +101,10 @@ class ProductPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(AppStrings.userdummy,
-                    style: TextStyle(fontWeight: FontWeight.bold)),
+                const Text(
+                  AppStrings.userdummy,
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
                 Row(
                   children: const [
                     Icon(Icons.star, size: 18, color: Colors.black87),
@@ -125,10 +130,7 @@ class ProductPage extends StatelessWidget {
               ],
             ),
           ),
-
           Divider(thickness: 1, color: Colors.grey[300]),
-
-          // Toko Section
           Padding(
             padding: EdgeInsets.all(size.md),
             child: Container(
@@ -149,12 +151,18 @@ class ProductPage extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: const [
-                        Text(AppStrings.soychicken,
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold)),
+                        Text(
+                          AppStrings.soychicken,
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                         SizedBox(height: 2),
-                        Text(AppStrings.westjakarta,
-                            style: TextStyle(color: Colors.black54)),
+                        Text(
+                          AppStrings.westjakarta,
+                          style: TextStyle(color: Colors.black54),
+                        ),
                       ],
                     ),
                   ),
@@ -163,7 +171,8 @@ class ProductPage extends StatelessWidget {
                     style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: Colors.black),
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(20))),
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                      ),
                     ),
                     child: const Text(AppStrings.followtext),
                   ),
@@ -171,23 +180,20 @@ class ProductPage extends StatelessWidget {
               ),
             ),
           ),
-
-          // 🔶 Divider Kuning bawah deskripsi
           Container(
             height: 2,
             color: Colors.orange,
             margin: EdgeInsets.symmetric(vertical: size.sm),
           ),
-
-          // Deskripsi
           Padding(
             padding: EdgeInsets.all(size.md),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: const [
-                Text(AppStrings.proddesct,
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                Text(
+                  AppStrings.proddesct,
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                ),
                 SizedBox(height: 8),
                 Text(AppStrings.eurochili),
               ],

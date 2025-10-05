@@ -48,7 +48,10 @@ class UserService {
     final url = Uri.parse('$baseUrl/login');
     final response = await http.post(
       url,
-      headers: {'Accept': 'application/json', 'Content-Type': 'application/json'},
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
       body: jsonEncode({'email': email, 'password': password}),
     );
 
@@ -62,17 +65,21 @@ class UserService {
     }
   }
 
-   static Future<void> logout() async {
+  static Future<void> logout() async {
     final token = await getToken();
     if (token != null) {
       try {
         await http.post(
           Uri.parse('$baseUrl/logout'),
-          headers: {'Authorization': 'Bearer $token', 'Accept': 'application/json'},
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Accept': 'application/json',
+          },
         );
       } catch (e) {
-        // Abaikan error, yang penting token lokal dihapus
-        print("Gagal menghubungi server untuk logout, token lokal tetap dihapus.");
+        print(
+          "Gagal menghubungi server untuk logout, token lokal tetap dihapus.",
+        );
       }
     }
     await removeToken();
@@ -111,7 +118,6 @@ class UserService {
     if (response.statusCode == 200) {
       return User.fromJson(jsonDecode(response.body));
     } else {
-      // Jika token tidak valid (401), hapus token agar tidak dicoba lagi.
       if (response.statusCode == 401) {
         await removeToken();
       }
@@ -119,14 +125,15 @@ class UserService {
     }
   }
 
-
-
-  static Future<bool> updateUserProfile(Map<String, dynamic> userData, {String? imagePath}) async {
+  static Future<bool> updateUserProfile(
+    Map<String, dynamic> userData, {
+    String? imagePath,
+  }) async {
     final token = await getToken();
     if (token == null) return false;
 
     final url = Uri.parse('$baseUrl/user/profile');
-    
+
     var request = http.MultipartRequest('POST', url);
     request.headers['Authorization'] = 'Bearer $token';
     request.headers['Accept'] = 'application/json';
@@ -137,7 +144,6 @@ class UserService {
       request.fields[key] = value.toString();
     });
 
-    // Add the image file if it exists
     if (imagePath != null) {
       request.files.add(await http.MultipartFile.fromPath('image', imagePath));
     }
@@ -150,16 +156,17 @@ class UserService {
     return response.statusCode == 200;
   }
 
-// ... the rest of the UserService class remains the same
-
-  static Future<bool> verifyUser(String firstname, String lastname, String email) async {
+  static Future<bool> verifyUser(
+    String firstname,
+    String lastname,
+    String email,
+  ) async {
     final url = Uri.parse('$baseUrl/verify-user');
 
-    final response = await http.post(url, body: {
-      'firstname': firstname,
-      'lastname': lastname,
-      'email': email,
-    });
+    final response = await http.post(
+      url,
+      body: {'firstname': firstname, 'lastname': lastname, 'email': email},
+    );
 
     print("VERIFY USER => ${response.statusCode} : ${response.body}");
 
@@ -169,15 +176,21 @@ class UserService {
     return false;
   }
 
-  // ---------- CHANGE PASSWORD ----------
-  static Future<bool> changePassword(String email, String newPassword, String confirmPassword) async {
+  static Future<bool> changePassword(
+    String email,
+    String newPassword,
+    String confirmPassword,
+  ) async {
     final url = Uri.parse('$baseUrl/change-password');
 
-    final response = await http.put(url, body: {
-      'email': email,
-      'newpassword': newPassword,
-      'confirmpassword': confirmPassword,
-    });
+    final response = await http.put(
+      url,
+      body: {
+        'email': email,
+        'newpassword': newPassword,
+        'confirmpassword': confirmPassword,
+      },
+    );
 
     print("CHANGE PASSWORD => ${response.statusCode} : ${response.body}");
 

@@ -41,7 +41,6 @@ class _ReviewTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Pindahkan logika ini ke dalam build method
     final String imageUrl = ImageHelper.getImageUrl(review.userAvatar);
 
     return Container(
@@ -54,7 +53,6 @@ class _ReviewTile extends StatelessWidget {
         children: [
           Row(
             children: [
-              // Sesuaikan CircleAvatar untuk menampilkan gambar
               CircleAvatar(
                 backgroundImage: imageUrl.isNotEmpty
                     ? NetworkImage(imageUrl)

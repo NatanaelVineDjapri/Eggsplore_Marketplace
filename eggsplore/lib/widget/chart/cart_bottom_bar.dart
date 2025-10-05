@@ -63,8 +63,9 @@ class CartBottomBar extends StatelessWidget {
             height: 45,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor:
-                    selectedItems.isEmpty ? Colors.grey : primaryColor,
+                backgroundColor: selectedItems.isEmpty
+                    ? Colors.grey
+                    : primaryColor,
                 elevation: 0,
                 shadowColor: Colors.transparent,
                 overlayColor: primaryColor.withOpacity(0.1),
@@ -79,9 +80,8 @@ class CartBottomBar extends StatelessWidget {
                       // Navigasi ke CheckoutPage sambil mengirim data barang
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => CheckoutPage(
-                            itemsToCheckout: selectedItems,
-                          ),
+                          builder: (context) =>
+                              CheckoutPage(itemsToCheckout: selectedItems),
                         ),
                       );
                     },

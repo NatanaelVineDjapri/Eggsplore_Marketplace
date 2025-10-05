@@ -21,10 +21,7 @@ class ShopActionsCard extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             label,
-            style: const TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-            ),
+            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
           ),
         ],
       ),
@@ -58,7 +55,8 @@ class ShopActionsCard extends StatelessWidget {
           _buildAction(
             icon: Icons.check_circle,
             label: "Completed Orders",
-            onTap: () => Navigator.pushNamed(context, AppRoutes.completedOrders),
+            onTap: () =>
+                Navigator.pushNamed(context, AppRoutes.completedOrders),
           ),
           _buildAction(
             icon: Icons.add,

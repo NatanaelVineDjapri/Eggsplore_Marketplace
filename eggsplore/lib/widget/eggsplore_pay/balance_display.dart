@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:eggsplore/widget/formatter.dart';
 import 'package:eggsplore/constants/colors.dart';
 
-
 class BalanceDisplay extends StatelessWidget {
   final double balance;
   final String imagePath;
@@ -49,7 +48,10 @@ class BalanceDisplay extends StatelessWidget {
           Text(
             formatRupiah(balance),
             style: const TextStyle(
-                color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+              color: Colors.white,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ],
       ),

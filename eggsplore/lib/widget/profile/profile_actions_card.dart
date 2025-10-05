@@ -20,15 +20,23 @@ class _ProfileActionsCardState extends State<ProfileActionsCard> {
             color: Colors.black.withOpacity(0.1),
             blurRadius: 6,
             offset: const Offset(0, 3),
-          )
+          ),
         ],
       ),
       child: Row(
         children: const [
-          Expanded(child: _ActionItem(icon: Icons.receipt_long, label: "Transaction")),
-          Expanded(child: _ActionItem(icon: Icons.timelapse, label: "On Process")),
-          Expanded(child: _ActionItem(icon: Icons.send, label: "Sent")),
-          Expanded(child: _ActionItem(icon: Icons.reviews, label: "Reviews")),
+          Expanded(
+            child: _ActionItem(icon: Icons.receipt_long, label: "Transaction"),
+          ),
+          Expanded(
+            child: _ActionItem(icon: Icons.timelapse, label: "On Process"),
+          ),
+          Expanded(
+            child: _ActionItem(icon: Icons.send, label: "Sent"),
+          ),
+          Expanded(
+            child: _ActionItem(icon: Icons.reviews, label: "Reviews"),
+          ),
         ],
       ),
     );
@@ -73,4 +81,3 @@ class _ActionItem extends StatelessWidget {
     );
   }
 }
-

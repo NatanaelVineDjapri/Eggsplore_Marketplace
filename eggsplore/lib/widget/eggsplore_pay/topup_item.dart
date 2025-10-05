@@ -30,11 +30,19 @@ class TopUpItem extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Image.asset(imagePath, width: width * 0.45, height: width * 0.45, fit: BoxFit.contain),
+            Image.asset(
+              imagePath,
+              width: width * 0.45,
+              height: width * 0.45,
+              fit: BoxFit.contain,
+            ),
             const SizedBox(height: 8),
             Text(
               formatRupiah(amount),
-              style: const TextStyle(color: Colors.orange, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                color: Colors.orange,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ],
         ),

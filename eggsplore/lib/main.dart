@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'app_routes.dart';
-import 'pages/provider/auth_provider.dart'; 
+import 'pages/provider/auth_provider.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));

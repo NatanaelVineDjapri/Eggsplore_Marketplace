@@ -48,18 +48,16 @@ class TopUpItem extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
               padding: const EdgeInsets.all(12),
-              child: Image.asset(
-                imagePath,
-                fit: BoxFit.contain,
-              ),
+              child: Image.asset(imagePath, fit: BoxFit.contain),
             ),
             const SizedBox(height: 8),
             Text(
               formatRupiah(amount),
               style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: Appsized.fontSm,
-                  fontWeight: FontWeight.bold),
+                color: Colors.white,
+                fontSize: Appsized.fontSm,
+                fontWeight: FontWeight.bold,
+              ),
               textAlign: TextAlign.center,
             ),
           ],

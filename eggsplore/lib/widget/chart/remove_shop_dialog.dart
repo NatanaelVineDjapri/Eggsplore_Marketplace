@@ -11,7 +11,9 @@ void showRemoveShopConfirmationDialog({
     context: context,
     builder: (ctx) => AlertDialog(
       title: const Text("Hapus Semua Barang"),
-      content: Text("Apakah kamu yakin ingin menghapus semua barang dari toko '$shopName'?"),
+      content: Text(
+        "Apakah kamu yakin ingin menghapus semua barang dari toko '$shopName'?",
+      ),
       actions: <Widget>[
         TextButton(
           child: const Text("Batal", style: TextStyle(color: Colors.grey)),

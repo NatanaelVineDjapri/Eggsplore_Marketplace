@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:eggsplore/model/user.dart'; 
-import 'package:eggsplore/model/message.dart'; 
-import 'package:eggsplore/service/user_service.dart'; 
+import 'package:eggsplore/model/user.dart';
+import 'package:eggsplore/model/message.dart';
+import 'package:eggsplore/service/user_service.dart';
 
 class MessageService {
   static const String baseUrl = "http://10.0.2.2:8000/api";
@@ -24,11 +24,10 @@ class MessageService {
     }
   }
 
- 
   static Stream<List<User>> watchInbox() {
     final controller = StreamController<List<User>>();
     Timer? timer;
-    
+
     final fetch = () async {
       try {
         final contacts = await _fetchInboxOnce();
@@ -39,7 +38,7 @@ class MessageService {
         controller.sink.addError(e);
       }
     };
-    
+
     fetch();
     timer = Timer.periodic(const Duration(seconds: 5), (t) => fetch());
     controller.onCancel = () {
@@ -49,8 +48,7 @@ class MessageService {
 
     return controller.stream;
   }
-  
-  
+
   static Future<List<Message>> getMessages(int userId) async {
     final token = await UserService.getToken();
     final response = await http.get(

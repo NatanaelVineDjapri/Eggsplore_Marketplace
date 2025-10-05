@@ -17,19 +17,17 @@ class LikeService {
       },
     );
 
-    print("⭐ TOGGLE LIKE STATUS: ${response.statusCode}"); // BARU: Cek status API
+    print("TOGGLE LIKE STATUS: ${response.statusCode}");
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       return Like.fromJson(data, productId);
-    } 
-    
-    // FIX PENTING: Jika 401, lempar exception spesifik
+    }
+
     if (response.statusCode == 401 || response.statusCode == 403) {
       throw Exception('Authentication Failed (401/403). Please log in again.');
     }
 
-    // Untuk error server lainnya (404, 500, dll.)
     throw Exception('Server Error (${response.statusCode}): ${response.body}');
   }
 
@@ -38,10 +36,13 @@ class LikeService {
     if (token == null) throw Exception('User not logged in');
 
     final url = Uri.parse('$baseUrl/user/liked-products');
-    final response = await http.get(url, headers: {
-      'Authorization': 'Bearer $token',
-      'Content-Type': 'application/json',
-    });
+    final response = await http.get(
+      url,
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+    );
 
     if (response.statusCode == 200) {
       final List data = json.decode(response.body);

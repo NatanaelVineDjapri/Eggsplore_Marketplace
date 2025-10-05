@@ -28,7 +28,7 @@ class ProductCard extends ConsumerWidget {
     final sizes = Appsized(context);
     final formatter = NumberFormat('#,###', 'id_ID');
     final cardWidth = MediaQuery.of(context).size.width * 0.45;
-    
+
     final likeState = ref.watch(likeStateProvider);
     final liked = isLiked ?? likeState[productId]?.userLiked ?? false;
 
@@ -69,14 +69,14 @@ class ProductCard extends ConsumerWidget {
                                     image!,
                                     fit: BoxFit.cover,
                                     width: double.infinity,
-                                    errorBuilder: (context, error, stackTrace) =>
-                                        Center(
-                                      child: Icon(
-                                        Icons.broken_image,
-                                        size: Appsized.iconSm,
-                                        color: Colors.grey,
-                                      ),
-                                    ),
+                                    errorBuilder:
+                                        (context, error, stackTrace) => Center(
+                                          child: Icon(
+                                            Icons.broken_image,
+                                            size: Appsized.iconSm,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
                                   )
                                 : Center(
                                     child: Icon(
@@ -162,10 +162,7 @@ class ProductCard extends ConsumerWidget {
           Positioned(
             right: -5,
             bottom: 15,
-            child: AddToCartButton(
-              productId: productId,
-              productName: name,
-            ),
+            child: AddToCartButton(productId: productId, productName: name),
           ),
         ],
       ),

@@ -27,7 +27,9 @@ class AddToCartButton extends ConsumerWidget {
             try {
               await ref.read(cartProvider.notifier).addItem(productId, 1);
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text("$productName ditambahkan ke keranjang")),
+                SnackBar(
+                  content: Text("$productName ditambahkan ke keranjang"),
+                ),
               );
             } catch (e) {
               ScaffoldMessenger.of(context).showSnackBar(
@@ -39,11 +41,7 @@ class AddToCartButton extends ConsumerWidget {
             width: addContainerDimension,
             height: addContainerDimension,
             child: const Center(
-              child: Icon(
-                Icons.add,
-                color: Colors.white,
-                size: addIconSize,
-              ),
+              child: Icon(Icons.add, color: Colors.white, size: addIconSize),
             ),
           ),
         ),

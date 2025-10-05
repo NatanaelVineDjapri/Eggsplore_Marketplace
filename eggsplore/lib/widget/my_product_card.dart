@@ -26,7 +26,7 @@ class MyProductCard extends ConsumerWidget {
     final sizes = Appsized(context);
     final formatter = NumberFormat('#,###');
     final cardWidth = MediaQuery.of(context).size.width * 0.45;
-    final imageUrl = image; 
+    final imageUrl = image;
 
     return SizedBox(
       width: cardWidth,
@@ -56,12 +56,12 @@ class MyProductCard extends ConsumerWidget {
                               width: double.infinity,
                               errorBuilder: (context, error, stackTrace) =>
                                   Center(
-                                child: Icon(
-                                  Icons.broken_image,
-                                  size: Appsized.iconSm,
-                                  color: Colors.grey,
-                                ),
-                              ),
+                                    child: Icon(
+                                      Icons.broken_image,
+                                      size: Appsized.iconSm,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
                             )
                           : Center(
                               child: Icon(
@@ -116,7 +116,9 @@ class MyProductCard extends ConsumerWidget {
                   context: context,
                   builder: (context) => AlertDialog(
                     title: const Text("Hapus Produk"),
-                    content: const Text("Apakah Anda yakin ingin menghapus produk ini?"),
+                    content: const Text(
+                      "Apakah Anda yakin ingin menghapus produk ini?",
+                    ),
                     actions: [
                       TextButton(
                         onPressed: () => Navigator.of(context).pop(false),

@@ -4,15 +4,11 @@ class ChatInput extends StatelessWidget {
   final TextEditingController controller;
   final VoidCallback onSend;
 
-  const ChatInput({
-    super.key,
-    required this.controller,
-    required this.onSend,
-  });
+  const ChatInput({super.key, required this.controller, required this.onSend});
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea( // ✅ biar naik pas keyboard muncul
+    return SafeArea(
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
         color: Colors.white,

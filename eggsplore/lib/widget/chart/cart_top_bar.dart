@@ -8,8 +8,7 @@ class CartTopBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      automaticallyImplyLeading:
-          false,
+      automaticallyImplyLeading: false,
       title: const Text("Keranjang", style: TextStyle(color: Colors.white)),
       backgroundColor: primaryColor,
       iconTheme: const IconThemeData(color: Colors.white),

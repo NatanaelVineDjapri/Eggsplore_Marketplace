@@ -35,7 +35,6 @@ class CheckoutData {
       user: User.fromJson(userJson),
       cartItems: cartListJson.map((item) => CartItem.fromJson(item as Map<String, dynamic>)).toList(),
       
-      // Ambil dari key 'summary' dan gunakan helper parsing
       itemsSubtotal: _parseDouble(summaryJson['items_subtotal']),
       shippingFee: _parseDouble(summaryJson['shipping_fee']),
       serviceFee: _parseDouble(summaryJson['service_fee']), 

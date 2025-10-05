@@ -2,43 +2,38 @@
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../model/order.dart'; 
-import '../service/user_service.dart'; // Untuk getToken()
+import '../model/order.dart';
+import '../service/user_service.dart';
 
 class OrderService {
   static const String baseUrl = "http://10.0.2.2:8000/api";
 
-  // Endpoint: GET /api/orders
-  // Mengambil SEMUA riwayat pesanan milik pengguna yang sedang login
   Future<List<Order>> getOrderHistory() async {
     final token = await UserService.getToken();
     if (token == null) throw Exception("Token otorisasi tidak ditemukan.");
-    
+
     final response = await http.get(
       Uri.parse("$baseUrl/orders"),
-      headers: { "Authorization": "Bearer $token" },
+      headers: {"Authorization": "Bearer $token"},
     );
 
     if (response.statusCode == 200) {
       final responseData = jsonDecode(response.body);
       final List<dynamic> ordersJson = responseData['data'] ?? [];
-      
-      // Memastikan relasi 'items' (OrderItem) ikut dimuat oleh Laravel
+
       return ordersJson.map((json) => Order.fromJson(json)).toList();
     } else {
       throw Exception("Gagal memuat riwayat pesanan: ${response.statusCode}");
     }
   }
 
-  // Endpoint: GET /api/orders/{orderId}
-  // Mengambil detail spesifik satu pesanan
   Future<Order> getOrderDetail(int orderId) async {
     final token = await UserService.getToken();
     if (token == null) throw Exception("Token otorisasi tidak ditemukan.");
-    
+
     final response = await http.get(
       Uri.parse("$baseUrl/orders/$orderId"),
-      headers: { "Authorization": "Bearer $token" },
+      headers: {"Authorization": "Bearer $token"},
     );
 
     if (response.statusCode == 200) {
@@ -49,9 +44,7 @@ class OrderService {
     }
   }
 
-  // Endpoint: POST /api/review/submit
-  // Mengirim rating/review untuk order item tertentu
- Future<bool> submitRating({
+  Future<bool> submitRating({
     required int orderItemId,
     required int productId,
     required int ratingValue,
@@ -76,6 +69,6 @@ class OrderService {
       body: jsonEncode(body),
     );
 
-    return response.statusCode == 201; // HTTP 201 Created
+    return response.statusCode == 201;
   }
 }

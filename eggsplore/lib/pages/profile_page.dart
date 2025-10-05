@@ -213,7 +213,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                               loading: () => const Center(
                                 child: CircularProgressIndicator(),
                               ),
-                              error: (err, stack) => Text('${AppStrings.usererror} $err'),
+                              error: (err, stack) =>
+                                  Text('${AppStrings.usererror} $err'),
                             ),
                             SizedBox(height: size.xl),
                             buildSectionTitle(

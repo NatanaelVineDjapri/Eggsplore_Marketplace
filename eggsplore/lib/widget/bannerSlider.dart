@@ -22,9 +22,7 @@ class _BannerSliderState extends State<BannerSlider> {
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(
-      viewportFraction: 0.95,
-    );
+    _pageController = PageController(viewportFraction: 0.95);
     _pageController.addListener(() {
       setState(() {
         _currentPage = _pageController.page ?? 0.0;
@@ -63,17 +61,16 @@ class _BannerSliderState extends State<BannerSlider> {
         controller: _pageController,
         itemCount: widget.images.length,
         itemBuilder: (context, index) {
-          final scale = (1 - ((_currentPage - index).abs() * 0.2))
-              .clamp(0.8, 1.0);
+          final scale = (1 - ((_currentPage - index).abs() * 0.2)).clamp(
+            0.8,
+            1.0,
+          );
 
           return TweenAnimationBuilder(
             tween: Tween<double>(begin: scale, end: scale),
             duration: const Duration(milliseconds: 250),
             builder: (context, value, child) {
-              return Transform.scale(
-                scale: value,
-                child: child,
-              );
+              return Transform.scale(scale: value, child: child);
             },
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),

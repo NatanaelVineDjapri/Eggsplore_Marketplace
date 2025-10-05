@@ -46,9 +46,7 @@ class _FollowButtonState extends State<FollowButton> {
       onPressed: toggleFollow,
       child: Text(
         isFollowing ? "Following" : "Follow",
-        style: TextStyle(
-          color: isFollowing ? Colors.black : Colors.white,
-        ),
+        style: TextStyle(color: isFollowing ? Colors.black : Colors.white),
       ),
     );
   }

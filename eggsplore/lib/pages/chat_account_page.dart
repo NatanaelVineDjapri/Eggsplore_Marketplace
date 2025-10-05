@@ -21,7 +21,7 @@ class ChatDetailPage extends StatefulWidget {
 
 class _ChatDetailPageState extends State<ChatDetailPage> {
   final TextEditingController _controller = TextEditingController();
-  late Future<Map<String, dynamic>> _chatFuture; // untuk FutureBuilder
+  late Future<Map<String, dynamic>> _chatFuture; 
   int? myId;
 
   @override
@@ -31,11 +31,9 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   }
 
   Future<Map<String, dynamic>> _loadChat() async {
-    // ambil user login
     final user = await UserService.getCurrentUser();
     myId = user?.id;
 
-    // ambil messages lawan chat
     final msgs = await MessageService.getMessages(widget.userId);
 
     return {
@@ -51,7 +49,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     final sent = await MessageService.sendMessage(widget.userId, text);
     if (sent != null) {
       setState(() {
-        messages.insert(0, sent); // masuk ke list
+        messages.insert(0, sent);
       });
       _controller.clear();
     }

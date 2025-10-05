@@ -5,7 +5,7 @@ import 'package:eggsplore/model/cart_item.dart';
 class CartItemWidget extends StatelessWidget {
   final CartItem item;
   final ValueChanged<int> onQuantityChanged;
-  final VoidCallback onRemove; // Dipanggil saat quantity < 1 atau tombol delete
+  final VoidCallback onRemove;
   final ValueChanged<bool?> onToggleSelect;
 
   const CartItemWidget({
@@ -25,14 +25,14 @@ class CartItemWidget extends StatelessWidget {
 
   String formatRupiah(double amount) {
     final String str = amount.toStringAsFixed(0);
-    return "Rp ${str.replaceAllMapped(
-      RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-      (Match m) => '${m[1]}.',
-    )}";
+    return "Rp ${str.replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]}.')}";
   }
 
   Widget _buildQuantityButton(
-      IconData icon, bool enabled, VoidCallback onPressed) {
+    IconData icon,
+    bool enabled,
+    VoidCallback onPressed,
+  ) {
     return InkWell(
       onTap: enabled ? onPressed : null,
       child: Container(
@@ -53,13 +53,11 @@ class CartItemWidget extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // 1. Checkbox
           Checkbox(
             value: item.isSelected,
             activeColor: PrimaryColor,
             onChanged: onToggleSelect,
           ),
-          // 2. Image
           ClipRRect(
             borderRadius: BorderRadius.circular(8.0),
             child: item.image != null
@@ -73,12 +71,14 @@ class CartItemWidget extends StatelessWidget {
                     width: 70,
                     height: 70,
                     color: Colors.grey.shade200,
-                    child: const Icon(Icons.image_not_supported,
-                        size: 30, color: Colors.grey),
+                    child: const Icon(
+                      Icons.image_not_supported,
+                      size: 30,
+                      color: Colors.grey,
+                    ),
                   ),
           ),
           const SizedBox(width: 12),
-          // 3. Info & Qty Control
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -90,17 +90,17 @@ class CartItemWidget extends StatelessWidget {
                   style: const TextStyle(fontSize: 14),
                 ),
                 const SizedBox(height: 8),
-                Text(
-                  formatRupiah(item.price),
-                  style: priceStyle,
-                ),
+                Text(formatRupiah(item.price), style: priceStyle),
                 const SizedBox(height: 8),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     IconButton(
-                      icon: const Icon(Icons.delete_outline,
-                          color: Colors.grey, size: 20),
+                      icon: const Icon(
+                        Icons.delete_outline,
+                        color: Colors.grey,
+                        size: 20,
+                      ),
                       onPressed: onRemove, // Panggil onRemove
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(),
@@ -115,17 +115,24 @@ class CartItemWidget extends StatelessWidget {
                       child: Row(
                         children: [
                           _buildQuantityButton(
-                              Icons.remove, item.quantity > 0, () {
-                            if (item.quantity > 1) {
-                              onQuantityChanged(item.quantity - 1);
-                            } else {
-                              onRemove(); 
-                            }
-                          }),
+                            Icons.remove,
+                            item.quantity > 0,
+                            () {
+                              if (item.quantity > 1) {
+                                onQuantityChanged(item.quantity - 1);
+                              } else {
+                                onRemove();
+                              }
+                            },
+                          ),
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: Text(item.quantity.toString(),
-                                style: const TextStyle(fontSize: 13)),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8.0,
+                            ),
+                            child: Text(
+                              item.quantity.toString(),
+                              style: const TextStyle(fontSize: 13),
+                            ),
                           ),
                           _buildQuantityButton(Icons.add, true, () {
                             onQuantityChanged(item.quantity + 1);

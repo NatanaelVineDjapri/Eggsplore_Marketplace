@@ -16,12 +16,9 @@ class ChatPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final chatAsync = ref.watch(chatProvider);
-
     return Scaffold(
       backgroundColor: Colors.grey[100],
-
       appBar: const backBar2(title: "Chat"), 
-
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -42,7 +39,6 @@ class ChatPage extends ConsumerWidget {
                       ),
                     );
                   }
-
                   return ListView.builder(
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
@@ -68,7 +64,6 @@ class ChatPage extends ConsumerWidget {
                   child: Text('${AppStrings.errchat} $err'),
                 ),
               ),
-
               const SizedBox(height: 20), 
               RandomProductsGrid()
             ],

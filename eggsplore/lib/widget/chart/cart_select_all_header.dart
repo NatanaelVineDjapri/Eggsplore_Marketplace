@@ -56,7 +56,9 @@ class CartSelectAllHeader extends StatelessWidget {
           const Text("Pilih semua"),
           const Spacer(),
           TextButton(
-            onPressed: selectedItems.isEmpty ? null : () => _confirmRemoveSelected(context),
+            onPressed: selectedItems.isEmpty
+                ? null
+                : () => _confirmRemoveSelected(context),
             child: Text(
               "Hapus (${selectedItems.length})",
               style: TextStyle(

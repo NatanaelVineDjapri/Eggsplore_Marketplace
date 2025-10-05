@@ -6,7 +6,7 @@ class ExpandableDescription extends StatefulWidget {
   const ExpandableDescription({
     super.key,
     required this.text,
-    this.trimLength = 150, 
+    this.trimLength = 150,
   });
 
   @override
@@ -20,8 +20,8 @@ class _ExpandableDescriptionState extends State<ExpandableDescription> {
   Widget build(BuildContext context) {
     final bool isLongText = widget.text.length > widget.trimLength;
 
-    final String displayedText = _isExpanded || !isLongText 
-        ? widget.text 
+    final String displayedText = _isExpanded || !isLongText
+        ? widget.text
         : '${widget.text.substring(0, widget.trimLength)}...';
 
     return Column(
@@ -29,11 +29,14 @@ class _ExpandableDescriptionState extends State<ExpandableDescription> {
       children: [
         Text(
           displayedText,
-          style: TextStyle(fontSize: 14, color: Colors.grey.shade700, height: 1.5),
+          style: TextStyle(
+            fontSize: 14,
+            color: Colors.grey.shade700,
+            height: 1.5,
+          ),
         ),
-        
-        if (isLongText)
-          const SizedBox(height: 8),
+
+        if (isLongText) const SizedBox(height: 8),
 
         if (isLongText)
           InkWell(

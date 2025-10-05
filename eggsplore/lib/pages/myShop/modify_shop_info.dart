@@ -31,14 +31,12 @@ class _ModifyShopInfoPageState extends State<ModifyShopInfoPage> {
     _fetchShopData();
   }
 
-  // Mengambil data toko berdasarkan user yang login
   Future<void> _fetchShopData() async {
-    // Memanggil method baru yang tidak butuh ID
     Shop? shop = await ShopService.getMyShop(); 
     
     if (shop != null && mounted) {
       setState(() {
-        _currentShop = shop; // Simpan seluruh data toko
+        _currentShop = shop; 
         _nameController.text = shop.name;
         _descriptionController.text = shop.description;
         _dateController.text = DateFormat('d MMMM yyyy').format(shop.createdAt);

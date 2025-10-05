@@ -5,10 +5,7 @@ import 'package:eggsplore/pages/modify_profile_info_page.dart'; // Pastikan Anda
 class ProfileInfoCard extends StatelessWidget {
   final User? user;
 
-  const ProfileInfoCard({
-    super.key,
-    required this.user,
-  });
+  const ProfileInfoCard({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -54,10 +51,7 @@ class ProfileInfoCard extends StatelessWidget {
           ),
           child: Row(
             children: [
-              CircleAvatar(
-                radius: 26,
-                backgroundImage: imageUrl,
-              ),
+              CircleAvatar(radius: 26, backgroundImage: imageUrl),
               const SizedBox(width: 12),
               Flexible(
                 child: Text(

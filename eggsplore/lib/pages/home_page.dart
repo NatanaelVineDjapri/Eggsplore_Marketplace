@@ -48,14 +48,12 @@ class _HomePageState extends ConsumerState<HomePage> {
     super.dispose();
   }
 
-  // Fungsi untuk navigasi ke halaman Eggsplore Pay dan refresh user data
   void _navigateToEggsplorePay() async {
     await Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const EggsplorePayPage()),
     );
 
-    // Setelah kembali, refresh user data
     if (mounted) {
       ref.invalidate(userProvider);
     }
@@ -65,9 +63,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   Widget build(BuildContext context) {
     final size = Appsized(context);
     final bgHeight = size.height * 0.36;
-
     final userAsyncValue = ref.watch(userProvider);
-
     return Scaffold(
       body: Stack(
         children: [
@@ -118,8 +114,6 @@ class _HomePageState extends ConsumerState<HomePage> {
                           AppImages.homeBanner,
                         ],
                       ),
-
-                      // Tampilkan saldo dari user provider
                       userAsyncValue.when(
                         loading: () =>
                             const Center(child: CircularProgressIndicator()),
@@ -130,7 +124,6 @@ class _HomePageState extends ConsumerState<HomePage> {
                           onTap: _navigateToEggsplorePay,
                         ),
                       ),
-
                       Padding(
                         padding: EdgeInsets.all(size.md),
                         child: Consumer(

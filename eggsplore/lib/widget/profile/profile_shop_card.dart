@@ -17,7 +17,7 @@ class _ProfileShopCardState extends State<ProfileShopCard> {
           Navigator.pushNamed(context, AppRoutes.myshop);
         },
         child: Container(
-          height: 100, // disamain dengan ProfileInfoCard
+          height: 100,
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
             color: Colors.white,
@@ -27,25 +27,18 @@ class _ProfileShopCardState extends State<ProfileShopCard> {
                 color: Colors.black.withOpacity(0.1),
                 blurRadius: 6,
                 offset: const Offset(0, 3),
-              )
+              ),
             ],
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: const [
-              Icon(
-                Icons.storefront, // 🔹 simbol toko
-                size: 32,
-                color: Colors.orange, // bisa diubah sesuai tema
-              ),
+              Icon(Icons.storefront, size: 32, color: Colors.orange),
               SizedBox(width: 10),
               Text(
                 "My Shop",
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              )
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
             ],
           ),
         ),

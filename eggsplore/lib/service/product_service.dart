@@ -14,15 +14,19 @@ class ProductService {
 
   static Future<List<Product>> fetchProducts() async {
     final token = await UserService.getToken();
-    if (token == null) throw Exception("Otorisasi gagal: Pengguna belum login.");
+    if (token == null)
+      throw Exception("Otorisasi gagal: Pengguna belum login.");
 
     final url = Uri.parse("$_baseUrl/products");
     try {
       final response = await http.get(
         url,
-        headers: {'Authorization': 'Bearer $token', 'Accept': 'application/json'},
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+        },
       );
-      
+
       debugPrint("FETCH ALL PRODUCTS => ${response.statusCode}");
 
       if (response.statusCode == 200) {
@@ -32,14 +36,18 @@ class ProductService {
         throw Exception("Gagal memuat produk: ${response.body}");
       }
     } on SocketException {
-      throw const SocketException("Tidak ada koneksi internet atau server tidak dapat dihubungi.");
+      throw const SocketException(
+        "Tidak ada koneksi internet atau server tidak dapat dihubungi.",
+      );
     } catch (e) {
       debugPrint("Error di fetchProducts: ${e.toString()}");
       rethrow;
     }
   }
 
-  static Future<List<Product>> fetchRandomProductsForCurrentUser({int count = 6}) async {
+  static Future<List<Product>> fetchRandomProductsForCurrentUser({
+    int count = 6,
+  }) async {
     final token = await UserService.getToken();
     if (token == null) return []; // Kembalikan list kosong jika tidak login
 
@@ -47,9 +55,12 @@ class ProductService {
     try {
       final response = await http.get(
         url,
-        headers: {'Authorization': 'Bearer $token', 'Accept': 'application/json'},
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+        },
       );
-      
+
       debugPrint("FETCH RANDOM PRODUCTS => ${response.statusCode}");
 
       if (response.statusCode == 200) {
@@ -66,14 +77,20 @@ class ProductService {
 
   static Future<List<Product>> fetchTrendingProducts() async {
     final token = await UserService.getToken();
-    if (token == null) throw Exception("Otorisasi gagal: Pengguna belum login.");
+    if (token == null)
+      throw Exception("Otorisasi gagal: Pengguna belum login.");
 
     final url = Uri.parse('$_baseUrl/products/trending');
     try {
-      final response = await http.get(
-        url,
-        headers: {"Authorization": "Bearer $token", "Accept": "application/json"},
-      ).timeout(const Duration(seconds: 15));
+      final response = await http
+          .get(
+            url,
+            headers: {
+              "Authorization": "Bearer $token",
+              "Accept": "application/json",
+            },
+          )
+          .timeout(const Duration(seconds: 15));
 
       debugPrint("FETCH TRENDING => ${response.statusCode}");
 
@@ -84,7 +101,9 @@ class ProductService {
         throw Exception("Gagal mengambil produk trending: ${response.body}");
       }
     } on SocketException {
-      throw const SocketException("Tidak ada koneksi internet atau server tidak dapat dihubungi.");
+      throw const SocketException(
+        "Tidak ada koneksi internet atau server tidak dapat dihubungi.",
+      );
     } catch (e) {
       debugPrint("Error di fetchTrendingProducts: ${e.toString()}");
       rethrow;
@@ -93,15 +112,19 @@ class ProductService {
 
   static Future<Product> fetchProductDetail(int productId) async {
     final token = await UserService.getToken();
-    if (token == null) throw Exception("Otorisasi gagal: Pengguna belum login.");
+    if (token == null)
+      throw Exception("Otorisasi gagal: Pengguna belum login.");
 
     final url = Uri.parse('$_baseUrl/products/$productId');
     try {
       final response = await http.get(
         url,
-        headers: {"Authorization": "Bearer $token", "Accept": "application/json"},
+        headers: {
+          "Authorization": "Bearer $token",
+          "Accept": "application/json",
+        },
       );
-      
+
       debugPrint("FETCH DETAIL PRODUCT => ${response.statusCode}");
 
       if (response.statusCode == 200) {
@@ -113,27 +136,40 @@ class ProductService {
         throw Exception("Gagal memuat detail produk: ${response.body}");
       }
     } on SocketException {
-      throw const SocketException("Tidak ada koneksi internet atau server tidak dapat dihubungi.");
+      throw const SocketException(
+        "Tidak ada koneksi internet atau server tidak dapat dihubungi.",
+      );
     } catch (e) {
       debugPrint("Error di fetchProductDetail: ${e.toString()}");
       rethrow;
     }
   }
 
-  static Future<List<Product>> fetchProductsFromShop({required int shopId, int? excludeProductId}) async {
+  static Future<List<Product>> fetchProductsFromShop({
+    required int shopId,
+    int? excludeProductId,
+  }) async {
     final token = await UserService.getToken();
-    if (token == null) throw Exception("Otorisasi gagal: Pengguna belum login.");
+    if (token == null)
+      throw Exception("Otorisasi gagal: Pengguna belum login.");
 
     var uri = Uri.parse('$_baseUrl/shops/$shopId/products');
     if (excludeProductId != null) {
-      uri = uri.replace(queryParameters: {'exclude': excludeProductId.toString()});
+      uri = uri.replace(
+        queryParameters: {'exclude': excludeProductId.toString()},
+      );
     }
 
     try {
-      final response = await http.get(
-        uri,
-        headers: {"Authorization": "Bearer $token", "Accept": "application/json"},
-      ).timeout(const Duration(seconds: 15));
+      final response = await http
+          .get(
+            uri,
+            headers: {
+              "Authorization": "Bearer $token",
+              "Accept": "application/json",
+            },
+          )
+          .timeout(const Duration(seconds: 15));
 
       debugPrint("FETCH SHOP PRODUCTS => ${response.statusCode}");
 
@@ -145,7 +181,9 @@ class ProductService {
         throw Exception("Gagal memuat produk toko: ${response.body}");
       }
     } on SocketException {
-      throw const SocketException("Tidak ada koneksi internet atau server tidak dapat dihubungi.");
+      throw const SocketException(
+        "Tidak ada koneksi internet atau server tidak dapat dihubungi.",
+      );
     } catch (e) {
       debugPrint("Error di fetchProductsFromShop: ${e.toString()}");
       rethrow;
@@ -154,13 +192,17 @@ class ProductService {
 
   static Future<List<Product>> fetchMyProducts() async {
     final token = await UserService.getToken();
-    if (token == null) throw Exception("Otorisasi gagal: Pengguna belum login.");
+    if (token == null)
+      throw Exception("Otorisasi gagal: Pengguna belum login.");
 
     final url = Uri.parse('$_baseUrl/my-products');
     try {
       final response = await http.get(
         url,
-        headers: {'Authorization': 'Bearer $token', 'Accept': 'application/json'},
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+        },
       );
 
       debugPrint("FETCH MY PRODUCTS => ${response.statusCode}");
@@ -172,7 +214,9 @@ class ProductService {
         throw Exception('Gagal memuat produk saya: ${response.body}');
       }
     } on SocketException {
-      throw const SocketException("Tidak ada koneksi internet atau server tidak dapat dihubungi.");
+      throw const SocketException(
+        "Tidak ada koneksi internet atau server tidak dapat dihubungi.",
+      );
     } catch (e) {
       debugPrint("Error di fetchMyProducts: ${e.toString()}");
       rethrow;
@@ -180,19 +224,24 @@ class ProductService {
   }
 
   // -- FUNGSI-FUNGSI AKSI PRODUK (CREATE, UPDATE, DELETE) --
-  
-  static Future<bool> addProduct({required Map<String, dynamic> productData, required String imagePath}) async {
+
+  static Future<bool> addProduct({
+    required Map<String, dynamic> productData,
+    required String imagePath,
+  }) async {
     final token = await UserService.getToken();
     if (token == null) {
       debugPrint('Token tidak ditemukan. User belum login.');
       return false;
     }
-    
+
     try {
-      // Mengambil shopId dari user yang sedang login
       final shopResponse = await http.get(
         Uri.parse("$_baseUrl/user/shop"),
-        headers: {'Authorization': 'Bearer $token', 'Accept': 'application/json'},
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+        },
       );
 
       if (shopResponse.statusCode != 200 || shopResponse.body.isEmpty) {
@@ -202,13 +251,15 @@ class ProductService {
       final shopId = shopData['id'];
       if (shopId == null) throw Exception("ID Toko tidak ditemukan.");
 
-      // Membuat request untuk menambah produk
-      var request = http.MultipartRequest('POST', Uri.parse('$_baseUrl/products'));
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse('$_baseUrl/products'),
+      );
       request.headers.addAll({
         'Authorization': 'Bearer $token',
         'Accept': 'application/json',
       });
-      
+
       request.fields.addAll({
         'shop_id': shopId.toString(),
         'name': productData['name'].toString(),
@@ -216,7 +267,7 @@ class ProductService {
         'price': productData['price'].toString(),
         'stock': productData['stock'].toString(),
       });
-      
+
       request.files.add(await http.MultipartFile.fromPath('image', imagePath));
 
       final response = await request.send();
@@ -227,29 +278,51 @@ class ProductService {
         return true;
       } else {
         final errorResponse = jsonDecode(responseBody);
-        throw Exception(errorResponse['message'] ?? "Gagal menambahkan produk.");
+        throw Exception(
+          errorResponse['message'] ?? "Gagal menambahkan produk.",
+        );
       }
     } catch (e) {
       debugPrint('Error saat menambahkan produk: $e');
-      // Lempar kembali error agar bisa ditampilkan di UI
       throw Exception('Gagal menambahkan produk: ${e.toString()}');
     }
   }
 
   static Future<bool> updateProduct(Product product) async {
-    // Implementasi fungsi updateProduct bisa ditambahkan di sini
-    // (Serupa dengan addProduct tapi menggunakan metode PUT/POST dengan _method)
-    return false; // Placeholder
+    final token = await UserService.getToken();
+    if (token == null) throw Exception("User belum login / token kosong");
+
+    final url = Uri.parse('$_baseUrl/products/${product.id}');
+    final response = await http.put(
+      url,
+      headers: {
+        "Authorization": "Bearer $token",
+        "Content-Type": "application/json",
+      },
+      body: jsonEncode(product.toJson()),
+    );
+
+    return response.statusCode == 200;
   }
 
   static Future<bool> deleteProduct(int id) async {
-    // Implementasi fungsi deleteProduct bisa ditambahkan di sini
-    return false; // Placeholder
+    final token = await UserService.getToken();
+    if (token == null) throw Exception("User belum login / token kosong");
+
+    final url = Uri.parse('$_baseUrl/products/$id');
+    final response = await http.delete(
+      url,
+      headers: {"Authorization": "Bearer $token"},
+    );
+
+    return response.statusCode == 200;
   }
 
-  // -- FUNGSI-FUNGSI ULASAN & RATING --
-  
-  static Future<bool> rateProduct(int productId, int rating, {String? comment}) async {
+  static Future<bool> rateProduct(
+    int productId,
+    int rating, {
+    String? comment,
+  }) async {
     final token = await UserService.getToken();
     if (token == null) return false;
 
@@ -273,15 +346,19 @@ class ProductService {
 
   static Future<List<Review>> fetchReviews(int productId) async {
     final token = await UserService.getToken();
-    if (token == null) throw Exception("Otorisasi gagal: Pengguna belum login.");
+    if (token == null)
+      throw Exception("Otorisasi gagal: Pengguna belum login.");
 
     final url = Uri.parse('$_baseUrl/products/$productId/reviews');
     try {
       final response = await http.get(
         url,
-        headers: {"Authorization": "Bearer $token", "Accept": "application/json"},
+        headers: {
+          "Authorization": "Bearer $token",
+          "Accept": "application/json",
+        },
       );
-      
+
       debugPrint("FETCH REVIEWS => ${response.statusCode}");
 
       if (response.statusCode == 200) {

@@ -22,19 +22,24 @@ class AddToCartButtonProduct extends ConsumerWidget {
           try {
             await ref.read(cartProvider.notifier).addItem(product.id, 1);
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text("${product.name} ditambahkan ke keranjang")),
+              SnackBar(
+                content: Text("${product.name} ditambahkan ke keranjang"),
+              ),
             );
           } catch (e) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text("Gagal: $e")),
-            );
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text("Gagal: $e")));
           }
         },
         style: OutlinedButton.styleFrom(
           padding: const EdgeInsets.symmetric(vertical: 14),
           side: BorderSide(color: color),
         ),
-        child: Text("+ Keranjang", style: TextStyle(fontWeight: FontWeight.bold, color: color)),
+        child: Text(
+          "+ Keranjang",
+          style: TextStyle(fontWeight: FontWeight.bold, color: color),
+        ),
       ),
     );
   }

@@ -12,10 +12,7 @@ class CartService {
 
     final response = await http.get(
       Uri.parse('$baseUrl/cart'),
-      headers: {
-        'Authorization': 'Bearer $token',
-        'Accept': 'application/json',
-      },
+      headers: {'Authorization': 'Bearer $token', 'Accept': 'application/json'},
     );
 
     print("📥 FETCH CART => ${response.statusCode} : ${response.body}");
@@ -37,16 +34,13 @@ class CartService {
       Uri.parse('$baseUrl/cart'),
       headers: {
         'Authorization': 'Bearer $token',
-        'Accept': 'application/json', // tambahin biar jelas
+        'Accept': 'application/json',
         'Content-Type': 'application/json',
       },
-      body: jsonEncode({
-        'product_id': productId,
-        'quantity': quantity,
-      }),
+      body: jsonEncode({'product_id': productId, 'quantity': quantity}),
     );
 
-    print("📤 ADD CART => ${response.statusCode} : ${response.body}");
+    print("ADD CART => ${response.statusCode} : ${response.body}");
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       final data = json.decode(response.body);
@@ -70,7 +64,7 @@ class CartService {
       body: jsonEncode({'quantity': quantity}),
     );
 
-    print("✏️ UPDATE CART => ${response.statusCode} : ${response.body}");
+    print("UPDATE CART => ${response.statusCode} : ${response.body}");
 
     if (response.statusCode != 200) {
       throw Exception('Failed to update cart item (${response.statusCode})');
@@ -83,35 +77,29 @@ class CartService {
 
     final response = await http.delete(
       Uri.parse('$baseUrl/cart/$itemId'),
-      headers: {
-        'Authorization': 'Bearer $token',
-        'Accept': 'application/json',
-      },
+      headers: {'Authorization': 'Bearer $token', 'Accept': 'application/json'},
     );
 
-    print("🗑 REMOVE CART => ${response.statusCode} : ${response.body}");
+    print("REMOVE CART => ${response.statusCode} : ${response.body}");
 
     if (response.statusCode != 200) {
       throw Exception('Failed to remove cart item (${response.statusCode})');
     }
   }
 
-static Future<void> removeShopItems(String shopName) async {
-  final token = await UserService.getToken();
-  if (token == null) throw Exception('User not logged in');
+  static Future<void> removeShopItems(String shopName) async {
+    final token = await UserService.getToken();
+    if (token == null) throw Exception('User not logged in');
 
-  final response = await http.delete(
-    Uri.parse('$baseUrl/cart/shop/$shopName'),
-    headers: {
-      'Authorization': 'Bearer $token',
-      'Accept': 'application/json',
-    },
-  );
+    final response = await http.delete(
+      Uri.parse('$baseUrl/cart/shop/$shopName'),
+      headers: {'Authorization': 'Bearer $token', 'Accept': 'application/json'},
+    );
 
-  print("🗑 REMOVE SHOP ITEMS => ${response.statusCode} : ${response.body}");
+    print("REMOVE SHOP ITEMS => ${response.statusCode} : ${response.body}");
 
-  if (response.statusCode != 200) {
-    throw Exception('Failed to remove shop items (${response.statusCode})');
+    if (response.statusCode != 200) {
+      throw Exception('Failed to remove shop items (${response.statusCode})');
+    }
   }
-}
 }

@@ -122,7 +122,6 @@ class _ModifyProfileInfoPageState extends State<ModifyProfileInfoPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // 🌟 Implementasi tampilan foto profil bulat dengan tombol tambah
               Stack(
                 alignment: Alignment.bottomRight,
                 children: [
@@ -151,9 +150,7 @@ class _ModifyProfileInfoPageState extends State<ModifyProfileInfoPage> {
                   ),
                 ],
               ),
-              const SizedBox(height: 24), // Spasi di bawah foto
-
-              // Form fields
+              const SizedBox(height: 24),
               TextFormField(
                 controller: _nameController,
                 style: const TextStyle(color: Colors.black54),

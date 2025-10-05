@@ -10,7 +10,6 @@ class CustomForm extends StatelessWidget {
   final Widget? suffixIcon;
   final TextEditingController? controller;
 
-
   const CustomForm({
     super.key,
     required this.label,
@@ -33,7 +32,7 @@ class CustomForm extends StatelessWidget {
           label,
           style: const TextStyle(
             fontSize: Appsized.fontLg,
-            fontWeight: FontWeight.bold
+            fontWeight: FontWeight.bold,
           ),
         ),
         SizedBox(
@@ -44,16 +43,19 @@ class CustomForm extends StatelessWidget {
             obscureText: obscureText,
             decoration: InputDecoration(
               // labelText: label,
-              border:  OutlineInputBorder(
+              border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
               prefixIcon: prefixIcon,
               suffixIcon: suffixIcon,
-              contentPadding: const EdgeInsets.symmetric(vertical: 18, horizontal: 12),
+              contentPadding: const EdgeInsets.symmetric(
+                vertical: 18,
+                horizontal: 12,
+              ),
             ),
           ),
-        )
-      ]
+        ),
+      ],
     );
   }
 }

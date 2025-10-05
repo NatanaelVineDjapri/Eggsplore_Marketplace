@@ -4,11 +4,7 @@ class TopNavBar extends StatelessWidget {
   final VoidCallback onChatTap;
   final ValueChanged<String>? onSearch;
 
-  const TopNavBar({
-    super.key,
-    required this.onChatTap,
-    this.onSearch,
-  });
+  const TopNavBar({super.key, required this.onChatTap, this.onSearch});
 
   @override
   Widget build(BuildContext context) {

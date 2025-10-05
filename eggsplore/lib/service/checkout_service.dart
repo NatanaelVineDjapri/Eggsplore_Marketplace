@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:eggsplore/model/order.dart';
 
-// Asumsi Anda punya model ini untuk data item yang dikirim
 class CartItemToSend {
   final int productId;
   final int quantity;
@@ -20,15 +19,16 @@ class CheckoutService {
     required List<CartItemToSend> items,
   }) async {
     final url = Uri.parse('$baseUrl/orders');
-    
+
     final body = json.encode({
       'shipping_address': shippingAddress,
       'receiver_name': receiverName,
       'receiver_phone': receiverPhone,
-      'items': items.map((item) => {
-        'product_id': item.productId,
-        'quantity': item.quantity,
-      }).toList(),
+      'items': items
+          .map(
+            (item) => {'product_id': item.productId, 'quantity': item.quantity},
+          )
+          .toList(),
     });
 
     final response = await http.post(
@@ -47,12 +47,10 @@ class CheckoutService {
     final responseBody = json.decode(response.body);
 
     if (response.statusCode == 201) {
-      // Jika sukses, Laravel mengembalikan { message: '...', order: {...} }
       return Order.fromJson(responseBody['order']);
     } else {
-      // Tangani berbagai macam error dari backend
-      // Ambil pesan error dari JSON response jika ada
-      final errorMessage = responseBody['message'] ?? 'Terjadi kesalahan tidak diketahui.';
+      final errorMessage =
+          responseBody['message'] ?? 'Terjadi kesalahan tidak diketahui.';
       throw Exception(errorMessage);
     }
   }

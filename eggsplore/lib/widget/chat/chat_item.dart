@@ -15,7 +15,7 @@ class ChatItem extends StatelessWidget {
     required this.userId,
     required this.name,
     required this.username,
-    this.imagePath, 
+    this.imagePath,
   });
 
   @override
@@ -29,10 +29,8 @@ class ChatItem extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ChatDetailPage(
-              userId: userId,
-              username: name,
-            ),
+            builder: (context) =>
+                ChatDetailPage(userId: userId, username: name),
           ),
         );
       },
@@ -52,7 +50,9 @@ class ChatItem extends StatelessWidget {
                       ? Text(
                           name[0].toUpperCase(),
                           style: const TextStyle(
-                              color: AppColors.primary, fontWeight: FontWeight.bold),
+                            color: AppColors.primary,
+                            fontWeight: FontWeight.bold,
+                          ),
                         )
                       : null,
                 ),
@@ -75,14 +75,10 @@ class ChatItem extends StatelessWidget {
                     ],
                   ),
                 ),
-                
               ],
             ),
           ),
-          Container(
-            height: 1,
-            color: Colors.grey,
-          ),
+          Container(height: 1, color: Colors.grey),
         ],
       ),
     );

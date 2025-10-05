@@ -16,7 +16,7 @@ class CartItem {
     required this.price,
     required this.quantity,
     this.image,
-    this.isSelected = false, // default false
+    this.isSelected = false, 
   });
 
   CartItem copyWith({

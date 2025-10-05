@@ -1,7 +1,7 @@
 import 'package:eggsplore/widget/product.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../pages/provider/product_provider.dart'; 
+import '../pages/provider/product_provider.dart';
 import '../pages/provider/like_provider.dart';
 
 class RandomProductsGrid extends ConsumerWidget {
@@ -26,7 +26,7 @@ class RandomProductsGrid extends ConsumerWidget {
               return const Center(
                 child: Text(
                   "Tidak ada produk rekomendasi.",
-                  style: TextStyle(color: Colors.grey)
+                  style: TextStyle(color: Colors.grey),
                 ),
               );
             }
@@ -36,13 +36,15 @@ class RandomProductsGrid extends ConsumerWidget {
               itemCount: products.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                crossAxisSpacing: 16.0, 
-                mainAxisSpacing: 16.0,  
+                crossAxisSpacing: 16.0,
+                mainAxisSpacing: 16.0,
                 childAspectRatio: 0.7,
               ),
               itemBuilder: (context, index) {
                 final product = products[index];
-                final isLiked = ref.watch(likeStateProvider)[product.id]?.userLiked ?? false;
+                final isLiked =
+                    ref.watch(likeStateProvider)[product.id]?.userLiked ??
+                    false;
 
                 return ProductCard(
                   productId: product.id,

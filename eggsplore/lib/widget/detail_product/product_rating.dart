@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 class ProductRating extends StatelessWidget {
   final double averageRating;
 
-  const ProductRating({
-    super.key,
-    required this.averageRating,
-  });
+  const ProductRating({super.key, required this.averageRating});
 
   @override
   Widget build(BuildContext context) {

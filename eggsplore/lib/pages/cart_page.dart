@@ -110,7 +110,6 @@ class _CartPageState extends ConsumerState<CartPage> {
                 }),
               ],
             ),
-
       bottomNavigationBar: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

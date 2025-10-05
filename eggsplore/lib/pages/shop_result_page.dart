@@ -17,17 +17,18 @@ class ShopResultPage extends StatelessWidget {
 
     final filtered = query.isEmpty
         ? shops
-        : shops.where((s) => s["name"]!.toLowerCase().contains(query.toLowerCase())).toList();
+        : shops
+              .where(
+                (s) => s["name"]!.toLowerCase().contains(query.toLowerCase()),
+              )
+              .toList();
 
     return ListView.builder(
       padding: const EdgeInsets.all(12),
       itemCount: filtered.length,
       itemBuilder: (context, index) {
         final shop = filtered[index];
-        return ShopCard(
-          name: shop["name"]!,
-          location: shop["location"]!,
-        );
+        return ShopCard(name: shop["name"]!, location: shop["location"]!);
       },
     );
   }

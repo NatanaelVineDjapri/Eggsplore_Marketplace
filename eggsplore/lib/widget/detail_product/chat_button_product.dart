@@ -16,24 +16,21 @@ class ChatButtonProduct extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // Menggunakan primaryColor yang di-pass
       decoration: BoxDecoration(
-        border: Border.all(color: primaryColor), 
-        borderRadius: BorderRadius.circular(10), 
+        border: Border.all(color: primaryColor),
+        borderRadius: BorderRadius.circular(10),
       ),
       child: IconButton(
         icon: const Icon(Icons.message_outlined, color: AppColors.primary),
-        iconSize: 24, 
-        padding: const EdgeInsets.all(8), 
+        iconSize: 24,
+        padding: const EdgeInsets.all(8),
         onPressed: () {
-          // Navigasi ke ChatDetailPage, menggunakan data toko/penjual dari objek product
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => ChatDetailPage(
-                // Mengirim ID Toko (shopId) dan Nama Toko (userName)
-                userId: product.shopId, 
-                username: product.userName, 
+                userId: product.shopId,
+                username: product.userName,
               ),
             ),
           );

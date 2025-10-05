@@ -6,15 +6,12 @@ import 'package:eggsplore/service/user_service.dart';
 class ProfileService {
   static const String baseUrl = "http://10.0.2.2:8000/api";
 
-  // Ambil detail user yang sedang login
   static Future<User?> getProfile() async {
     final token = await UserService.getToken();
 
     final response = await http.get(
       Uri.parse("$baseUrl/user"),
-      headers: {
-        "Authorization": "Bearer $token",
-      },
+      headers: {"Authorization": "Bearer $token"},
     );
 
     if (response.statusCode == 200) {

@@ -70,10 +70,7 @@ class _ReviewInputState extends State<ReviewInput> {
 
           const SizedBox(height: 8),
 
-          ElevatedButton(
-            onPressed: _handleSubmit,
-            child: const Text("Submit"),
-          ),
+          ElevatedButton(onPressed: _handleSubmit, child: const Text("Submit")),
         ],
       ),
     );

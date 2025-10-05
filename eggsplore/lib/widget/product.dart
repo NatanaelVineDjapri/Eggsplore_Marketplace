@@ -125,7 +125,7 @@ class ProductCard extends ConsumerWidget {
                     ),
                     Padding(
                       padding: EdgeInsets.fromLTRB(
-                        sizes.sm,
+                        sizes.md,
                         sizes.md,
                         sizes.sm,
                         sizes.lg,

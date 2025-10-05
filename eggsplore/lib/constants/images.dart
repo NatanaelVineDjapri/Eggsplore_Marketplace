@@ -31,4 +31,5 @@ class AppImages {
   static const String baju = 'assets/images/baju.png';
   static const String marco = 'assets/images/marco.png';
   static const String smile = 'assets/images/smile.png';
+  static const String chat_bg = 'assets/images/chat_bg.png';
 }

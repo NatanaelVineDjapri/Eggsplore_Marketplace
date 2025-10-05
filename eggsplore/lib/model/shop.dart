@@ -7,7 +7,7 @@ class Shop {
   final String description;
   final String image;
   final DateTime createdAt;
-
+  final String address;
   Shop({
     required this.id,
     required this.userId,
@@ -15,6 +15,7 @@ class Shop {
     required this.description,
     required this.image,
     required this.createdAt,
+    required this.address,
   });
 
   factory Shop.fromJson(Map<String, dynamic> json) {
@@ -25,6 +26,7 @@ class Shop {
       description: json['description'],
       image: ImageHelper.getImageUrl(json['image']),
       createdAt: DateTime.parse(json['created_at']),
+      address: json['address']
     );
   }
 }

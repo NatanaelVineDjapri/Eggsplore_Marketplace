@@ -4,7 +4,7 @@ import 'package:eggsplore/widget/trending_product_card.dart';
 import 'package:eggsplore/widget/TopNavBar.dart';
 
 // 🔹 Import SearchPage
-import 'package:eggsplore/pages/search_page.dart';
+import 'package:eggsplore/pages/search/search_page.dart';
 
 class TrendingPage extends StatefulWidget {
   const TrendingPage({super.key});

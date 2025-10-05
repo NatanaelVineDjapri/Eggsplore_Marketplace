@@ -9,44 +9,43 @@ class ProductService {
   static const String baseUrl = "http://10.0.2.2:8000/api";
 
   static Future<List<Product>> fetchProducts(String token) async {
-    final response = await http.get(
-      Uri.parse("$baseUrl/products"),
-      headers: {'Authorization': 'Bearer $token', 'Accept': 'application/json'},
-    );
+  final response = await http.get(
+    Uri.parse("$baseUrl/products"),
+    headers: {'Authorization': 'Bearer $token', 'Accept': 'application/json'},
+  );
 
-    print("Status code: ${response.statusCode}");
-    print("Body: ${response.body}");
-
-    if (response.statusCode == 200) {
-      final List<dynamic> data = jsonDecode(response.body);
-      return data.map((json) => Product.fromJson(json)).toList();
-    } else {
-      throw Exception("Gagal load produk: ${response.statusCode}");
-    }
+  if (response.statusCode == 200) {
+    final body = jsonDecode(response.body);
+    final List<dynamic> list =
+        (body is List) ? body : (body['data'] as List<dynamic>? ?? []);
+    return list.map((e) => Product.fromJson(Map<String, dynamic>.from(e))).toList();
+  } else {
+    throw Exception("Gagal load produk: ${response.statusCode}");
   }
+}
 
   static Future<List<Product>> fetchRandomProducts(
-    String token, {
-    int count = 6,
-  }) async {
-    final response = await http.get(
-      Uri.parse("$baseUrl/products/random?count=$count"),
-      headers: {'Authorization': 'Bearer $token', 'Accept': 'application/json'},
-    );
+  String token, {
+  int count = 6,
+}) async {
+  final response = await http.get(
+    Uri.parse("$baseUrl/products/random?count=$count"),
+    headers: {'Authorization': 'Bearer $token', 'Accept': 'application/json'},
+  );
 
-    print("Status code: ${response.statusCode}");
-    print("Body: ${response.body}");
-
-    if (response.statusCode == 200) {
-      final List<dynamic> data = jsonDecode(response.body);
-      return data.map((json) => Product.fromJson(json)).toList();
-    } else {
-      throw Exception("Gagal load produk random: ${response.statusCode}");
-    }
+  if (response.statusCode == 200) {
+    final body = jsonDecode(response.body);
+    final List<dynamic> list =
+        (body is List) ? body : (body['data'] as List<dynamic>? ?? []);
+    return list.map((e) => Product.fromJson(Map<String, dynamic>.from(e))).toList();
+  } else {
+    throw Exception("Gagal load produk random: ${response.statusCode}");
   }
+}
+
 
   static Future<List<Product>> fetchRandomProductsForCurrentUser({
-    int count = 6,
+    int count = 100,
   }) async {
     final token = await UserService.getToken();
     if (token != null) {
@@ -201,29 +200,28 @@ class ProductService {
   }
 
   static Future<Product> fetchProductDetail(int productId) async {
-    final token = await UserService.getToken();
-    if (token == null) throw Exception("User belum login / token kosong");
+  final token = await UserService.getToken();
+  if (token == null) throw Exception("User belum login / token kosong");
 
-    final url = Uri.parse('$baseUrl/products/$productId');
-    final response = await http.get(
-      url,
-      headers: {"Authorization": "Bearer $token"},
-    );
+  final url = Uri.parse('$baseUrl/products/$productId');
+  final response = await http.get(
+    url,
+    headers: {"Authorization": "Bearer $token", "Accept": "application/json"},
+  );
 
-    print("Detail Product Status code: ${response.statusCode}");
+  if (response.statusCode == 200) {
+    final data = jsonDecode(response.body);
+    final Map<String, dynamic> productJson = data['product'] != null
+        ? Map<String, dynamic>.from(data['product'])
+        : Map<String, dynamic>.from(data);
 
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-
-      final productJson = data['product'] as Map<String, dynamic>;
-
-      productJson['average_rating'] = data['average_rating'] ?? 0.0;
-
-      return Product.fromJson(productJson);
-    } else {
-      throw Exception("Gagal load detail produk: ${response.statusCode}");
-    }
+    // ensure average_rating available inside productJson so Product.fromJson can read it if needed
+    productJson['average_rating'] = data['average_rating'] ?? productJson['average_rating'] ?? 0.0;
+    return Product.fromJson(productJson);
+  } else {
+    throw Exception("Gagal load detail produk: ${response.statusCode}");
   }
+}
 
   static Future<List<Product>> fetchProductsFromShop({
   required int shopId,

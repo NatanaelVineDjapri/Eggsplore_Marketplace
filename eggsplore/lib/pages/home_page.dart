@@ -11,7 +11,7 @@ import 'package:eggsplore/bar/bottom_nav.dart';
 import 'package:eggsplore/constants/images.dart';
 import 'package:eggsplore/provider/product_provider.dart';
 import 'package:eggsplore/widget/product.dart';
-import 'package:eggsplore/pages/search_page.dart';
+import 'package:eggsplore/pages/search/search_page.dart';
 import 'package:eggsplore/widget/bannerSlider.dart';
 
 // Provider untuk mengambil data user

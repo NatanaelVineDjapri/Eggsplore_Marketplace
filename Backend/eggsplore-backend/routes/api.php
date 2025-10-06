@@ -17,6 +17,9 @@ Route::post('login', [AuthController::class, 'login']);
 Route::post('verify-user', [AuthController::class, 'verifyUser']);
 Route::put('change-password', [AuthController::class, 'changePassword']);
 
+Route::get('/products', [ProductController::class,'index']);
+Route::get('/products/trending', [ProductController::class, 'trending']);
+
 Route::middleware('auth:sanctum')->group(function() {
 
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -25,10 +28,10 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('/user/shop', [ShopController::class, 'getUserShop']);
     Route::get('/user/liked-products', [LikeController::class, 'likedProducts']);
 
-    Route::get('/products', [ProductController::class,'index']);
+    
     Route::get('/my-products', [ProductController::class, 'myProducts']);
 
-    Route::get('/products/trending', [ProductController::class, 'trending']);
+    
     Route::get('/products/random', [ProductController::class, 'randomProducts']);
 
     Route::get('/products/{id}', [ProductController::class,'showProduct']);

@@ -143,10 +143,12 @@ class ProductController extends Controller
     }
 
     public function trending()
-    {
-        $trendingProducts = Product::trending();
-        return response()->json($trendingProducts);
-    }
+{
+    $products = \App\Models\Product::trending();
+
+    return response()->json($products, 200);
+}
+
 
     public function randomProducts(Request $request)
     {
@@ -235,4 +237,5 @@ class ProductController extends Controller
 
         return response()->json($products);
     }
+
 }

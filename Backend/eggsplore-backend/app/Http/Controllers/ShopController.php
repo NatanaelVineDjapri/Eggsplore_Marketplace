@@ -13,14 +13,15 @@ class ShopController extends Controller
         return response()->json($shops);
     }
 
-    public function showShop($id){
-        $shop = Shop::with('user')->find($id);
+    public function showShop($id)
+    {
+        $shop = Shop::with('products')->find($id);
 
-        if(!$shop){
+        if (!$shop) {
             return response()->json(['message' => 'Toko tidak ditemukan'], 404);
         }
 
-        return response()->json($shop);
+        return response()->json(['data' => $shop]);
     }
 
     public function makeShop(Request $request){

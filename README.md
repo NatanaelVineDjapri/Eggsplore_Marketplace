@@ -50,17 +50,17 @@
 
 ### 🪄 Prerequisites
 
-Pastikan semua tools berikut telah terinstal di perangkat kamu:
+Make sure all the following tools are installed on your device:
 
 | Tool | Description |
 |------|--------------|
-| 🐦 [Flutter SDK](https://docs.flutter.dev/get-started/install) | Framework utama untuk frontend |
-| 💻 [Dart](https://dart.dev/get-dart) | Bahasa pemrograman Flutter |
-| 🧰 [Android Studio / VS Code](https://developer.android.com/studio) | IDE untuk menjalankan aplikasi |
-| 🐘 [PHP 8+](https://www.php.net/) | Bahasa backend untuk Laravel |
-| 🎼 [Composer](https://getcomposer.org/) | Dependency manager untuk PHP |
-| 🗄️ [MySQL Server](https://dev.mysql.com/downloads/mysql/) | Database server |
-| 🧭 [Git](https://git-scm.com/) | Version control |
+| 🐦 [Flutter SDK](https://docs.flutter.dev/get-started/install) | Main framework for building the frontend |
+| 💻 [Dart](https://dart.dev/get-dart) | Programming language used by Flutter|
+| 🧰 [Android Studio / VS Code](https://developer.android.com/studio) | IDEs for developing and running the application |
+| 🐘 [PHP 8+](https://www.php.net/) | Backend programming language for Laravel |
+| 🎼 [Composer](https://getcomposer.org/) | Dependency manager for PHP |
+| 🗄️ [MySQL Server](https://dev.mysql.com/downloads/mysql/) | Database server for storing application data |
+| 🧭 [Git](https://git-scm.com/) | Version control system |
 
 ---
 
@@ -117,4 +117,5 @@ flutter run
 ```
 
  
+
 
